@@ -9,7 +9,7 @@ __pycache__/
 
 
 *.sqlite3
-*/migrations
+*/migrations/0*
 
 media
 static

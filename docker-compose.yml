@@ -7,7 +7,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
 
 #  db:
 #    image: mysql
@@ -30,11 +30,11 @@ services:
   web:
     build: .
     restart: unless-stopped
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver 0.0.0.0:80
     volumes:
       - .:/code
     ports:
-      - "8000:8000"
+      - "80:80"
     depends_on:
       - db
       - redis
