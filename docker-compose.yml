@@ -30,18 +30,18 @@ services:
   web:
     build: .
     restart: unless-stopped
-    command: python3 manage.py runserver 0.0.0.0:80
+    command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
-      - "80:80"
+      - "8000:8000"
     depends_on:
       - db
       - redis
 
   celery:
     build: .
-    command: celery -A copart worker --loglevel=INFO --concurrency=2
+    command: celery -A copart worker --loglevel=INFO --concurrency=4
     volumes:
       - .:/code
     depends_on:

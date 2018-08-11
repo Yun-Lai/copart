@@ -19,11 +19,14 @@ def scrap_copart(request):
 
     scrap_copart_lots.delay(vtype, description, code)
 
-    return redirect('/product/vehicle/')
+    return redirect('/product/vehiclemakes/')
 
 
 def scrap_copart_all(request):
-    scrap_copart_lots_all.delay()
+    scrap_copart_lots_all.delay(0, 360)
+    scrap_copart_lots_all.delay(361, 720)
+    scrap_copart_lots_all.delay(721, 1080)
+    scrap_copart_lots_all.delay(1081, 1441)
 
     return redirect('/')
 

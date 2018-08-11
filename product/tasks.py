@@ -34,7 +34,7 @@ def say_ok():
 
 
 @app.task
-def scrap_copart_lots_all():
+def scrap_copart_lots_all(start, end):
     options = webdriver.ChromeOptions()
     prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
@@ -79,7 +79,7 @@ def scrap_copart_lots_all():
         "Cache-Control": "max-age=0",
     }
 
-    for makes in VehicleMakes.objects.all():
+    for makes in VehicleMakes.objects.all()[start:end]:
         vtype = makes.type
         description = makes.description
         code = makes.code
@@ -108,14 +108,18 @@ def scrap_copart_lots_all():
 
         while page <= pages_num:
             for _lot in result['content']:
-                # if Vehicle.objects.filter(lot=_lot['ln']).exists():
-                #     print('exists - ' + str(_lot['ln']))
-                #     continue
+                if Vehicle.objects.filter(lot=_lot['ln']).exists():
+                    print('exists - ' + str(_lot['ln']))
+                    continue
 
                 driver.get(detail_url(_lot['ln']))
                 lot = json.loads(document_fromstring(driver.page_source).text_content())['data']
                 images = lot.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': [], 'HIGH_RESOLUTION_IMAGE': []})
-                lot = lot['lotDetails']
+                try:
+                    lot = lot['lotDetails']
+                except Exception as e:
+                    print(_lot['ln'], lot, e)
+                    continue
                 print(description + ' - ' + str(lot['ln']))
 
                 vin = lot.get('fv', '')
