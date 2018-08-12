@@ -445,7 +445,13 @@ def scrap_iaai_lots():
                 print('exists - ' + str(lot_id))
                 return
 
-            response = requests.get('https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
+            while True:
+                try:
+                    response = requests.get('https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
+                    break
+                except:
+                    print('reconnect to https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
+                    time.sleep(1)
             if response.text.__contains__('<h1>Vehicle details are not found for this stock.</h1>'):
                 print(lot_id, 'Vehicle details are not found for this stock.')
                 return
@@ -523,7 +529,13 @@ def scrap_iaai_lots():
             image_url = 'https://www.iaai.com/Images/GetJsonImageDimensions?json={"stockNumber":"%s","branchCode":"%s","salvageId":"%s"}' % (
                 lot['SaleInfo']['StockNumber'], lot['BranchCode'], lot['SalvageID']
             )
-            response = requests.get(image_url)
+            while True:
+                try:
+                    response = requests.get(image_url)
+                    break
+                except:
+                    print('reconnect to ' + image_url)
+                    time.sleep(1)
             if response.text != '':
                 images = json.loads(response.text)
                 db_item.images = '|'.join([a['K'] for a in images['keys']])
@@ -532,8 +544,7 @@ def scrap_iaai_lots():
             db_item.save()
         except Exception as e:
             error_file = open('error.txt', 'a')
-            error_file.write('https://www.iaai.com/Vehicle?itemID=' + str(lot_id) + '\n')
-            error_file.write(str(e) + '\n')
+            error_file.write('https://www.iaai.com/Vehicle?itemID=' + str(lot_id) + ' ' + str(e))
             print('https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
             print(e)
             error_file.close()
@@ -544,10 +555,24 @@ def scrap_iaai_lots():
             'Key': 'pg',
             'Value': pg
         }
-        response = requests.post('https://www.iaai.com/Search/ChangeKey', data=payload)
-        print('page - ' + str(pg))
-        response = requests.get('https://www.iaai.com/' + response.text)
-        t = fromstring(response.text)
+        while True:
+            try:
+                response = requests.post('https://www.iaai.com/Search/ChangeKey', data=payload)
+                print('search key - ' + str(pg))
+                break
+            except:
+                print('search key again - ' + str(pg))
+                time.sleep(1)
+
+        while True:
+            try:
+                response = requests.get('https://www.iaai.com/' + response.text)
+                t = fromstring(response.text)
+                print('page - ' + str(pg))
+                break
+            except:
+                print('page again - ' + str(pg))
+                time.sleep(1)
 
         urls = t.xpath('//div[@id="dvSearchList"]/div/div/table/tbody/tr/td[3]/a/@href')
         return [int(url.split('?')[1].split('&')[0].split('=')[1]) for url in urls]
@@ -568,7 +593,7 @@ def scrap_iaai_lots():
         lots += chunk
 
     end = datetime.now()
-    print((end - start).total_seconds())
+    print(len(lots), (end - start).total_seconds())
 
     pool = ThreadPool(32)
     for _ in pool.imap_unordered(get_detail, lots):
