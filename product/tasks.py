@@ -312,9 +312,9 @@ def scrap_copart_lots(vtype, description, code):
 
     while page <= pages_num:
         for _lot in result['content']:
-            # if Vehicle.objects.filter(lot=_lot['ln']).exists():
-            #     print('exists - ' + str(_lot['ln']))
-            #     continue
+            if Vehicle.objects.filter(lot=_lot['ln']).exists():
+                print('exists - ' + str(_lot['ln']))
+                continue
 
             driver.get(detail_url(_lot['ln']))
             lot = json.loads(document_fromstring(driver.page_source).text_content())['data']
@@ -446,15 +446,22 @@ def scrap_iaai_lots():
                 return
 
             response = requests.get('https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
+            if response.text.__contains__('<h1>Vehicle details are not found for this stock.</h1>'):
+                print(lot_id, 'Vehicle details are not found for this stock.')
+                return
             t = fromstring(response.text)
             data = t.xpath('//script[@id="layoutVM"]/text()')[0].strip()
             lot = json.loads(data)['VehicleDetailsViewModel']
 
             print(', '.join(['ItemID: ' + lot['ItemID'], 'AuctionID: ' + lot['ItemID'], 'StockNo: ' + lot['StockNo']]))
 
-            vin = bytearray.fromhex(lot['VIN']).decode()
-            if not vin or len(vin) > 17:
-                raise ValueError('vin not correct - ' + vin)
+            try:
+                vin = bytearray.fromhex(lot['VIN']).decode()
+                if not vin or len(vin) != 17:
+                    raise Exception
+            except:     # Unknown, BILL OF SALE, N/A, NONE
+                print('vin not correct - ' + lot['VIN'])
+                return
 
             # db_item, created = Vehicle.objects.get_or_create(lot=item_id)
             db_item = Vehicle(lot=lot_id)
@@ -504,8 +511,8 @@ def scrap_iaai_lots():
             # db_item.sold_price = models.IntegerField(_('Sold Price'), default=0)
 
             # Sale Information
-            db_item.location = lot['SaleInfo']['TitleState']
-            db_item.lane = lot['AuctionLane']
+            db_item.location = lot['SaleInfo']['TitleState'] if lot['SaleInfo']['TitleState'] else ''
+            db_item.lane = lot['AuctionLane'] if lot['AuctionLane'] else '-'
             db_item.item = lot['Slot']
             # db_item.grid = models.CharField(_('Grid/Row'), max_length=5, default='')
             db_item.sale_date = timezone.make_aware(datetime.strptime(lot['LiveDate'], '%m/%d/%Y %I:%M:%S %p'), timezone.get_current_timezone())
@@ -517,9 +524,10 @@ def scrap_iaai_lots():
                 lot['SaleInfo']['StockNumber'], lot['BranchCode'], lot['SalvageID']
             )
             response = requests.get(image_url)
-            images = json.loads(response.text)
-            db_item.images = '|'.join([a['K'] for a in images['keys']])
-            db_item.avatar = 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % images['keys'][0]['K']
+            if response.text != '':
+                images = json.loads(response.text)
+                db_item.images = '|'.join([a['K'] for a in images['keys']])
+                db_item.avatar = 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % images['keys'][0]['K']
 
             db_item.save()
         except Exception as e:

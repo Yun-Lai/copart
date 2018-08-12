@@ -24,8 +24,9 @@ django-celery-beat
 websockets
 requests
 lxml
-mysql-connector-python
-mysqlclient
+#mysql-connector-python
+#mysqlclient
 psycopg2
 psycopg2-binary
 redis
+whitenoise
