@@ -51,15 +51,10 @@ def scrap_copart_lots_all(start, end):
 
     driver.get('https://www.copart.com/')
     wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageSignIn"]'))).click()
-    wait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageMemberSignIn"]'))).click()
-    wait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(
-        'vdm.cojocaru@gmail.com')
-    wait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys('c0p2rt')
-    wait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageMemberSignIn"]'))).click()
+    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys('vdm.cojocaru@gmail.com')
+    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys('c0p2rt')
+    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
 
     page_count = 1000
     misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
@@ -86,7 +81,13 @@ def scrap_copart_lots_all(start, end):
 
         payload = payloads(draw=1, start=0, length=page_count, misc=misc(code=code, description=description, type=vtype),
                            page=0, size=page_count)
-        response = requests.request("POST", url, data=payload, headers=headers)
+        while True:
+            try:
+                response = requests.request("POST", url, data=payload, headers=headers)
+                break
+            except:
+                print(url)
+                time.sleep(1)
 
         result = json.loads(response.text)['data']['results']
         total = result['totalElements']
@@ -117,8 +118,8 @@ def scrap_copart_lots_all(start, end):
                 images = lot.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': [], 'HIGH_RESOLUTION_IMAGE': []})
                 try:
                     lot = lot['lotDetails']
-                except Exception as e:
-                    print(_lot['ln'], lot, e)
+                except:
+                    print(_lot['ln'], lot, detail_url(_lot['ln']))
                     continue
                 print(description + ' - ' + str(lot['ln']))
 
@@ -206,7 +207,13 @@ def scrap_copart_lots_all(start, end):
             page += 1
             payload = payloads(draw=page, start=page_count * (page - 1), length=page_count,
                                misc=misc(code=code, description=description, type=vtype), page=page - 1, size=page_count)
-            response = requests.request("POST", url, data=payload, headers=headers)
+            while True:
+                try:
+                    response = requests.request("POST", url, data=payload, headers=headers)
+                    break
+                except:
+                    print(url)
+                    time.sleep(1)
             print('page - ' + str(page))
 
             result = json.loads(response.text)['data']['results']
@@ -220,16 +227,16 @@ def scrap_copart_lots_all(start, end):
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))
 
-        current_vin = ''
-        lots = Vehicle.objects.filter(source=True).order_by('vin', 'lot')
-        for lot_id, lot in enumerate(lots):
-            if lot.vin == current_vin:
-                lots[lot_id - 1].show = False
-                lots[lot_id - 1].save()
-                lot.foregoing = lots[lot_id - 1]
-                lot.save()
-                print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
-            current_vin = lot.vin
+    current_vin = ''
+    lots = Vehicle.objects.filter(source=True).order_by('vin', 'lot')
+    for lot_id, lot in enumerate(lots):
+        if lot.vin == current_vin:
+            lots[lot_id - 1].show = False
+            lots[lot_id - 1].save()
+            lot.foregoing = lots[lot_id - 1]
+            lot.save()
+            print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
+        current_vin = lot.vin
 
     driver.close()
     driver.quit()
@@ -237,24 +244,6 @@ def scrap_copart_lots_all(start, end):
 
 @app.task
 def scrap_copart_lots(vtype, description, code):
-    page_count = 1000
-    misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
-    payloads = 'draw={draw}&columns[0][data]=0&columns[0][name]=&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]=&columns[1][searchable]=true&columns[1][orderable]=false&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=2&columns[2][name]=&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=3&columns[3][name]=&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=4&columns[4][name]=&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=5&columns[5][name]=&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false&columns[6][data]=6&columns[6][name]=&columns[6][searchable]=true&columns[6][orderable]=true&columns[6][search][value]=&columns[6][search][regex]=false&columns[7][data]=7&columns[7][name]=&columns[7][searchable]=true&columns[7][orderable]=true&columns[7][search][value]=&columns[7][search][regex]=false&columns[8][data]=8&columns[8][name]=&columns[8][searchable]=true&columns[8][orderable]=true&columns[8][search][value]=&columns[8][search][regex]=false&columns[9][data]=9&columns[9][name]=&columns[9][searchable]=true&columns[9][orderable]=true&columns[9][search][value]=&columns[9][search][regex]=false&columns[10][data]=10&columns[10][name]=&columns[10][searchable]=true&columns[10][orderable]=true&columns[10][search][value]=&columns[10][search][regex]=false&columns[11][data]=11&columns[11][name]=&columns[11][searchable]=true&columns[11][orderable]=true&columns[11][search][value]=&columns[11][search][regex]=false&columns[12][data]=12&columns[12][name]=&columns[12][searchable]=true&columns[12][orderable]=true&columns[12][search][value]=&columns[12][search][regex]=false&columns[13][data]=13&columns[13][name]=&columns[13][searchable]=true&columns[13][orderable]=true&columns[13][search][value]=&columns[13][search][regex]=false&columns[14][data]=14&columns[14][name]=&columns[14][searchable]=true&columns[14][orderable]=false&columns[14][search][value]=&columns[14][search][regex]=false&columns[15][data]=15&columns[15][name]=&columns[15][searchable]=true&columns[15][orderable]=false&columns[15][search][value]=&columns[15][search][regex]=false&order[0][column]=1&order[0][dir]=asc&start={start}&length={length}&search[value]=&search[regex]=false&sort=auction_date_type desc,auction_date_utc asc&defaultSort=true&filter[MISC]={misc}&query=*&watchListOnly=false&freeFormSearch=false&page={page}&size={size}'.format
-
-    url = "https://www.copart.com/public/vehicleFinder/search"
-    headers = {
-        "Host": "www.copart.com",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "X-Requested-With": "XMLHttpRequest",
-        "Connection": "keep-alive",
-        "Cache-Control": "max-age=0",
-    }
-
-    detail_url = 'https://www.copart.com/public/data/lotdetails/solr/lotImages/{}'.format
     options = webdriver.ChromeOptions()
     prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
@@ -276,6 +265,24 @@ def scrap_copart_lots(vtype, description, code):
     wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys('c0p2rt')
     wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
 
+    page_count = 1000
+    misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
+    payloads = 'draw={draw}&columns[0][data]=0&columns[0][name]=&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]=&columns[1][searchable]=true&columns[1][orderable]=false&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=2&columns[2][name]=&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=3&columns[3][name]=&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=4&columns[4][name]=&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=5&columns[5][name]=&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false&columns[6][data]=6&columns[6][name]=&columns[6][searchable]=true&columns[6][orderable]=true&columns[6][search][value]=&columns[6][search][regex]=false&columns[7][data]=7&columns[7][name]=&columns[7][searchable]=true&columns[7][orderable]=true&columns[7][search][value]=&columns[7][search][regex]=false&columns[8][data]=8&columns[8][name]=&columns[8][searchable]=true&columns[8][orderable]=true&columns[8][search][value]=&columns[8][search][regex]=false&columns[9][data]=9&columns[9][name]=&columns[9][searchable]=true&columns[9][orderable]=true&columns[9][search][value]=&columns[9][search][regex]=false&columns[10][data]=10&columns[10][name]=&columns[10][searchable]=true&columns[10][orderable]=true&columns[10][search][value]=&columns[10][search][regex]=false&columns[11][data]=11&columns[11][name]=&columns[11][searchable]=true&columns[11][orderable]=true&columns[11][search][value]=&columns[11][search][regex]=false&columns[12][data]=12&columns[12][name]=&columns[12][searchable]=true&columns[12][orderable]=true&columns[12][search][value]=&columns[12][search][regex]=false&columns[13][data]=13&columns[13][name]=&columns[13][searchable]=true&columns[13][orderable]=true&columns[13][search][value]=&columns[13][search][regex]=false&columns[14][data]=14&columns[14][name]=&columns[14][searchable]=true&columns[14][orderable]=false&columns[14][search][value]=&columns[14][search][regex]=false&columns[15][data]=15&columns[15][name]=&columns[15][searchable]=true&columns[15][orderable]=false&columns[15][search][value]=&columns[15][search][regex]=false&order[0][column]=1&order[0][dir]=asc&start={start}&length={length}&search[value]=&search[regex]=false&sort=auction_date_type desc,auction_date_utc asc&defaultSort=true&filter[MISC]={misc}&query=*&watchListOnly=false&freeFormSearch=false&page={page}&size={size}'.format
+
+    url = "https://www.copart.com/public/vehicleFinder/search"
+    detail_url = 'https://www.copart.com/public/data/lotdetails/solr/lotImages/{}'.format
+    headers = {
+        "Host": "www.copart.com",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "X-Requested-With": "XMLHttpRequest",
+        "Connection": "keep-alive",
+        "Cache-Control": "max-age=0",
+    }
+
     # response = requests.request("POST", url, headers=headers)
     # cookies = response.cookies.get_dict()
     # cookie_str = '{incap_key}={incap_value}'.format
@@ -290,7 +297,13 @@ def scrap_copart_lots(vtype, description, code):
 
     payload = payloads(draw=1, start=0, length=page_count, misc=misc(code=code, description=description, type=vtype),
                        page=0, size=page_count)
-    response = requests.request("POST", url, data=payload, headers=headers)
+    while True:
+        try:
+            response = requests.request("POST", url, data=payload, headers=headers)
+            break
+        except:
+            print(url)
+            time.sleep(1)
 
     result = json.loads(response.text)['data']['results']
     total = result['totalElements']
@@ -319,7 +332,11 @@ def scrap_copart_lots(vtype, description, code):
             driver.get(detail_url(_lot['ln']))
             lot = json.loads(document_fromstring(driver.page_source).text_content())['data']
             images = lot.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': [], 'HIGH_RESOLUTION_IMAGE': []})
-            lot = lot['lotDetails']
+            try:
+                lot = lot['lotDetails']
+            except:
+                print(_lot['ln'], lot, detail_url(_lot['ln']))
+                continue
             print(description + ' - ' + str(lot['ln']))
 
             vin = lot.get('fv', '')
@@ -406,7 +423,13 @@ def scrap_copart_lots(vtype, description, code):
         page += 1
         payload = payloads(draw=page, start=page_count * (page - 1), length=page_count,
                            misc=misc(code=code, description=description, type=vtype), page=page - 1, size=page_count)
-        response = requests.request("POST", url, data=payload, headers=headers)
+        while True:
+            try:
+                response = requests.request("POST", url, data=payload, headers=headers)
+                break
+            except:
+                print(url)
+                time.sleep(1)
         print('page - ' + str(page))
 
         result = json.loads(response.text)['data']['results']
@@ -438,39 +461,42 @@ def scrap_copart_lots(vtype, description, code):
 @app.task
 def scrap_iaai_lots():
     first_url = 'Search?url=pd6JWbJ9kRzcBdFK3vKeyjpx+85A4wDWncLLWXG+ICNJ+99sqMaoisYKWs6Cr9ehv9+/+aONWE6H6WT3ZwrT5WJbMzhonrNwbBqJ1gz8MLhEGYLSkxHCvDCjFfWbo0PvmwHJtE0eSnJvuIuIOW9/5g==&crefiners=&keyword='
+    item_url = 'https://www.iaai.com/Vehicle?itemID={item_id}'.format
 
-    def get_detail(lot_id):
+    def get_detail(item_and_stock_number):
+        item_id = item_and_stock_number[0]
+        stock_id = item_and_stock_number[1]
         try:
-            if Vehicle.objects.filter(lot=lot_id).exists():
-                print('exists - ' + str(lot_id))
+            if Vehicle.objects.filter(lot=int(stock_id)).exists():
+                print('exists - ' + item_id + ', ' + stock_id)
                 return
 
             while True:
                 try:
-                    response = requests.get('https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
+                    response = requests.get(item_url(item_id=item_id))
                     break
                 except:
-                    print('reconnect to https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
+                    print('reconnect to ' + item_url(item_id=item_id))
                     time.sleep(1)
             if response.text.__contains__('<h1>Vehicle details are not found for this stock.</h1>'):
-                print(lot_id, 'Vehicle details are not found for this stock.')
+                print(item_url(item_id=item_id) + ' - Vehicle details are not found for this stock.')
                 return
             t = fromstring(response.text)
             data = t.xpath('//script[@id="layoutVM"]/text()')[0].strip()
             lot = json.loads(data)['VehicleDetailsViewModel']
 
-            print(', '.join(['ItemID: ' + lot['ItemID'], 'AuctionID: ' + lot['ItemID'], 'StockNo: ' + lot['StockNo']]))
+            print(', '.join(['ItemID: ' + lot['ItemID'], 'StockNo: ' + lot['StockNo']]))
 
             try:
                 vin = bytearray.fromhex(lot['VIN']).decode()
                 if not vin or len(vin) != 17:
                     raise Exception
             except:     # Unknown, BILL OF SALE, N/A, NONE
-                print('vin not correct - ' + lot['VIN'])
+                print(item_url(item_id=item_id) + ' - vin not correct ' + lot['VIN'])
                 return
 
             # db_item, created = Vehicle.objects.get_or_create(lot=item_id)
-            db_item = Vehicle(lot=lot_id)
+            db_item = Vehicle(lot=int(stock_id))
             db_item.vin = vin
 
             # General Information
@@ -544,10 +570,9 @@ def scrap_iaai_lots():
             db_item.save()
         except Exception as e:
             error_file = open('error.txt', 'a')
-            error_file.write('https://www.iaai.com/Vehicle?itemID=' + str(lot_id) + ' ' + str(e))
-            print('https://www.iaai.com/Vehicle?itemID=' + str(lot_id))
-            print(e)
+            error_file.write(item_url(item_id=item_id) + ' ' + str(e))
             error_file.close()
+            print(item_url(item_id=item_id), e)
 
     def get_lot_urls(pg):
         payload = {
@@ -575,7 +600,8 @@ def scrap_iaai_lots():
                 time.sleep(1)
 
         urls = t.xpath('//div[@id="dvSearchList"]/div/div/table/tbody/tr/td[3]/a/@href')
-        return [int(url.split('?')[1].split('&')[0].split('=')[1]) for url in urls]
+        stock_nums = t.xpath('//div[@id="dvSearchList"]/div/div/table/tbody/tr/td[3]/p/text/text()')
+        return [url.split('?')[1].split('&')[0].split('=')[1] for url in urls], stock_nums
 
     start = datetime.now()
 
@@ -583,17 +609,22 @@ def scrap_iaai_lots():
     response = requests.get('https://www.iaai.com/' + first_url)
     t = fromstring(response.text)
     results = t.xpath('//div[@id="dvSearchList"]/div/div/table/tbody/tr/td[3]/a/@href')
-    lots = [int(url.split('?')[1].split('&')[0].split('=')[1]) for url in results]
+    stock_numbers = t.xpath('//div[@id="dvSearchList"]/div/div/table/tbody/tr/td[3]/p/text/text()')
+    lots = [url.split('?')[1].split('&')[0].split('=')[1] for url in results]
 
     total = int(t.xpath('//span[@id="dvTotalText"]/text()')[0].strip().replace(',', ''))
     pages = (total + 99) // 100
 
     pool = ThreadPool(32)
     for chunk in pool.imap_unordered(get_lot_urls, range(2, pages + 1)):
-        lots += chunk
+        a, b = chunk
+        lots += a
+        stock_numbers += b
 
     end = datetime.now()
-    print(len(lots), (end - start).total_seconds())
+    print(len(lots), len(stock_numbers), (end - start).total_seconds())
+
+    lots = [[item, stock_numbers[item_id]] for item_id, item in enumerate(lots)]
 
     pool = ThreadPool(32)
     for _ in pool.imap_unordered(get_detail, lots):

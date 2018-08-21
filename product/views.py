@@ -24,9 +24,9 @@ def scrap_copart(request):
 
 def scrap_copart_all(request):
     scrap_copart_lots_all.delay(0, 360)
-    scrap_copart_lots_all.delay(361, 720)
-    scrap_copart_lots_all.delay(721, 1080)
-    scrap_copart_lots_all.delay(1081, 1441)
+    scrap_copart_lots_all.delay(360, 720)
+    scrap_copart_lots_all.delay(720, 1080)
+    scrap_copart_lots_all.delay(1080, 1441)
 
     return redirect('/')
 
