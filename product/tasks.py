@@ -10,6 +10,9 @@ from lxml.html import document_fromstring, fromstring
 from datetime import datetime, timedelta
 from django.utils import timezone
 
+from celery.schedules import crontab
+from celery.task import task, periodic_task
+
 import requests
 import time
 from selenium import webdriver
@@ -24,13 +27,31 @@ GLOBAL = {'live_auctions': []}
 
 
 @app.task
-def say_hello():
-    print('say_hello() called at ' + str(datetime.now()))
+def test_normal():
+    print('test_normal() called at ' + str(datetime.now()))
 
 
 @app.task
-def say_ok():
-    print('say_ok() called at ' + str(datetime.now()))
+def test_low():
+    print('test_low() called at ' + str(datetime.now()))
+
+
+@periodic_task(
+    run_every=(crontab(minute='*/1')),
+    name="product.tasks.test_high",
+    ignore_result=True,
+    queue='high',
+    options={'queue': 'high'}
+)
+def test_high():
+    print('test_high() called at ' + str(datetime.now()))
+
+
+# def scrap_copart_all():
+#     scrap_copart_lots_all.delay(0, 360)
+#     scrap_copart_lots_all.delay(360, 720)
+#     scrap_copart_lots_all.delay(720, 1080)
+#     scrap_copart_lots_all.delay(1080, 1441)
 
 
 @app.task

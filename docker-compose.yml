@@ -39,9 +39,27 @@ services:
       - db
       - redis
 
-  celery:
+  celery-worker-h:
     build: .
-    command: celery -A copart worker --loglevel=INFO --concurrency=4
+    command: celery -A copart worker --concurrency 4 --loglevel=INFO -n worker.high -Q high
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+
+  celery-worker-n:
+    build: .
+    command: celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.normal -Q normal
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+
+  celery-worker-l:
+    build: .
+    command: celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.low -Q low
     volumes:
       - .:/code
     depends_on:
@@ -50,7 +68,7 @@ services:
 
   celery-beat:
     build: .
-    command: celery -A copart beat -l info
+    command: celery -A copart beat --loglevel=INFO
     volumes:
       - .:/code
     depends_on:
