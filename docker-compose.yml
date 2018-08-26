@@ -22,15 +22,23 @@ services:
   redis:
     image: redis:latest
     restart: unless-stopped
-#    volumes:
-#      - ./volumes/redis:/data
+    volumes:
+      - redis_data:/data
     ports:
       - "6379:6379"
 
   web:
     build: .
     restart: unless-stopped
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: |
+      sh -c "
+        python3 manage.py makemigrations &&
+        python3 manage.py migrate &&
+        python3 manage.py loaddata copart/fixtures/vehiclemakes.json &&
+        python3 manage.py loaddata copart/fixtures/user.json &&
+        python3 manage.py collectstatic --noinput &&
+        python3 manage.py runserver 0.0.0.0:8000
+      "
     volumes:
       - .:/code
     ports:
@@ -42,6 +50,7 @@ services:
   celery-worker-h:
     build: .
     command: celery -A copart worker --concurrency 4 --loglevel=INFO -n worker.high -Q high
+    restart: unless-stopped
     volumes:
       - .:/code
     depends_on:
@@ -51,6 +60,7 @@ services:
   celery-worker-n:
     build: .
     command: celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.normal -Q normal
+    restart: unless-stopped
     volumes:
       - .:/code
     depends_on:
@@ -60,6 +70,7 @@ services:
   celery-worker-l:
     build: .
     command: celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.low -Q low
+    restart: unless-stopped
     volumes:
       - .:/code
     depends_on:
@@ -69,6 +80,7 @@ services:
   celery-beat:
     build: .
     command: celery -A copart beat --loglevel=INFO
+    restart: unless-stopped
     volumes:
       - .:/code
     depends_on:
@@ -77,3 +89,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
