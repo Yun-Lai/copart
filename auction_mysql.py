@@ -5,11 +5,11 @@ import asyncio
 import websockets
 import time
 from datetime import datetime
-import psycopg2
-from dbconfig import read_postgres_db_config
+from mysql.connector import MySQLConnection
+from dbconfig import read_mysql_db_config
 
-db_config = read_postgres_db_config()
-conn = psycopg2.connect(**db_config)
+db_config = read_mysql_db_config()
+conn = MySQLConnection(**db_config)
 cursor = conn.cursor()
 
 async def copart(param):
