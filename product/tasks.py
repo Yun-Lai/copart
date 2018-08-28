@@ -754,7 +754,7 @@ def scrap_live_auctions():
         for param in params:
             if param in GLOBAL['live_auctions']:
                 continue
-            command = "python auction.py " + param + '-' + str(random.randint(204, 206))# + " &"
+            command = "python auction.py " + param + '-' + str(random.randint(204, 206)) + " &"
             subprocess.call(command, shell=True)
             print('new auction - https://www.copart.com/auctionDashboard?auctionDetails=' + param[:-1].lstrip('0') + '-' + param[-1])
         GLOBAL['live_auctions'] = params
