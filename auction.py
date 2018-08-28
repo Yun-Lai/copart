@@ -19,12 +19,12 @@ async def copart(param):
         param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=Linux&S=ANONYMOUS&A=VB3&G=T&D=F&B=&R={}&1Date={}&'.format
         await websocket.send(param_1st(2, str(int(time.time() * 1000))))
         greeting = await websocket.recv()
-        print("{}".format(greeting))
+        # print("{}".format(greeting))
 
         param_2nd = 'F=5&R={}&E=1&N=/COPART{}/outbound,0,,F'.format
         await websocket.send(param_2nd(3, param))
         greeting = await websocket.recv()
-        print("{}".format(greeting))
+        # print("{}".format(greeting))
 
         keep_alive = 'F=3&R={}&'.format
         r = 4
@@ -37,6 +37,9 @@ async def copart(param):
                 data = json.loads(decoded.decode())
                 if 'ATTRIBUTE' in data:
                     print(','.join([param, data['LOTNO'], data['BID']]))
+                    auction_file = open('auction_history.txt', 'a')
+                    auction_file.write(','.join([param, data['LOTNO'], data['BID'], '\n']))
+                    auction_file.close()
 
                     try:
                         query = "UPDATE product_vehicle SET sold_price = {} WHERE lot = {}".format
@@ -65,6 +68,7 @@ if __name__ == '__main__':
     arg = sys.argv[1:]
 
     if len(arg) == 1:
+        print('started - https://www.copart.com/auctionDashboard?auctionDetails=' + arg[0][:-1].lstrip('0') + '-' + arg[0][-1])
         get_copart_auction(arg[0])
     else:
         print('Please input the correct command')

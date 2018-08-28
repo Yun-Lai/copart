@@ -41,8 +41,6 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('language/<language>/', views.switch_language),
 
-    url(r'^test/', views.task_test),
-
     # url(r'^silk/', include('silk.urls', namespace='silk')),
     # url(r'^statuscheck/', include('celerybeat_status.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

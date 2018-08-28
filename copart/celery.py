@@ -21,30 +21,4 @@ app.conf.update(
     CELERY_RESULT_SERIALIZER='json',
     CELERY_TIMEZONE='America/Regina',
     CELERY_ENABLE_UTC=False,
-    CELERYBEAT_SCHEDULE={
-        'test_normal': {
-            'task': 'product.tasks.test_normal',
-            'schedule': crontab(minute='*/1'),
-            'args': (),
-            'queue': 'normal',
-            'options': {'queue': 'normal'},
-        },
-        'test_low': {
-            'task': 'product.tasks.test_low',
-            'schedule': crontab(minute='*/1'),
-            'args': (),
-            'queue': 'low',
-            'options': {'queue': 'low'},
-        },
-        # 'scrap_auctions': {
-        #     'task': 'product.tasks.scrap_live_auctions',
-        #     'schedule': crontab(minute='*/2', hour='15-23,1-2', day_of_week='mon,tue,wed,thu,fri'),
-        #     'args': ()
-        # },
-        # 'scrap_copart_lots': {
-        #     'task': 'product.tasks.scrap_copart_lots',
-        #     'schedule': crontab(minute=0, hour=3),
-        #     'args': ()
-        # },
-    }
 )

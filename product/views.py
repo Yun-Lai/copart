@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 
-from product.tasks import scrap_copart_lots, scrap_copart_lots_all, scrap_iaai_lots, scrap_live_auctions, test_normal
+from product.tasks import scrap_copart_lots, scrap_copart_lots_all, scrap_iaai_lots, scrap_live_auctions
 from product.models import Vehicle
 
 
@@ -39,12 +39,6 @@ def scrap_iaai(request):
 
 def scrap_auction(request):
     scrap_live_auctions.delay()
-
-    return redirect('/')
-
-
-def task_test(request):
-    test_normal.delay()
 
     return redirect('/')
 

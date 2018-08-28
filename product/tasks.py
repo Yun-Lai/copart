@@ -20,18 +20,29 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 
-from copart.celery import app
 from product.models import *
 
 GLOBAL = {'live_auctions': []}
 
 
-@app.task
+'''@periodic_task(
+    run_every=(crontab(minute='*/1')),
+    name="product.tasks.test_normal",
+    ignore_result=True,
+    queue='normal',
+    options={'queue': 'normal'}
+)
 def test_normal():
     print('test_normal() called at ' + str(datetime.now()))
 
 
-@app.task
+@periodic_task(
+    run_every=(crontab(minute='*/1')),
+    name="product.tasks.test_low",
+    ignore_result=True,
+    queue='low',
+    options={'queue': 'low'}
+)
 def test_low():
     print('test_low() called at ' + str(datetime.now()))
 
@@ -44,17 +55,31 @@ def test_low():
     options={'queue': 'high'}
 )
 def test_high():
-    print('test_high() called at ' + str(datetime.now()))
+    print('test_high() called at ' + str(datetime.now()))'''
 
 
-# def scrap_copart_all():
-#     scrap_copart_lots_all.delay(0, 360)
-#     scrap_copart_lots_all.delay(360, 720)
-#     scrap_copart_lots_all.delay(720, 1080)
-#     scrap_copart_lots_all.delay(1080, 1441)
+# @periodic_task(
+@task(
+    # run_every=(crontab(minute=0, hour=3)),
+    name="product.tasks.scrap_copart_all",
+    ignore_result=True,
+    queue='high',
+    options={'queue': 'high'}
+)
+def scrap_copart_all():
+    scrap_copart_lots_all.delay(0, 360)
+    scrap_copart_lots_all.delay(360, 720)
+    scrap_copart_lots_all.delay(720, 1080)
+    scrap_copart_lots_all.delay(1080, 1441)
 
 
-@app.task
+@task(
+    name="product.tasks.scrap_copart_lots_all",
+    ignore_result=True,
+    time_limit=36000,
+    queue='high',
+    options={'queue': 'high'}
+)
 def scrap_copart_lots_all(start, end):
     options = webdriver.ChromeOptions()
     prefs = {"profile.managed_default_content_settings.images": 2}
@@ -263,7 +288,13 @@ def scrap_copart_lots_all(start, end):
     driver.quit()
 
 
-@app.task
+@task(
+    name="product.tasks.scrap_copart_lots",
+    ignore_result=True,
+    time_limit=36000,
+    queue='high',
+    options={'queue': 'high'}
+)
 def scrap_copart_lots(vtype, description, code):
     options = webdriver.ChromeOptions()
     prefs = {"profile.managed_default_content_settings.images": 2}
@@ -479,7 +510,15 @@ def scrap_copart_lots(vtype, description, code):
     driver.quit()
 
 
-@app.task
+# @periodic_task(
+@task(
+    # run_every=(crontab(minute=0, hour=3)),
+    name="product.tasks.scrap_iaai_lots",
+    ignore_result=True,
+    time_limit=36000,
+    queue='normal',
+    options={'queue': 'normal'}
+)
 def scrap_iaai_lots():
     first_url = 'Search?url=pd6JWbJ9kRzcBdFK3vKeyjpx+85A4wDWncLLWXG+ICNJ+99sqMaoisYKWs6Cr9ehv9+/+aONWE6H6WT3ZwrT5WJbMzhonrNwbBqJ1gz8MLhEGYLSkxHCvDCjFfWbo0PvmwHJtE0eSnJvuIuIOW9/5g==&crefiners=&keyword='
     item_url = 'https://www.iaai.com/Vehicle?itemID={item_id}'.format
@@ -663,7 +702,15 @@ def scrap_iaai_lots():
         current_vin = lot.vin
 
 
-@app.task
+# @periodic_task(
+@task(
+    # run_every=(crontab(minute='*/2', hour='15-23,1-2', day_of_week='mon,tue,wed,thu,fri')),
+    name="product.tasks.scrap_live_auctions",
+    ignore_result=True,
+    time_limit=3600,
+    queue='low',
+    options={'queue': 'low'}
+)
 def scrap_live_auctions():
     try:
         options = webdriver.ChromeOptions()
@@ -707,9 +754,9 @@ def scrap_live_auctions():
         for param in params:
             if param in GLOBAL['live_auctions']:
                 continue
-            command = "python auction.py " + param + '-' + str(random.randint(204, 206)) + " &"
+            command = "python auction.py " + param + '-' + str(random.randint(204, 206))# + " &"
             subprocess.call(command, shell=True)
-            print('new auction -', param)
+            print('new auction - https://www.copart.com/auctionDashboard?auctionDetails=' + param[:-1].lstrip('0') + '-' + param[-1])
         GLOBAL['live_auctions'] = params
         print(len(params))
     except Exception as e:
