@@ -15,7 +15,7 @@ cursor = conn.cursor()
 async def copart(param):
     nirvanalv = param.split('-')[1]
     param = param.split('-')[0]
-    async with websockets.connect('wss://nirvanalv' + nirvanalv + '.copart.com/sv/ws') as websocket:
+    async with websockets.connect('wss://nirvanarn' + nirvanalv + '.copart.com/sv/ws') as websocket:
         param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=Linux&S=ANONYMOUS&A=VB3&G=T&D=F&B=&R={}&1Date={}&'.format
         await websocket.send(param_1st(2, str(int(time.time() * 1000))))
         greeting = await websocket.recv()

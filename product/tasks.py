@@ -667,7 +667,8 @@ def scrap_iaai_lots():
 def scrap_live_auctions():
     try:
         options = webdriver.ChromeOptions()
-
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        options.add_experimental_option("prefs", prefs)
         options.add_argument('--disable-extensions')
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
