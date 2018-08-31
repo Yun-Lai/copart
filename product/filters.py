@@ -89,6 +89,6 @@ class SourceFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if self.value() == 'copart':
             return queryset.filter(source=True)
-        elif self.value() == 'negative':
+        elif self.value() == 'iaai':
             return queryset.filter(source=False)
         return queryset

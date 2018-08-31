@@ -2,8 +2,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 
-from product.tasks import scrap_copart_lots, scrap_copart_lots_all, scrap_iaai_lots, scrap_live_auctions
-from product.models import Vehicle
+from product.tasks import scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions
+from product.models import Vehicle, VehicleMakes
 
 
 def switch_language(request, language):
@@ -17,16 +17,18 @@ def scrap_copart(request):
     description = request.GET.get('description')
     code = request.GET.get('code')
 
-    scrap_copart_lots.delay(vtype, description, code)
+    make = VehicleMakes.objects.get(type=vtype, code=code, description=description)
+
+    scrap_copart_lots.delay(make.id, make.id + 1)
 
     return redirect('/product/vehiclemakes/')
 
 
-def scrap_copart_all(request):
-    scrap_copart_lots_all.delay(0, 360)
-    scrap_copart_lots_all.delay(360, 720)
-    scrap_copart_lots_all.delay(720, 1080)
-    scrap_copart_lots_all.delay(1080, 1441)
+def scrap_coparts(request):
+    scrap_copart_lots.delay(0, 360)
+    scrap_copart_lots.delay(360, 720)
+    scrap_copart_lots.delay(720, 1080)
+    scrap_copart_lots.delay(1080, 1441)
 
     return redirect('/')
 

@@ -51,6 +51,7 @@ class Vehicle(models.Model):
     year = models.IntegerField(_('Year'), null=True, blank=True)
     currency = models.CharField(_('Currency'), max_length=3, default='')
     avatar = models.URLField(_('Avatar'), null=True, blank=True)
+    source = models.BooleanField(_('Source'), default=True)
 
     # Lot Information
     doc_type_ts = models.CharField(_('Doc Type TS'), max_length=2, default='')
@@ -92,7 +93,6 @@ class Vehicle(models.Model):
 
     foregoing = models.ForeignKey('self', verbose_name=_('Foregoing'), on_delete=models.CASCADE, null=True, blank=True)
     show = models.BooleanField(_('Show'), default=True)
-    source = models.BooleanField(_('Source'), default=True)
 
     images = models.TextField(_('Image Urls'), null=True, blank=True)
     thumb_images = models.TextField(_('Thumbnail Image Urls'), null=True, blank=True)
@@ -139,6 +139,25 @@ class Vehicle(models.Model):
                          .format(lot=self.lot, url=self.avatar, title=self.name))
     avatar_img.short_description = 'Avatar'
 
+    def source_(self):
+        return 'copart' if self.source else 'iaai'
+    source_.short_description = 'Source'
+
+    def images_(self):
+        if self.source:
+            images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in self.images.split('|')]
+        else:
+            images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % a for a in self.images.split('|')]
+        return mark_safe('<br>'.join(['<a href="' + a + '">' + a + '</a>' for a in images]))
+    images_.short_description = 'Image Urls'
+
+    def thumb_images_(self):
+        if self.source:
+            images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in self.thumb_images.split('|')]
+        else:
+            images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % a for a in self.thumb_images.split('|')]
+        return mark_safe('<br>'.join(['<a href="' + a + '">' + a + '</a>' for a in images]))
+    thumb_images_.short_description = 'Thumbnail Image Urls'
 
 # class Location(models.Model):
 #     phone = models.CharField(_('Phone'), max_length=255, null=True, blank=True)

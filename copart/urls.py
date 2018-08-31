@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^rosetta/', include('rosetta.urls')),
 
     url(r'^scrap_copart/', views.scrap_copart),
-    url(r'^scrap_copart_all/', views.scrap_copart_all),
+    url(r'^scrap_coparts/', views.scrap_coparts),
     url(r'^scrap_iaai/', views.scrap_iaai),
     url(r'^scrap_auction/', views.scrap_auction),
 
