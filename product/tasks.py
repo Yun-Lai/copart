@@ -475,9 +475,8 @@ def scrap_live_auctions():
         driver.get('https://www.copart.com/todaysAuction/')
 
         auction_live_now = driver.find_element_by_xpath('//table[@id="auctionLiveNow-datatable"]')
-        auction_later_today = driver.find_element_by_xpath('//table[@id="auctionLaterToday-datatable"]')
         no_auction = 'There are no auctions available at this time.'
-        if auction_live_now.text.__contains__(no_auction) and auction_later_today.text.__contains__(no_auction):
+        if auction_live_now.text.__contains__(no_auction):
             print(no_auction)
             return
 
