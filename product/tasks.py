@@ -121,10 +121,6 @@ def scrap_copart_lots(start, end):
 
         while page <= pages_num:
             for _lot in result['content']:
-                if Vehicle.objects.filter(lot=_lot['ln']).exists():
-                    print('exists - ' + str(_lot['ln']))
-                    continue
-
                 driver.get(detail_url(_lot['ln']))
                 lot = json.loads(document_fromstring(driver.page_source).text_content())['data']
                 images = lot.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': [], 'HIGH_RESOLUTION_IMAGE': []})
@@ -239,6 +235,13 @@ def scrap_copart_lots(start, end):
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))
 
+    # Checking Foregoing Lots
+    # created_at    lot     vin     foregoing   show
+    # 2018-07-08    111     aaa     empty       false
+    # 2018-07-09    222     bbb     empty       false
+    # 2018-07-10    333     aaa     111         false
+    # 2018-07-11    444     bbb     222         true
+    # 2018-08-09    555     aaa     333         true
     current_vin = ''
     lots = Vehicle.objects.filter(source=True).order_by('vin', 'lot')
     for lot_id, lot in enumerate(lots):

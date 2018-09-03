@@ -42,11 +42,13 @@ async def copart(param):
                     auction_file.close()
 
                     try:
-                        query = "UPDATE product_vehicle SET sold_price = {} WHERE lot = {}".format
+                        query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE lot = {}".format
                         cursor.execute(query(data['BID'], data['LOTNO']))
                         conn.commit()
-                    except Exception as e:
-                        print(e)
+                    except:
+                        query = "INSERT INTO product_vehicle(lot, sold_price, sale_status) VALUES ({}, {}, 'SOLD')".format
+                        cursor.execute(query(data['LOTNO'], data['BID']))
+                        conn.commit()
 
                 if 'TEXT' in data:
                     cursor.close()
