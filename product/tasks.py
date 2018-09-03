@@ -26,7 +26,7 @@ GLOBAL = {'live_auctions': []}
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='8')),
+    run_every=(crontab(minute='0', hour='9')),
     name="product.tasks.scrap_copart",
     ignore_result=True,
     queue='high',
@@ -258,7 +258,7 @@ def scrap_copart_lots(start, end):
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='9')),
+    run_every=(crontab(minute='0', hour='8')),
     name="product.tasks.scrap_iaai_lots",
     ignore_result=True,
     time_limit=36000,
