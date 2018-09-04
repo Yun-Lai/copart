@@ -176,23 +176,3 @@ class Vehicle(models.Model):
 #
 #     def __str__(self):
 #         return self.address
-#
-#
-# class CronJob(models.Model):
-#     name = models.CharField(_('JobName'), max_length=255, null=True, blank=True)
-#
-#     class Meta:
-#         verbose_name = _('CronJob')
-#         verbose_name_plural = _('CronJobs')
-#         ordering = ['pk']
-#
-#     def __str__(self):
-#         return self.name
-#
-#
-# class CronFinder(models.Model):
-#     finder = models.ForeignKey(VehicleMakes, verbose_name=_('VehicleMakes'), on_delete=models.CASCADE)
-#     job = models.ForeignKey(CronJob, verbose_name=_('CronJob'), on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return dict(TYPES)[self.finder.type] + '-' + self.finder.description + ' - ' + str(self.finder.count)

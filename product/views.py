@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.utils import translation
 
 from product.tasks import scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions
+from product.tasks import scrap_copart as scrap_copart_lot
 from product.models import Vehicle, VehicleMakes
 
 
@@ -25,10 +26,7 @@ def scrap_copart(request):
 
 
 def scrap_coparts(request):
-    scrap_copart_lots.delay(0, 360)
-    scrap_copart_lots.delay(360, 720)
-    scrap_copart_lots.delay(720, 1080)
-    scrap_copart_lots.delay(1080, 1441)
+    scrap_copart_lot.delay()
 
     return redirect('/')
 

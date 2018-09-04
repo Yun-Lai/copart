@@ -33,10 +33,61 @@ GLOBAL = {'live_auctions': []}
     options={'queue': 'high'}
 )
 def scrap_copart():
-    scrap_copart_lots.delay(0, 1354)
-    scrap_copart_lots.delay(1354, 1375)
-    scrap_copart_lots.delay(1375, 1405)
-    scrap_copart_lots.delay(1405, 1441)
+    misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
+    payloads = 'draw={draw}&columns[0][data]=0&columns[0][name]=&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]=&columns[1][searchable]=true&columns[1][orderable]=false&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=2&columns[2][name]=&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=3&columns[3][name]=&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=4&columns[4][name]=&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=5&columns[5][name]=&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false&columns[6][data]=6&columns[6][name]=&columns[6][searchable]=true&columns[6][orderable]=true&columns[6][search][value]=&columns[6][search][regex]=false&columns[7][data]=7&columns[7][name]=&columns[7][searchable]=true&columns[7][orderable]=true&columns[7][search][value]=&columns[7][search][regex]=false&columns[8][data]=8&columns[8][name]=&columns[8][searchable]=true&columns[8][orderable]=true&columns[8][search][value]=&columns[8][search][regex]=false&columns[9][data]=9&columns[9][name]=&columns[9][searchable]=true&columns[9][orderable]=true&columns[9][search][value]=&columns[9][search][regex]=false&columns[10][data]=10&columns[10][name]=&columns[10][searchable]=true&columns[10][orderable]=true&columns[10][search][value]=&columns[10][search][regex]=false&columns[11][data]=11&columns[11][name]=&columns[11][searchable]=true&columns[11][orderable]=true&columns[11][search][value]=&columns[11][search][regex]=false&columns[12][data]=12&columns[12][name]=&columns[12][searchable]=true&columns[12][orderable]=true&columns[12][search][value]=&columns[12][search][regex]=false&columns[13][data]=13&columns[13][name]=&columns[13][searchable]=true&columns[13][orderable]=true&columns[13][search][value]=&columns[13][search][regex]=false&columns[14][data]=14&columns[14][name]=&columns[14][searchable]=true&columns[14][orderable]=false&columns[14][search][value]=&columns[14][search][regex]=false&columns[15][data]=15&columns[15][name]=&columns[15][searchable]=true&columns[15][orderable]=false&columns[15][search][value]=&columns[15][search][regex]=false&order[0][column]=1&order[0][dir]=asc&start={start}&length={length}&search[value]=&search[regex]=false&sort=auction_date_type desc,auction_date_utc asc&defaultSort=true&filter[MISC]={misc}&query=*&watchListOnly=false&freeFormSearch=false&page={page}&size={size}'.format
+
+    url = "https://www.copart.com/public/vehicleFinder/search"
+    headers = {
+        "Host": "www.copart.com",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "X-Requested-With": "XMLHttpRequest",
+        "Connection": "keep-alive",
+        "Cache-Control": "max-age=0",
+    }
+
+    data = []
+
+    for id, makes in enumerate(VehicleMakes.objects.all()):
+        vtype = makes.type
+        description = makes.description
+        code = makes.code
+
+        payload = payloads(draw=1, start=0, length=1, misc=misc(code=code, description=description, type=vtype),
+                           page=0, size=1)
+        while True:
+            try:
+                response = requests.request("POST", url, data=payload, headers=headers)
+                break
+            except:
+                print(url)
+                time.sleep(1)
+
+        result = json.loads(response.text)['data']['results']
+        total = result['totalElements']
+        print(','.join([str(id), description, str(total)]))
+        data.append(total)
+
+        # finder_item = VehicleMakes.objects.get(type=vtype, description=description, code=code)
+        # finder_item.count = total
+        # finder_item.save()
+
+    total = sum(data)
+    count = 0
+    before = 0
+    for current, make in enumerate(data):
+        if count >= total // 8:
+            print(str(before) + ' ' + str(current) + ' ' + str(sum(data[before:current])))
+            scrap_copart_lots.delay(before, current)
+            count = 0
+            before = current
+        count += make
+    print(str(before) + ' ' + str(len(data)) + ' ' + str(sum(data[before:len(data)])))
+    scrap_copart_lots.delay(before, len(data))
+    print(sum(data))
 
 
 @task(
@@ -104,9 +155,9 @@ def scrap_copart_lots(start, end):
         result = json.loads(response.text)['data']['results']
         total = result['totalElements']
 
-        finder_item = VehicleMakes.objects.get(type=vtype, description=description, code=code)
-        finder_item.count = total
-        finder_item.save()
+        # finder_item = VehicleMakes.objects.get(type=vtype, description=description, code=code)
+        # finder_item.count = total
+        # finder_item.save()
 
         pages_num = (total + 999) // 1000
         print(description, 'total - ' + str(total))
@@ -134,6 +185,10 @@ def scrap_copart_lots(start, end):
                 vin = lot.get('fv', '')
                 if not vin or len(vin) > 17:
                     continue
+
+                # if Vehicle.objects.filter(lot=_lot['ln']).filter(vin=vin).exists():
+                #     print('exists - ' + str(_lot['ln']))
+                #     continue
 
                 db_item, created = Vehicle.objects.get_or_create(lot=lot['ln'])
 
@@ -228,9 +283,9 @@ def scrap_copart_lots(start, end):
             total = result['totalElements']
             pages_num = (total + 999) // 1000
 
-        finder_item = VehicleMakes.objects.get(type=vtype, description=description, code=code)
-        finder_item.count = total
-        finder_item.save()
+        # finder_item = VehicleMakes.objects.get(type=vtype, description=description, code=code)
+        # finder_item.count = total
+        # finder_item.save()
 
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))

@@ -31,7 +31,7 @@ services:
 
   celery-worker-h:
     build: .
-    command: celery -A copart worker --concurrency 4 --loglevel=INFO -n worker.high -Q high
+    command: celery -A copart worker --concurrency 9 --loglevel=INFO -n worker.high -Q high
     restart: unless-stopped
     volumes:
       - .:/code
