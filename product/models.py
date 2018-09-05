@@ -36,8 +36,8 @@ class VehicleMakes(models.Model):
         return dict(TYPES)[self.type] + '-' + self.description + ' - ' + str(self.count)
 
     def scrap_link(self):
-        scrap_link = '<a href="/scrap_copart/?type={type}&description={description}&code={code}">Scrap {description}</a>'.format
-        return mark_safe(scrap_link(type=self.type, description=self.description, code=self.code))
+        scrap_link = '<a href="/scrap_copart/?id={id}">Scrap {description}</a>'.format
+        return mark_safe(scrap_link(id=self.id, description=self.description))
 
 
 class Vehicle(models.Model):

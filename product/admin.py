@@ -5,7 +5,7 @@ from product.filters import DescriptionFilter, MultipleChoicesFieldListFilter, M
 
 
 class VehicleMakesAdmin(admin.ModelAdmin):
-    list_display = ['type', 'description', 'count', 'scrap_link']
+    list_display = ['type', 'description', 'scrap_link']
     list_filter = (DescriptionFilter, ('type', MultipleChoicesFieldListFilter))
     search_fields = ['description']
 

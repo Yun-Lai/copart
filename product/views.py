@@ -14,13 +14,8 @@ def switch_language(request, language):
 
 
 def scrap_copart(request):
-    vtype = request.GET.get('type')
-    description = request.GET.get('description')
-    code = request.GET.get('code')
-
-    make = VehicleMakes.objects.get(type=vtype, code=code, description=description)
-
-    scrap_copart_lots.delay(make.id, make.id + 1)
+    make_id = request.GET.get('id')
+    scrap_copart_lots.delay([make_id])
 
     return redirect('/product/vehiclemakes/')
 
