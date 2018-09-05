@@ -288,3 +288,5 @@ JET_THEMES = [
 JET_SIDE_MENU_COMPACT = True
 
 # JET_INDEX_DASHBOARD = 'copart.dashboard.CustomIndexDashboard'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 150000
