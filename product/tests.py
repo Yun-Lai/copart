@@ -1553,29 +1553,22 @@ if __name__ == '__main__':
         [1412, 0],
     ]
     total = sum([a[1] for a in data])
+    div_count = 5
+    average = ((total + div_count - 1) // div_count)
+    print(total)
+    print(average)
 
     data = sorted(data, key=lambda x: x[1], reverse=True)
-    for a in data:
-        print(a)
 
-    print(total)
+    result = [[] for i in range(div_count)]
+    amount = [0 for i in range(div_count)]
+    for _, item in enumerate(data):
+        for i in range(0, div_count):
+            if amount[i] + item[1] <= average:
+                amount[i] += item[1]
+                result[i].append(item[0])
+                break
+        result = result[::-1]
 
-    values = [
-        [553, 571, 743, 776],
-        [1035, 1086, 801, 1202],
-        [1378, 830, 359, 1170],
-        [825, 315, 511, 453],
-        [371, 200, 627, 169, 3, 765, 150],
-    ]
-    result = [553, 571, 743, 1035, 1086, 801, 1378, 830, 359, 825, 315, 511, 371, 200, 627, 169, 3, 765, 776, 1202, 1170, 453, 150]
-    others = list(set([a[0] for a in data]) - set(result))
-    values.append(others)
-
-    for aaa in values:
-        total = 0
-        for a in aaa:
-            for b in data:
-                if b[0] == a:
-                    total += b[1]
-        print(total)
-    print(sorted(others))
+    for i in range(div_count):
+        print(amount[i], result[i])
