@@ -71,7 +71,7 @@ def scrap_copart():
         print(','.join([str(id), description, str(total)]))
         data.append([makes.id, total])
 
-    div_count = 5
+    div_count = 4
     total = sum([a[1] for a in data])
     average = ((total + div_count - 1) // div_count)
     print(total)
@@ -92,7 +92,7 @@ def scrap_copart():
     for i in range(div_count):
         print(amount[i], result[i])
         scrap_copart_lots.delay(result[i])
-        time.sleep(25)
+        time.sleep(10)
 
 
 @task(
