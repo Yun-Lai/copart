@@ -66,10 +66,13 @@ def scrap_copart():
                 print(url)
                 time.sleep(1)
 
-        result = json.loads(response.text)['data']['results']
-        total = result['totalElements']
-        print(','.join([str(id), description, str(total)]))
-        data.append([makes.id, total])
+        try:
+            result = json.loads(response.text)['data']['results']
+            total = result['totalElements']
+            print(','.join([str(id), description, str(total)]))
+            data.append([makes.id, total])
+        except:
+            continue
 
     div_count = 4
     total = sum([a[1] for a in data])
@@ -158,12 +161,11 @@ def scrap_copart_lots(make_ids):
                 print(url)
                 time.sleep(1)
 
-        result = json.loads(response.text)['data']['results']
-        total = result['totalElements']
-
-        # finder_item = VehicleMakes.objects.get(type=vtype, description=description, code=code)
-        # finder_item.count = total
-        # finder_item.save()
+        try:
+            result = json.loads(response.text)['data']['results']
+            total = result['totalElements']
+        except:
+            continue
 
         pages_num = (total + 999) // 1000
         print(description, 'total - ' + str(total))
@@ -285,13 +287,12 @@ def scrap_copart_lots(make_ids):
                     time.sleep(1)
             print('page - ' + str(page))
 
-            result = json.loads(response.text)['data']['results']
-            total = result['totalElements']
-            pages_num = (total + 999) // 1000
-
-        # finder_item = VehicleMakes.objects.get(type=vtype, description=description, code=code)
-        # finder_item.count = total
-        # finder_item.save()
+            try:
+                result = json.loads(response.text)['data']['results']
+                total = result['totalElements']
+                pages_num = (total + 999) // 1000
+            except:
+                continue
 
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))
