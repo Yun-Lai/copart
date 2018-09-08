@@ -75,7 +75,15 @@ def scrap_copart():
             print('scrap_copart(), 2')
             continue
 
-    div_count = 4
+    accounts = [
+        {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'},
+        {'username': 'zazacopart1@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'jobcopart@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'mycopartcars@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'copartvehicles@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'copart.gitlab@gmail.com', 'password': 'm1llerh0u4e'},
+    ]
+    div_count = 6
     total = sum([a[1] for a in data])
     average = ((total + div_count - 1) // div_count)
     print(total)
@@ -95,8 +103,8 @@ def scrap_copart():
 
     for i in range(div_count):
         print(amount[i], result[i])
-        scrap_copart_lots.delay(result[i])
-        time.sleep(10)
+        scrap_copart_lots.delay(result[i], accounts[i])
+        time.sleep(15)
 
 
 @task(
@@ -106,7 +114,7 @@ def scrap_copart():
     queue='high',
     options={'queue': 'high'}
 )
-def scrap_copart_lots(make_ids):
+def scrap_copart_lots(make_ids, account):
     options = webdriver.ChromeOptions()
     prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
@@ -118,18 +126,11 @@ def scrap_copart_lots(make_ids):
         try:
             driver = webdriver.Chrome(chrome_options=options)
             driver.get('https://www.copart.com/')
-            wait(driver, 60).until(
-                EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageSignIn"]'))).click()
-            wait(driver, 60).until(
-                EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageMemberSignIn"]'))).click()
-            wait(driver, 60).until(
-                EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(
-                'vdm.cojocaru@gmail.com')
-            wait(driver, 60).until(
-                EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(
-                'c0p2rt')
-            wait(driver, 60).until(
-                EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageSignIn"]'))).click()
+            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageMemberSignIn"]'))).click()
+            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
+            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
+            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
             break
         except Exception as e:
             print('scrap_copart_lots(), 1 - ' + str(e))
@@ -200,7 +201,7 @@ def scrap_copart_lots(make_ids):
                         driver.get(detail_url(_lot['ln']))
                         break
                     except Exception as e:
-                        print('scrap_copart_lots(), 5 - ' + str(e))
+                        print('scrap_copart_lots(), 5 - ' + str(e) + ' - ' + detail_url(_lot['ln']))
                         time.sleep(1)
 
                 lot = json.loads(document_fromstring(driver.page_source).text_content())['data']
