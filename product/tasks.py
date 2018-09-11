@@ -6,7 +6,7 @@ import random
 import subprocess
 from multiprocessing.pool import ThreadPool
 
-from lxml.html import document_fromstring, fromstring
+from lxml.html import fromstring
 from datetime import datetime, timedelta
 from django.utils import timezone
 
@@ -133,7 +133,7 @@ def scrap_copart_lots(make_ids, account):
             wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
             break
         except Exception as e:
-            print('scrap_copart_lots(), 1 - ' + str(e))
+            print('scrap_copart_lots(), 1', str(e))
             time.sleep(1)
 
     page_count = 1000
@@ -167,14 +167,14 @@ def scrap_copart_lots(make_ids, account):
                 response = requests.request("POST", url, data=payload, headers=headers)
                 break
             except Exception as e:
-                print('scrap_copart_lots(), 2 - ' + url + ' - ' + str(e))
+                print('scrap_copart_lots(), 2 - ' + url, str(e))
                 time.sleep(1)
 
         try:
             result = json.loads(response.text)['data']['results']
             total = result['totalElements']
         except Exception as e:
-            print('scrap_copart_lots(), 3 - ' + str(e))
+            print('scrap_copart_lots(), 3 - ' + response.text, str(e))
             continue
 
         pages_num = (total + 999) // 1000
@@ -191,7 +191,7 @@ def scrap_copart_lots(make_ids, account):
                 driver.get(detail_url(result['content'][0]['ln']))
                 break
             except Exception as e:
-                print('scrap_copart_lots(), 4 - ' + str(e))
+                print('scrap_copart_lots(), 4 - ' + detail_url(result['content'][0]['ln']), str(e))
                 time.sleep(1)
 
         while page <= pages_num:
@@ -201,17 +201,18 @@ def scrap_copart_lots(make_ids, account):
                         driver.get(detail_url(_lot['ln']))
                         break
                     except Exception as e:
-                        print('scrap_copart_lots(), 5 - ' + str(e) + ' - ' + detail_url(_lot['ln']))
+                        print('scrap_copart_lots(), 5 - ' + detail_url(_lot['ln']), str(e))
                         time.sleep(1)
 
-                lot = json.loads(document_fromstring(driver.page_source).text_content())['data']
-                images = lot.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': [], 'HIGH_RESOLUTION_IMAGE': []})
                 try:
-                    lot = lot['lotDetails']
+                    lot_data = json.loads(driver.page_source[121:-20])['data']
+                    # images = lot_data.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': [], 'HIGH_RESOLUTION_IMAGE': []})
+                    images = lot_data.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': []})
+                    lot = lot_data['lotDetails']
                 except Exception as e:
-                    print('scrap_copart_lots(), 6 - ' + str(e))
-                    print(_lot['ln'], lot, detail_url(_lot['ln']))
+                    print('scrap_copart_lots(), 6 - ' + detail_url(_lot['ln']), driver.page_source, str(e))
                     continue
+
                 print(description + ' - ' + str(lot['ln']))
 
                 vin = lot.get('fv', '')
@@ -307,7 +308,7 @@ def scrap_copart_lots(make_ids, account):
                     response = requests.request("POST", url, data=payload, headers=headers)
                     break
                 except Exception as e:
-                    print('scrap_copart_lots(), 7 - ' + url + ' - ' + str(e))
+                    print('scrap_copart_lots(), 7 - ' + url, str(e))
                     time.sleep(1)
             print('page - ' + str(page))
 
@@ -316,7 +317,7 @@ def scrap_copart_lots(make_ids, account):
                 total = result['totalElements']
                 pages_num = (total + 999) // 1000
             except Exception as e:
-                print('scrap_copart_lots(), 8' + str(e))
+                print('scrap_copart_lots(), 8' + response.text, str(e))
                 continue
 
         print('total - ' + str(total))

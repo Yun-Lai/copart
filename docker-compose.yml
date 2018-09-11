@@ -39,7 +39,20 @@ services:
 
   celery-worker-h:
     build: .
-    command: celery -A copart worker --concurrency 9 --loglevel=INFO -n worker.high -Q high
+    command: |
+      sh -c "
+        apt update &&
+        apt install -y libxss1 libappindicator1 libindicator7 &&
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &&
+        dpkg -i google-chrome*.deb &&
+        apt install -y -f &&
+        wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip &&
+        apt install -y unzip &&
+        unzip chromedriver_linux64.zip &&
+        chmod +x chromedriver &&
+        mv -f chromedriver /usr/local/bin/chromedriver &&
+        celery -A copart worker --concurrency 9 --loglevel=INFO -n worker.high -Q high
+      "
     restart: unless-stopped
     volumes:
       - .:/code
@@ -59,7 +72,20 @@ services:
 
   celery-worker-l:
     build: .
-    command: celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.low -Q low
+    command: |
+      sh -c "
+        apt update &&
+        apt install -y libxss1 libappindicator1 libindicator7 &&
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &&
+        dpkg -i google-chrome*.deb &&
+        apt install -y -f &&
+        wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip &&
+        apt install -y unzip &&
+        unzip chromedriver_linux64.zip &&
+        chmod +x chromedriver &&
+        mv -f chromedriver /usr/local/bin/chromedriver &&
+        celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.low -Q low
+      "
     restart: unless-stopped
     volumes:
       - .:/code
