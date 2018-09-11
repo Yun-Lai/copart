@@ -72,7 +72,7 @@ def scrap_copart():
             print(','.join([str(id), description, str(total)]))
             data.append([makes.id, total])
         except:
-            print('scrap_copart(), 2')
+            print('scrap_copart(), 2 - ' + response.text)
             continue
 
     accounts = [
@@ -125,12 +125,15 @@ def scrap_copart_lots(make_ids, account):
     while True:
         try:
             driver = webdriver.Chrome(chrome_options=options)
-            driver.get('https://www.copart.com/')
-            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageSignIn"]'))).click()
-            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//a[@data-uname="homePageMemberSignIn"]'))).click()
-            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
-            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
-            wait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+            driver.get('https://www.copart.com/login/')
+            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys('vdm.cojocaru@gmail.com')
+            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys('c0p2rt')
+            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+
+            time.sleep(3)
+            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys('vdm.cojocaru@gmail.com')
+            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys('c0p2rt')
+            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
             break
         except Exception as e:
             print('scrap_copart_lots(), 1', str(e))
