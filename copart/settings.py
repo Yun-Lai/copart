@@ -39,7 +39,7 @@ SITE_ID = 1
 INSTALLED_APPS = [
     'jet.dashboard',
     'jet',
-    'modeltranslation',
+    # 'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
