@@ -83,8 +83,14 @@ def scrap_copart():
         {'username': 'mycopartcars@gmail.com', 'password': 'm1llerh0u4e'},
         {'username': 'copartvehicles@gmail.com', 'password': 'm1llerh0u4e'},
         {'username': 'copart.gitlab@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'},
+        {'username': 'zazacopart1@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'jobcopart@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'mycopartcars@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'copartvehicles@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'copart.gitlab@gmail.com', 'password': 'm1llerh0u4e'},
     ]
-    div_count = 6
+    div_count = 12
     total = sum([a[1] for a in data])
     average = ((total + div_count - 1) // div_count)
     print(total)
@@ -118,7 +124,7 @@ def scrap_copart():
 def scrap_copart_lots(make_ids, account):
     while True:
         try:
-            driver = webdriver.Remote(command_executor='http://206.189.171.9:4444/wd/hub',
+            driver = webdriver.Remote(command_executor='http://104.248.182.111:4444/wd/hub',
                                       desired_capabilities=DesiredCapabilities.CHROME)
             driver.get('https://www.copart.com/login/')
             wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
@@ -546,7 +552,7 @@ def scrap_live_auctions():
     try:
         while True:
             try:
-                driver = webdriver.Remote(command_executor='http://206.189.171.9:4444/wd/hub',
+                driver = webdriver.Remote(command_executor='http://104.248.182.111:4444/wd/hub',
                                           desired_capabilities=DesiredCapabilities.CHROME)
                 break
             except:
