@@ -29,7 +29,7 @@ urlpatterns = [
 
     url(r'^', admin.site.urls),
 
-    url(r'^rosetta/', include('rosetta.urls')),
+    # url(r'^rosetta/', include('rosetta.urls')),
 
     url(r'^scrap_copart/', views.scrap_copart),
     url(r'^scrap_coparts/', views.scrap_coparts),
@@ -38,8 +38,8 @@ urlpatterns = [
 
     url(r'^ajax_getimages/', csrf_exempt(views.ajax_getimages), name='ajax_getimages'),
 
-    path('i18n/', include('django.conf.urls.i18n')),
-    path('language/<language>/', views.switch_language),
+    # path('i18n/', include('django.conf.urls.i18n')),
+    # path('language/<language>/', views.switch_language),
 
     # url(r'^silk/', include('silk.urls', namespace='silk')),
     # url(r'^statuscheck/', include('celerybeat_status.urls')),

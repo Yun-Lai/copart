@@ -48,12 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'product',
-    'ckeditor',
-    'rosetta',
-    'constance',
-    'constance.backends.database',
-    'debug_toolbar',
-    'imagekit',
+    # 'ckeditor',
+    # 'rosetta',
+    # 'constance',
+    # 'constance.backends.database',
+    # 'debug_toolbar',
+    # 'imagekit',
     # 'product.templatetags.extra_filters',
     # 'silk',
     # 'django_celery_beat',
@@ -61,7 +61,7 @@ INSTALLED_APPS = [
  ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     # 'silk.middleware.SilkyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -83,7 +83,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'constance.context_processors.config',
+                # 'constance.context_processors.config',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',

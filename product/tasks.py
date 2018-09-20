@@ -116,16 +116,10 @@ def scrap_copart():
     options={'queue': 'high'}
 )
 def scrap_copart_lots(make_ids, account):
-    # options = webdriver.ChromeOptions()
-    # prefs = {"profile.managed_default_content_settings.images": 2}
-    # options.add_experimental_option("prefs", prefs)
-    # options.add_argument('--disable-extensions')
-    # options.add_argument('--headless')
-    # options.add_argument('--disable-gpu')
-    # options.add_argument('--no-sandbox')
     while True:
         try:
-            driver = webdriver.Remote(command_executor='http://206.189.171.9:4444/wd/hub', desired_capabilities=DesiredCapabilities.CHROME)
+            driver = webdriver.Remote(command_executor='http://206.189.171.9:4444/wd/hub',
+                                      desired_capabilities=DesiredCapabilities.CHROME)
             driver.get('https://www.copart.com/login/')
             wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
             wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
@@ -550,17 +544,10 @@ def scrap_iaai_lots():
 )
 def scrap_live_auctions():
     try:
-        options = webdriver.ChromeOptions()
-        prefs = {"profile.managed_default_content_settings.images": 2}
-        options.add_experimental_option("prefs", prefs)
-        options.add_argument('--disable-extensions')
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--no-sandbox')
-
         while True:
             try:
-                driver = webdriver.Chrome(chrome_options=options)
+                driver = webdriver.Remote(command_executor='http://206.189.171.9:4444/wd/hub',
+                                          desired_capabilities=DesiredCapabilities.CHROME)
                 break
             except:
                 time.sleep(1)
