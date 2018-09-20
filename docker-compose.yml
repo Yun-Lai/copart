@@ -1,6 +1,20 @@
 version: '2'
 
 services:
+  chrome:
+    image: selenium/node-chrome:3.14.0-europium
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+
+  hub:
+    image: selenium/hub:3.14.0-europium
+    ports:
+      - "4444:4444"
+
   db:
     image: postgres
     restart: unless-stopped
@@ -39,7 +53,7 @@ services:
 
   celery-worker-h:
     build: .
-    command: celery -A copart worker --concurrency 9 --loglevel=INFO -n worker.high -Q high
+    command: celery -A copart worker --concurrency 7 --loglevel=INFO -n worker.high -Q high
     restart: unless-stopped
     volumes:
       - .:/code

@@ -4,7 +4,7 @@ from django.utils import translation
 
 from product.tasks import scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions
 from product.tasks import scrap_copart as scrap_copart_lot
-from product.models import Vehicle, VehicleMakes
+from product.models import Vehicle
 
 
 def switch_language(request, language):
@@ -15,7 +15,7 @@ def switch_language(request, language):
 
 def scrap_copart(request):
     make_id = request.GET.get('id')
-    scrap_copart_lots.delay([make_id])
+    scrap_copart_lots.delay([make_id], {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'})
 
     return redirect('/product/vehiclemakes/')
 
