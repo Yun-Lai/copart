@@ -93,6 +93,7 @@ def scrap_copart():
     div_count = 12
     total = sum([a[1] for a in data])
     average = ((total + div_count - 1) // div_count)
+    remaining_count = div_count
     print(total)
     print(average)
 
@@ -101,17 +102,31 @@ def scrap_copart():
     result = [[] for _ in range(div_count)]
     amount = [0 for _ in range(div_count)]
     for _, item in enumerate(data):
+        if item[1] == 0:
+            continue
+        allocate = False
+        min_id = -1
+        min_val = -1
         for i in range(div_count):
             if amount[i] + item[1] <= average:
                 amount[i] += item[1]
                 result[i].append(item[0])
                 break
-        result = result[::-1]
+            if min_val == -1 or min_val > amount[i]:
+                min_val = amount[i]
+                min_id = i
+        if not allocate:
+            amount[min_id] += item[1]
+            result[min_id].append(item[0])
+            remaining_count -= 1
+            total -= item[1]
+            average = ((total + remaining_count - 1) // remaining_count)
 
     for i in range(div_count):
         print(amount[i], result[i])
+    for i in range(div_count):
         scrap_copart_lots.delay(result[i], accounts[i])
-        time.sleep(15)
+        time.sleep(20)
 
 
 @task(
@@ -327,6 +342,9 @@ def scrap_copart_lots(make_ids, account):
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))
 
+    driver.close()
+    driver.quit()
+
     # Checking Foregoing Lots
     # created_at    lot     vin     foregoing   show
     # 2018-07-08    111     aaa     empty       false
@@ -334,19 +352,19 @@ def scrap_copart_lots(make_ids, account):
     # 2018-07-10    333     aaa     111         false
     # 2018-07-11    444     bbb     222         true
     # 2018-08-09    555     aaa     333         true
-    current_vin = ''
-    lots = Vehicle.objects.filter(source=True).order_by('vin', 'lot')
-    for lot_id, lot in enumerate(lots):
-        if lot.vin == current_vin:
-            lots[lot_id - 1].show = False
-            lots[lot_id - 1].save()
-            lot.foregoing = lots[lot_id - 1]
-            lot.save()
-            print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
-        current_vin = lot.vin
-
-    driver.close()
-    driver.quit()
+    if [553] == make_ids:
+        current_vin = ''
+        last_id = 0
+        lots = Vehicle.objects.filter(source=True).order_by('vin', 'id')
+        for lot_id, lot in enumerate(lots):
+            if lot.vin == current_vin:
+                lots[last_id].show = False
+                lots[last_id].save()
+                lot.foregoing = lots[last_id]
+                lot.save()
+                print(', '.join([current_vin, str(lots[last_id].lot), str(lot.lot)]))
+            current_vin = lot.vin
+            last_id = lot.id
 
 
 @periodic_task(

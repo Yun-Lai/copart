@@ -37,18 +37,20 @@ async def copart(param):
                 data = json.loads(decoded.decode())
                 if 'ATTRIBUTE' in data:
                     print(','.join([param, data['LOTNO'], data['BID']]))
-                    auction_file = open('auction_history.txt', 'a')
-                    auction_file.write(','.join([param, data['LOTNO'], data['BID'], '\n']))
-                    auction_file.close()
+                    # auction_file = open('auction_history.txt', 'a')
+                    # auction_file.write(','.join([param, data['LOTNO'], data['BID'], '\n']))
+                    # auction_file.close()
 
                     try:
                         query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE lot = {}".format
                         cursor.execute(query(data['BID'], data['LOTNO']))
                         conn.commit()
+                        print('Updated')
                     except:
                         query = "INSERT INTO product_vehicle(lot, sold_price, sale_status) VALUES ({}, {}, 'SOLD')".format
                         cursor.execute(query(data['LOTNO'], data['BID']))
                         conn.commit()
+                        print('Inserted')
 
                 if 'TEXT' in data:
                     cursor.close()

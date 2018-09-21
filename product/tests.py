@@ -1553,7 +1553,8 @@ if __name__ == '__main__':
         [1412, 0],
     ]
     total = sum([a[1] for a in data])
-    div_count = 5
+    div_count = 12
+    remaining_count = div_count
     average = ((total + div_count - 1) // div_count)
     print(total)
     print(average)
@@ -1563,12 +1564,28 @@ if __name__ == '__main__':
     result = [[] for i in range(div_count)]
     amount = [0 for i in range(div_count)]
     for _, item in enumerate(data):
+        if item[1] == 0:
+            continue
+        allocate = False
+        min_id = -1
+        min_val = -1
         for i in range(0, div_count):
             if amount[i] + item[1] <= average:
                 amount[i] += item[1]
                 result[i].append(item[0])
+                allocate = True
                 break
-        result = result[::-1]
+            if min_val == -1 or min_val > amount[i]:
+                min_val = amount[i]
+                min_id = i
+        if not allocate:
+            amount[min_id] += item[1]
+            result[min_id].append(item[0])
+            remaining_count -= 1
+            total -= item[1]
+            average = ((total + remaining_count - 1) // remaining_count)
+        # result = result[::-1]
+        # amount = amount[::-1]
 
     for i in range(div_count):
         print(amount[i], result[i])
