@@ -1589,3 +1589,38 @@ if __name__ == '__main__':
 
     for i in range(div_count):
         print(amount[i], result[i])
+
+    # Checking Foregoing Lots
+    # created_at    lot     vin     foregoing   show
+    # 2018-07-08    111     aaa     empty       false
+    # 2018-07-09    222     bbb     empty       false
+    # 2018-07-10    333     aaa     111         false
+    # 2018-07-11    444     bbb     222         true
+    # 2018-08-09    555     aaa     333         true
+    lots = [
+        [1, 111, 'aaa', None, True],
+        [2, 222, 'bbb', None, True],
+        [3, 333, 'aaa', None, True],
+        [4, 444, 'bbb', None, True],
+        [5, 555, 'aaa', None, True],
+    ]
+    current_vin = ''
+    lots = sorted(lots, key=lambda x: x[2])
+    for lot_id, lot in enumerate(lots):
+        if lot[2] == current_vin and lot[3] is None:
+            lots[lot_id - 1][4] = False
+            lot[3] = lots[lot_id - 1]
+            print(', '.join([current_vin, str(lots[lot_id - 1][1]), str(lot[1])]))
+        current_vin = lot[2]
+
+    lots.append([6, 666, 'ccc', None, True])
+    lots.append([7, 777, 'bbb', None, True])
+    lots.append([8, 888, 'aaa', None, True])
+    current_vin = ''
+    lots = sorted(lots, key=lambda x: x[2])
+    for lot_id, lot in enumerate(lots):
+        if lot[2] == current_vin and lot[3] is None:
+            lots[lot_id - 1][4] = False
+            lot[3] = lots[lot_id - 1]
+            print(', '.join([current_vin, str(lots[lot_id - 1][1]), str(lot[1])]))
+        current_vin = lot[2]

@@ -354,17 +354,15 @@ def scrap_copart_lots(make_ids, account):
     # 2018-08-09    555     aaa     333         true
     if [553] == make_ids:
         current_vin = ''
-        last_id = 0
-        lots = Vehicle.objects.filter(source=True).order_by('vin', 'id')
+        lots = Vehicle.objects.filter(source=True).order_by('vin')
         for lot_id, lot in enumerate(lots):
-            if lot.vin == current_vin:
-                lots[last_id].show = False
-                lots[last_id].save()
-                lot.foregoing = lots[last_id]
+            if lot.vin == current_vin and lot.foregoing is None:
+                lots[lot_id - 1].show = False
+                lots[lot_id - 1].save()
+                lot.foregoing = lots[lot_id - 1]
                 lot.save()
-                print(', '.join([current_vin, str(lots[last_id].lot), str(lot.lot)]))
+                print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
             current_vin = lot.vin
-            last_id = lot.id
 
 
 @periodic_task(
