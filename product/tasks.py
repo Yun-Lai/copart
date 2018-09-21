@@ -139,7 +139,7 @@ def scrap_copart():
 def scrap_copart_lots(make_ids, account):
     while True:
         try:
-            driver = webdriver.Remote(command_executor='http://104.248.182.111:4444/wd/hub',
+            driver = webdriver.Remote(command_executor='http://142.93.90.7:4444/wd/hub',
                                       desired_capabilities=DesiredCapabilities.CHROME)
             driver.get('https://www.copart.com/login/')
             wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
@@ -229,7 +229,7 @@ def scrap_copart_lots(make_ids, account):
                     images = lot_data.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': []})
                     lot = lot_data['lotDetails']
                 except Exception as e:
-                    print('scrap_copart_lots(), 6 - ' + detail_url(_lot['ln']), driver.page_source, str(e))
+                    print('scrap_copart_lots(), 6 - No lotDetails, ' + detail_url(_lot['ln']))
                     continue
 
                 print(description + ' - ' + str(lot['ln']))
@@ -568,7 +568,7 @@ def scrap_live_auctions():
     try:
         while True:
             try:
-                driver = webdriver.Remote(command_executor='http://104.248.182.111:4444/wd/hub',
+                driver = webdriver.Remote(command_executor='http://142.93.90.7:4444/wd/hub',
                                           desired_capabilities=DesiredCapabilities.CHROME)
                 break
             except:
