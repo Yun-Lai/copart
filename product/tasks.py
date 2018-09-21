@@ -111,6 +111,7 @@ def scrap_copart():
             if amount[i] + item[1] <= average:
                 amount[i] += item[1]
                 result[i].append(item[0])
+                allocate = True
                 break
             if min_val == -1 or min_val > amount[i]:
                 min_val = amount[i]
