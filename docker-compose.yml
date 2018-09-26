@@ -1,8 +1,17 @@
 version: '2'
 
 services:
-  chrome:
-    image: selenium/node-chrome:3.14.0-europium
+#  chrome:
+#    image: selenium/node-chrome:3.14.0-europium
+#    volumes:
+#      - /dev/shm:/dev/shm
+#    depends_on:
+#      - hub
+#    environment:
+#      HUB_HOST: hub
+
+  firefox:
+    image: selenium/node-firefox:3.14.0-europium
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
