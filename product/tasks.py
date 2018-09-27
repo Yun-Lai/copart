@@ -90,7 +90,7 @@ def scrap_copart():
         {'username': 'copartvehicles@gmail.com', 'password': 'm1llerh0u4e'},
         {'username': 'copart.gitlab@gmail.com', 'password': 'm1llerh0u4e'},
     ]
-    div_count = 12
+    div_count = 10
     total = sum([a[1] for a in data])
     average = ((total + div_count - 1) // div_count)
     remaining_count = div_count
@@ -140,18 +140,15 @@ def scrap_copart():
 def scrap_copart_lots(make_ids, account):
     while True:
         try:
-            # driver = webdriver.Remote(command_executor='http://142.93.90.7:4444/wd/hub',
-            #                           desired_capabilities=DesiredCapabilities.CHROME)
+            driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
+                                      desired_capabilities=DesiredCapabilities.CHROME)
 
-            driver = webdriver.Remote(command_executor='http://178.128.10.108:4444/wd/hub',
-                                      desired_capabilities=DesiredCapabilities.FIREFOX)
+            # driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
+            #                           desired_capabilities=DesiredCapabilities.FIREFOX)
 
             driver.get('https://www.copart.com/login/')
-            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
-            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
-            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+            print(driver.title)
 
-            time.sleep(3)
             wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
             wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
             wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
