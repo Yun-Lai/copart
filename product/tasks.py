@@ -570,11 +570,11 @@ def scrap_live_auctions():
     try:
         while True:
             try:
-                # driver = webdriver.Remote(command_executor='http://142.93.90.7:4444/wd/hub',
-                #                           desired_capabilities=DesiredCapabilities.CHROME)
+                driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
+                                          desired_capabilities=DesiredCapabilities.CHROME)
 
-                driver = webdriver.Remote(command_executor='http://178.128.10.108:4444/wd/hub',
-                                          desired_capabilities=DesiredCapabilities.FIREFOX)
+                # driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
+                #                           desired_capabilities=DesiredCapabilities.FIREFOX)
                 break
             except:
                 time.sleep(1)
