@@ -18,13 +18,11 @@ async def copart(param):
     async with websockets.connect('wss://nirvanarn' + nirvanalv + '.copart.com/sv/ws') as websocket:
         param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=Linux&S=ANONYMOUS&A=VB3&G=T&D=F&B=&R={}&1Date={}&'.format
         await websocket.send(param_1st(2, str(int(time.time() * 1000))))
-        greeting = await websocket.recv()
-        # print("{}".format(greeting))
+        await websocket.recv()
 
         param_2nd = 'F=5&R={}&E=1&N=/COPART{}/outbound,0,,F'.format
         await websocket.send(param_2nd(3, param))
-        greeting = await websocket.recv()
-        # print("{}".format(greeting))
+        await websocket.recv()
 
         keep_alive = 'F=3&R={}&'.format
         r = 4
@@ -36,7 +34,7 @@ async def copart(param):
                 decoded = base64.b64decode(json.loads(greeting)[0]['d'][1]['Data'])
                 data = json.loads(decoded.decode())
                 if 'ATTRIBUTE' in data:
-                    print(','.join([param, data['LOTNO'], data['BID']]))
+                    # print(','.join([param, data['LOTNO'], data['BID']]))
                     # auction_file = open('auction_history.txt', 'a')
                     # auction_file.write(','.join([param, data['LOTNO'], data['BID'], '\n']))
                     # auction_file.close()
@@ -48,8 +46,9 @@ async def copart(param):
                         print(','.join([param, data['LOTNO'], data['BID'], 'updated']))
                     except:
                         query = "INSERT INTO product_vehicle(lot, sold_price, sale_status) VALUES ({}, {}, 'SOLD')".format
-                        cursor.execute(query(data['LOTNO'], data['BID'], 'inserted'))
+                        cursor.execute(query(data['LOTNO'], data['BID']))
                         conn.commit()
+                        print(','.join([param, data['LOTNO'], data['BID'], 'inserted']))
 
                 if 'TEXT' in data:
                     cursor.close()

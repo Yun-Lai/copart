@@ -96,7 +96,6 @@ class Vehicle(models.Model):
 
     images = models.TextField(_('Image Urls'), null=True, blank=True)
     thumb_images = models.TextField(_('Thumbnail Image Urls'), null=True, blank=True)
-    # high_images = models.TextField(_('High Resolution Image Urls'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Vehicle')
@@ -125,14 +124,15 @@ class Vehicle(models.Model):
     def est_retail_value(self):
         return '$' + str(self.retail_value) + ' ' + self.currency
     est_retail_value.short_description = 'Est. Retail Value'
+    est_retail_value.admin_order_field = 'retail_value'
 
     def current_bid_(self):
         return '$' + str(self.current_bid) + ' ' + self.currency
-    current_bid_.short_description = 'Current Bid'
+    current_bid_.admin_order_field = 'current_bid'
 
     def sold_price_(self):
         return '$' + str(self.sold_price) + ' ' + self.currency
-    current_bid_.short_description = 'Current Bid'
+    sold_price_.admin_order_field = 'sold_price'
 
     def avatar_img(self):
         return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
@@ -141,7 +141,7 @@ class Vehicle(models.Model):
 
     def source_(self):
         return 'copart' if self.source else 'iaai'
-    source_.short_description = 'Source'
+    source_.admin_order_field = 'source'
 
     def images_(self):
         if self.source:
