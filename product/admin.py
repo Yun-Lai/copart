@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from product.models import *
-from product.filters import DescriptionFilter, MultipleChoicesFieldListFilter, MultipleChangeList, SourceFilter
+from product.filters import DescriptionFilter, MultipleChoicesFieldListFilter, MultipleChangeList, SourceFilter, SoldFilter
 
 
 class VehicleMakesAdmin(admin.ModelAdmin):
@@ -20,7 +20,7 @@ class VehicleAdmin(admin.ModelAdmin):
 
     list_display_links = ['vin', 'lot']
 
-    list_filter = [SourceFilter, 'make']
+    list_filter = [SourceFilter, SoldFilter]
 
     search_fields = ['name', 'vin', 'lot', 'year', 'make', 'model']
 

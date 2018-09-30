@@ -92,3 +92,21 @@ class SourceFilter(admin.SimpleListFilter):
         elif self.value() == 'iaai':
             return queryset.filter(source=False)
         return queryset
+
+
+class SoldFilter(admin.SimpleListFilter):
+    title = _('Sold Status')
+    parameter_name = 'sold'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('exist', _('Not Sold')),
+            ('sold', _('Sold Out')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'exist':
+            return queryset.filter(sold_price=0)
+        elif self.value() == 'sold':
+            return queryset.filter(sold_price__gt=0)
+        return queryset
