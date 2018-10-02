@@ -200,8 +200,6 @@ def scrap_copart_lots(make_ids, account):
                     print('scrap_copart_lots(), 6 - No lotDetails, ' + detail_url(_lot['ln']), e)
                     continue
 
-                print(description + ' - ' + str(lot['ln']))
-
                 vin = lot.get('fv', '')
                 if not vin or len(vin) > 17:
                     continue
@@ -211,6 +209,10 @@ def scrap_copart_lots(make_ids, account):
                 #     continue
 
                 db_item, created = Vehicle.objects.get_or_create(lot=lot['ln'])
+                if created:
+                    print(description + ' - ' + str(lot['ln']) + ', Insert')
+                else:
+                    print(description + ' - ' + str(lot['ln']) + ', Update')
 
                 db_item.make = lot['mkn']
                 db_item.model = lot['lm']
