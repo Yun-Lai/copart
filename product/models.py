@@ -105,6 +105,9 @@ class Vehicle(models.Model):
     def __str__(self):
         return self.vin + ' ' + str(self.lot)
 
+    def lot_(self):
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.lot) + '" target="_blank">' + str(self.lot) + '</a>')
+
     def odometer(self):
         return str(self.odometer_orr) + ' ' + (self.odometer_ord[0] if self.odometer_ord else '')
 

@@ -138,21 +138,15 @@ def scrap_copart():
     options={'queue': 'high'}
 )
 def scrap_copart_lots(make_ids, account):
-    while True:
-        try:
-            driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
-                                      desired_capabilities=DesiredCapabilities.CHROME)
+    driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
+                              desired_capabilities=DesiredCapabilities.CHROME)
 
-            driver.get('https://www.copart.com/login/')
-            print(driver.title)
+    driver.get('https://www.copart.com/login/')
+    print(driver.title)
 
-            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
-            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
-            wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
-            break
-        except Exception as e:
-            print('scrap_copart_lots(), 1', str(e))
-            time.sleep(1)
+    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
+    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
+    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
 
     page_count = 1000
     misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
@@ -180,20 +174,9 @@ def scrap_copart_lots(make_ids, account):
 
         payload = payloads(draw=1, start=0, length=page_count, misc=misc(code=code, description=description, type=vtype),
                            page=0, size=page_count)
-        while True:
-            try:
-                response = requests.request("POST", url, data=payload, headers=headers)
-                break
-            except Exception as e:
-                print('scrap_copart_lots(), 2 - ' + url, str(e))
-                time.sleep(1)
-
-        try:
-            result = json.loads(response.text)['data']['results']
-            total = result['totalElements']
-        except Exception as e:
-            print('scrap_copart_lots(), 3 - ' + response.text, str(e))
-            continue
+        response = requests.request("POST", url, data=payload, headers=headers)
+        result = json.loads(response.text)['data']['results']
+        total = result['totalElements']
 
         pages_num = (total + 999) // 1000
         print(description, 'total - ' + str(total))
@@ -204,31 +187,17 @@ def scrap_copart_lots(make_ids, account):
 
         page = 1
 
-        while True:
-            try:
-                driver.get(detail_url(result['content'][0]['ln']))
-                break
-            except Exception as e:
-                print('scrap_copart_lots(), 4 - ' + detail_url(result['content'][0]['ln']), str(e))
-                time.sleep(1)
+        driver.get(detail_url(result['content'][0]['ln']))
 
         while page <= pages_num:
             for _lot in result['content']:
-                while True:
-                    try:
-                        driver.get(detail_url(_lot['ln']))
-                        break
-                    except Exception as e:
-                        print('scrap_copart_lots(), 5 - ' + detail_url(_lot['ln']), str(e))
-                        time.sleep(1)
-
+                driver.get(detail_url(_lot['ln']))
                 try:
                     lot_data = json.loads(driver.page_source[121:-20])['data']
-                    # images = lot_data.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': [], 'HIGH_RESOLUTION_IMAGE': []})
                     images = lot_data.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': []})
                     lot = lot_data['lotDetails']
                 except Exception as e:
-                    print('scrap_copart_lots(), 6 - No lotDetails, ' + detail_url(_lot['ln']))
+                    print('scrap_copart_lots(), 6 - No lotDetails, ' + detail_url(_lot['ln']), e)
                     continue
 
                 print(description + ' - ' + str(lot['ln']))
@@ -321,22 +290,12 @@ def scrap_copart_lots(make_ids, account):
             page += 1
             payload = payloads(draw=page, start=page_count * (page - 1), length=page_count,
                                misc=misc(code=code, description=description, type=vtype), page=page - 1, size=page_count)
-            while True:
-                try:
-                    response = requests.request("POST", url, data=payload, headers=headers)
-                    break
-                except Exception as e:
-                    print('scrap_copart_lots(), 7 - ' + url, str(e))
-                    time.sleep(1)
+            response = requests.request("POST", url, data=payload, headers=headers)
             print('page - ' + str(page))
 
-            try:
-                result = json.loads(response.text)['data']['results']
-                total = result['totalElements']
-                pages_num = (total + 999) // 1000
-            except Exception as e:
-                print('scrap_copart_lots(), 8' + response.text, str(e))
-                continue
+            result = json.loads(response.text)['data']['results']
+            total = result['totalElements']
+            pages_num = (total + 999) // 1000
 
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))

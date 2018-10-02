@@ -14,13 +14,12 @@ class VehicleMakesAdmin(admin.ModelAdmin):
 
 
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = ['avatar_img', 'vin', 'lot', 'year', 'make', 'model', 'color', 'item', 'location', 'lane_row',
-                    'sale_date', 'odometer', 'doc_type', 'lot_1st_damage', 'est_retail_value',
-                    'current_bid_', 'sold_price_', 'source_']
+    list_display = ['avatar_img', 'vin', 'lot_', 'year', 'make', 'model', 'est_retail_value',
+                    'current_bid_', 'sold_price_', 'sale_date', 'odometer', 'lot_1st_damage', 'source_']
 
-    list_display_links = ['vin', 'lot']
+    list_display_links = ['vin']
 
-    list_filter = [SourceFilter, SoldFilter]
+    list_filter = [SourceFilter, SoldFilter, 'make']
 
     search_fields = ['name', 'vin', 'lot', 'year', 'make', 'model']
 
@@ -48,20 +47,8 @@ class VehicleAdmin(admin.ModelAdmin):
 # class LocationAdmin(admin.ModelAdmin):
 #     list_display = ['phone', 'fax', 'hours', 'free_wifi', 'address', 'mailing_address',
 #                     'location', 'general_manager', 'regional_manager']
-#
-#
-# class CronFinderInline(admin.TabularInline):
-#     model = CronFinder
-#     extra = 3
-#     show_change_link = True
-#
-#
-# class CronJobAdmin(admin.ModelAdmin):
-#     list_display = ['name']
-#     inlines = [CronFinderInline]
 
 
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(VehicleMakes, VehicleMakesAdmin)
 # admin.site.register(Location, LocationAdmin)
-# admin.site.register(CronJob, CronJobAdmin)
