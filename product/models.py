@@ -138,7 +138,9 @@ class Vehicle(models.Model):
     sold_price_.admin_order_field = 'sold_price'
 
     def avatar_img(self):
-        return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
+        # return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
+        #                  .format(lot=self.lot, url=self.avatar, title=self.name))
+        return mark_safe('<img src="{url}" title="{title}" width="96" height="72">'
                          .format(lot=self.lot, url=self.avatar, title=self.name))
     avatar_img.short_description = 'Avatar'
 

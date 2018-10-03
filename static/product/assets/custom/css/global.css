@@ -1,0 +1,45 @@
+.g_none_dis
+{
+    display: none;
+}
+
+.g_txt_right
+{
+    text-align: right;
+}
+
+.g_txt_center
+{
+    text-align: center;
+}
+
+.g_txt_bold
+{
+    font-weight: bold;
+}
+
+.g_slt
+{
+    width: 92%;
+    padding: 3px 10px;
+    border: 1px solid silver;
+    border-radius: 3px !important;
+}
+
+.g_ipt
+{
+    border: 1px solid silver;
+    width: 90%;
+    border-radius: 3px !important;
+    padding: 2px 10px;
+    display: inherit;
+}
+
+.g_ipt_f
+{
+    border: 1px solid silver;
+    width: 100%;
+    border-radius: 3px !important;
+    padding: 6px 10px;
+    display: inherit;
+}

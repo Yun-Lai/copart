@@ -1,0 +1,1821 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- langing page
+    2018-09-07 by hmc
+ -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>VEHICLE</title>
+    <link rel="shortcut icon" href="{% static 'product/assets/custom/imgs/avata.ico' %}">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="Metronic Shop UI description" name="description">
+    <meta content="Metronic Shop UI keywords" name="keywords">
+    <meta content="keenthemes" name="author">
+    <meta property="og:site_name" content="-CUSTOMER VALUE-">
+    <meta property="og:title" content="-CUSTOMER VALUE-">
+    <meta property="og:description" content="-CUSTOMER VALUE-">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
+    <meta property="og:url" content="-CUSTOMER VALUE-">
+    <!-- style sheet files -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"><!--- fonts for slider on the index page -->
+    <link href="{% static 'product/assets/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/pages/css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/plugins/fancybox/source/jquery.fancybox.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/plugins/owl.carousel/assets/owl.carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/pages/css/components.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/pages/css/slider.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/pages/css/style-shop.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'product/assets/corporate/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/corporate/css/style-responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/corporate/css/themes/red.css' %}" rel="stylesheet" id="style-color">
+    <link href="{% static 'product/assets/corporate/css/custom.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- custom style sheet files -->
+    <link href="{% static 'product/assets/custom/css/front.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/custom/css/global.css' %}" rel="stylesheet">
+</head>
+<body class="ecommerce" style="font-size: 11px">
+<!-- BEGIN TOP BAR
+<div class="pre-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 additional-shop-info">
+                <ul class="list-unstyled list-inline">
+                    <li class="f_phone_li"><i class="fa fa-phone"></i><span>+1 456 289 6717</span></li>
+                    <li><i class="fa fa-skype"></i>+1 456 6717</span></li>
+                    <li><span>Monday - Friday  9:00 AM - 5:00 PM ET</span></li>
+                </ul>
+            </div>
+            <div class="col-md-6 col-sm-6 additional-nav">
+                <ul class="list-unstyled list-inline pull-right">
+                    <li class="langs-block">
+                        <a href="javascript:void(0);" class="current f_lang_li">English </a>
+                        <div class="langs-block-others-wrapper"><div class="langs-block-others">
+                            <a href="javascript:void(0);">French</a>
+                            <a href="javascript:void(0);">Germany</a>
+                            <a href="javascript:void(0);">Turkish</a>
+                        </div></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<!-- HEADER BAR -->
+<div class="header f_header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-xs-12">
+                <a class="site-logo" href="index.html"><img src="{% static 'product/assets/custom/imgs/logo.png' %}"></a>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div class="f_search_dv">
+                    <input type="text" class="f_search_ipt" placeholder="Search by VIN or Lot" />
+                    <input type="button" class="f_search_btn" id="f_global_search_btn" value="SEARCH" />
+                </div>
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <div class="top-cart-block f_sign_dv">
+                    <ul class="list-unstyled list-inline pull-right">
+                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#f_refer_a_friend">Refer a Friend</a></li>
+                        <li><a href="{% url 'list_page' %}">Sign In</a></li>
+                        <li><a href="{% url 'list_page' %}">Join Free</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header END -->
+
+<!-- MAIN -->
+<div class="main" id="f_lr_main_dv">
+    <div class="container">
+        <div class="row f_asearch_tdv">
+            <div class="f_list_filter_dv">
+                <div class="f_asearch_tlt_dv">Filters  <i class="material-icons f_list_left_filter_min_i">line_weight</i></div>
+                <div class="f_asearch_cnt_dv f_list_filter_cnt Check">
+                    <div>
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Sites</div>
+                        <div class="f_l_f_cnt">
+                            <input type="radio" name="f_list_filter_site" id="flfc10" /><label for="flfc10">&nbsp;All</label> <br>
+                            <input type="radio" name="f_list_filter_site" id="flfc11" /><label for="flfc11">&nbsp;Copart (608)</label> <br>
+                            <input type="radio" name="f_list_filter_site" id="flfc12" /><label for="flfc12">&nbsp;IAAI (30)</label> <br>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Already Solded</div>
+                        <div class="f_l_f_cnt f_l_f_cnt_sp">
+                            <input type="checkbox" name="f_list_filter_site" id="flfc100" /><label for="flfc100">&nbsp;Show Real Price (608)</label> <br>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Featured Items</div>
+                        <div class="f_l_f_cnt f_l_f_cnt_sp">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc21" /><label for="flfc21">Classics (608)</label> <br>
+                            <input type="checkbox" id="flfc22" /><label for="flfc22">Buy It Now (30)</label> <br>
+                            <input type="checkbox" id="flfc23" /><label for="flfc23">Engind Start Prog (387)</label> <br>
+                            <input type="checkbox" id="flfc24" /><label for="flfc24">Enhanced Vehicles (2366)</label> <br>
+                            <input type="checkbox" id="flfc25" /><label for="flfc25">Exotics (7)</label> <br>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Make</div>
+                        <div class="f_l_f_cnt f_l_f_cnt_sp">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc31" /><label for="flfc31">1982(608)</label> <br>
+                            <input type="checkbox" id="flfc32" /><label for="flfc32">1983 (30)</label> <br>
+                            <input type="checkbox" id="flfc33" /><label for="flfc33">1984 (387)</label> <br>
+                            <input type="checkbox" id="flfc34" /><label for="flfc34">1985 (2366)</label> <br>
+                            <input type="checkbox" id="flfc35" /><label for="flfc35">1986 (7)</label> <br>
+                        </div>
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Model</div>
+                        <div class="f_l_f_cnt f_l_f_cnt_sp">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc41" /><label for="flfc41">31 (608)</label> <br>
+                            <input type="checkbox" id="flfc42" /><label for="flfc42">3S (30)</label> <br>
+                            <input type="checkbox" id="flfc43" /><label for="flfc43">3.2tl (387)</label> <br>
+                            <input type="checkbox" id="flfc44" /><label for="flfc44">3251(2366)</label> <br>
+                            <input type="checkbox" id="flfc45" /><label for="flfc45">4runner (7)</label> <br>
+                        </div>
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Year</div>
+                        <div class="f_l_f_cnt f_l_f_cnt_sp">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc51" /><label for="flfc21">2017 (608)</label> <br>
+                            <input type="checkbox" id="flfc52" /><label for="flfc22">2016 (30)</label> <br>
+                            <input type="checkbox" id="flfc53" /><label for="flfc23">2015 (387)</label> <br>
+                            <input type="checkbox" id="flfc54" /><label for="flfc24">2014 (2366)</label> <br>
+                            <input type="checkbox" id="flfc55" /><label for="flfc25">2013 (7)</label> <br>
+                        </div>
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Odmeter</div>
+                        <div class="f_l_f_cnt g_none_dis">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc61" /><label for="flfc61">Less than 25000 (608)</label> <br>
+                            <input type="checkbox" id="flfc62" /><label for="flfc62">2500 to 50000 (30)</label> <br>
+                            <input type="checkbox" id="flfc63" /><label for="flfc63">50001 to 75000 (387)</label> <br>
+                            <input type="checkbox" id="flfc64" /><label for="flfc64">75001 to 100000 (2366)</label> <br>
+                            <input type="checkbox" id="flfc65" /><label for="flfc65">10001 to 150000 (7)</label> <br>
+                        </div>
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Location</div>
+                        <div class="f_l_f_cnt g_none_dis">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc71" /><label for="flfc71">AK-ANCHORAGE (608)</label> <br>
+                            <input type="checkbox" id="flfc72" /><label for="flfc72">AL-BIRMINGHAM (30)</label> <br>
+                            <input type="checkbox" id="flfc73" /><label for="flfc73">AL-MOBILE (387)</label> <br>
+                            <input type="checkbox" id="flfc74" /><label for="flfc74">AL-MONTGOMERY (2366)</label> <br>
+                            <input type="checkbox" id="flfc75" /><label for="flfc75">AL-TRANNER(7)</label> <br>
+                        </div>
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Sale Name</div>
+                        <div class="f_l_f_cnt g_none_dis">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc81" /><label for="flfc81">AK-ANCHORAGE (608)</label> <br>
+                            <input type="checkbox" id="flfc82" /><label for="flfc82">AL-BIRMINGHAM (30)</label> <br>
+                            <input type="checkbox" id="flfc83" /><label for="flfc83">AL-MOBILE (387)</label> <br>
+                            <input type="checkbox" id="flfc84" /><label for="flfc84">AL-MONTGOMERY (2366)</label> <br>
+                            <input type="checkbox" id="flfc85" /><label for="flfc85">AL-TRANNER (7)</label> <br>
+                        </div>
+                        <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Featured Items</div>
+                        <div class="f_l_f_cnt g_none_dis">
+                            <input type="text" class="g_ipt" placeholder="Search" />
+                            <input type="checkbox" id="flfc91" /><label for="flfc91">09/08/2018 (608)</label> <br>
+                            <input type="checkbox" id="flfc92" /><label for="flfc92">09/12/2018 (30)</label> <br>
+                            <input type="checkbox" id="flfc93" /><label for="flfc93">09/14/2018 (387)</label> <br>
+                            <input type="checkbox" id="flfc94" /><label for="flfc94">09/15/2018 (2366)</label> <br>
+                            <input type="checkbox" id="flfc95" /><label for="flfc95">09/18/2018 (7)</label> <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="f_list_search_result_cnt_dv">
+                <div class="f_asearch_tlt_dv">Search results for: 2008 to 2019</div>
+                <div class="f_list_cnt_tdv">
+                    <div class="f_l_c_filter_applied">
+                        Filters Applied: <div>
+                        <div class="f_l_f_a_item">Classis<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %}" /></div>
+                        <div class="f_l_f_a_item">Hot Items<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Bmw<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Integra Ls<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Honda<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Ford<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
+                    </div></div>
+                    <div class="f_search_result_tb_top">
+                        <div class="row f_r_r_tb_top_top">
+                            <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing 1 to 10 <span class="f_list_page_num">of 100 entries</span></div>
+                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search : <input type="text" class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN" /></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show
+                                <select class="f_f_r_t_scnt_slt">
+                                    <option value="10">10</option>
+                                    <option value="10">25</option>
+                                    <option value="10">50</option>
+                                    <option value="10">100</option>
+                                </select><span class="f_list_page_num"> entries</span>
+                            </div>
+                            <div class="col-md-8 col-sm-8 col-xs-7 f_l_s_f_sp g_txt_right f_f_r_pagin_btns">
+                                <div>Last</div>
+                                <div>Next</div>
+                                <div class="f_list_page_num">3</div>
+                                <div class="f_list_page_num">2</div>
+                                <div class="f_paging_active f_list_page_num">1</div>
+                                <div>Previous</div>
+                                <div>First</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="f_l_filer_tb_dv">
+                        <table id="c_seach_tb" class="table table-striped table-bordered dt-responsive" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>Images</th>
+                                <th>Year</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Location</th>
+                                <th>Sale Date</th>
+                                <th>Odometer</th>
+                                <th>Doc Type</th>
+                                <th>Damage</th>
+                                <th>Retail Value</th>
+                                <th>Current Bid</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
+                                    <td>ACURA</td>
+                                    <td>INTEGRALS</td>
+                                    <td>NY-LNG ISLAND <br> SF002</td>
+                                    <td>09/12/2018<br>08:00pm OMST</td>
+                                    <td>260, 216 E</td>
+                                    <td>CT - NY</td>
+                                    <td>FRONTEND</td>
+                                    <td>$1M 450USD</td>
+                                    <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row f_r_r_tb_top_top">
+                        <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing 1 to 10 <span class="f_list_page_num">of 100 entries</span></div>
+                        <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search : <input type="text" class="f_f_r_t_search_ipt" placeholder=" By Lot or Vin" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show
+                            <select class="f_f_r_t_scnt_slt">
+                                <option value="10">10</option>
+                                <option value="10">25</option>
+                                <option value="10">50</option>
+                                <option value="10">100</option>
+                            </select><span class="f_list_page_num"> entries</span>
+                        </div>
+                        <div class="col-md-8 col-sm-8 col-xs-7 f_l_s_f_sp g_txt_right f_f_r_pagin_btns">
+                            <div>Last</div>
+                            <div>Next</div>
+                            <div class="f_list_page_num">3</div>
+                            <div class="f_list_page_num">2</div>
+                            <div class="f_paging_active f_list_page_num">1</div>
+                            <div>Previous</div>
+                            <div>First</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 g_txt_center f_f_r_t_goto_dv">
+                            Go To Page <input type="text" class="f_f_r_t_goto_ipt" /><img class="f_lr_goto_page_img" src="{% static 'product/assets/custom/imgs/goto.png' %} " /><!-- <div class="f_lr_goto_page">Go</div>-->
+                        </div>
+                    </div>
+                    <div class="row f_lr_back_top">
+                        <div class="col-md-12 col-xs-12 g_txt_center f_list_goto_top_dv">
+                            <img src="{% static 'product/assets/custom/imgs/back_top.png' %} " /> &nbsp; Top
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BEGIN PRE-FOOTER -->
+<div class="pre-footer">
+    <div class="container">
+        <div class="row">
+            <!-- BEGIN BOTTOM ABOUT BLOCK -->
+            <div class="col-md-6 col-sm-6 col-xs-12 pre-footer-col">
+                <h2>About us</h2>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam sit nonummy nibh euismod tincidunt ut laoreet dolore magna aliquarm erat sit volutpat. Nostrud exerci tation ullamcorper suscipit lobortis nisl aliquip  commodo consequat.
+                    Duis autem vel eum iriure dolor vulputate velit esse molestie at dolore.</p>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 pre-footer-col">
+                <h2>Our Contacts</h2>
+                <address class="margin-bottom-40">
+                    35, Lorem Lis Street, Park Ave
+                    California, US<br>
+                    Phone: 300 323 3456 &nbsp; &nbsp;
+                    Fax: 300 323 1456<br>
+                    Email: <a href="mailto:info@metronic.com">info@metronic.com</a> &nbsp; &nbsp;
+                    Skype: <a href="skype:metronic">metronic</a>
+                </address>
+            </div>
+            <!-- END BOTTOM CONTACTS -->
+        </div>
+        <hr>
+        <div class="row">
+            <!-- BEGIN SOCIAL ICONS -->
+            <div class="col-md-6 col-sm-6">
+                <ul class="social-icons">
+                    <li><a class="rss" data-original-title="rss" href="javascript:;"></a></li>
+                    <li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
+                    <li><a class="twitter" data-original-title="twitter" href="javascript:;"></a></li>
+                    <li><a class="googleplus" data-original-title="googleplus" href="javascript:;"></a></li>
+                    <li><a class="linkedin" data-original-title="linkedin" href="javascript:;"></a></li>
+                    <li><a class="youtube" data-original-title="youtube" href="javascript:;"></a></li>
+                    <li><a class="vimeo" data-original-title="vimeo" href="javascript:;"></a></li>
+                    <li><a class="skype" data-original-title="skype" href="javascript:;"></a></li>
+                </ul>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="pre-footer-subscribe-box pull-right">
+                    <h2>Newsletter</h2>
+                    <form action="#">
+                        <div class="input-group">
+                            <input type="text" placeholder="youremail@mail.com" class="form-control">
+                            <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                  </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PRE-FOOTER -->
+<input type="hidden" id="f_list_page_mark" value="1" />
+
+<!-- MODALS -->
+<div id="f_refer_a_friend" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Refer a Friend</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="g_ipt_f" id="f_friend_invite" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- javascript files -->
+<script src="{% static 'product/assets/plugins/respond.min.js' %} "></script>
+<script src="{% static 'product/assets/plugins/jquery.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/assets/plugins/jquery-migrate.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/assets/plugins/bootstrap/js/bootstrap.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/assets/corporate/scripts/back-to-top.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/assets/plugins/fancybox/source/jquery.fancybox.pack.js' %} " type="text/javascript"></script><!-- pop up -->
+<script src="{% static 'product/assets/plugins/owl.carousel/owl.carousel.min.js' %} " type="text/javascript"></script><!-- slider for products -->
+<script src="{% static 'product/assets/plugins/zoom/jquery.zoom.min.js' %}" type="text/javascript"></script><!-- product zoom -->
+<script src="{% static 'product/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js' %} " type="text/javascript"></script><!-- Quantity -->
+<script src="{% static 'product/assets/corporate/scripts/layout.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/assets/pages/scripts/bs-carousel.js' %} " type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
+<!-- custom javascript files -->
+<script src="{% static 'product/assets/custom/js/front.js' %} " type="text/javascript"></script>
+
+</body>
+</html>

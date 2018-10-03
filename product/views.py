@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils import translation
 
 from product.tasks import scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions
@@ -59,3 +59,15 @@ def ajax_getimages(request):
         'images': images,
         'thumb_images': thumb_images,
     })
+
+
+def index(request):
+    return render(request, 'product/index.html')
+
+
+def lot_list(request):
+    return render(request, 'product/list.html')
+
+
+def detail(request):
+    return render(request, 'product/detail.html')

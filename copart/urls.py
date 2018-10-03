@@ -17,10 +17,8 @@ from django.conf.urls import url, include
 from django.urls import path
 from django.contrib import admin
 from django.conf.urls.static import static
-from django.views.decorators.csrf import csrf_exempt
 
 from copart import settings
-from product import views
 
 
 urlpatterns = [
@@ -28,15 +26,9 @@ urlpatterns = [
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
 
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('product.urls')),
 
     # url(r'^rosetta/', include('rosetta.urls')),
-
-    url(r'^scrap_copart/', views.scrap_copart),
-    url(r'^scrap_coparts/', views.scrap_coparts),
-    url(r'^scrap_iaai/', views.scrap_iaai),
-    url(r'^scrap_auction/', views.scrap_auction),
-
-    url(r'^ajax_getimages/', csrf_exempt(views.ajax_getimages), name='ajax_getimages'),
 
     # path('i18n/', include('django.conf.urls.i18n')),
     # path('language/<language>/', views.switch_language),
@@ -45,8 +37,8 @@ urlpatterns = [
     # url(r'^statuscheck/', include('celerybeat_status.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+# if settings.DEBUG:
+#     import debug_toolbar
+#     urlpatterns = [
+#         url(r'^__debug__/', include(debug_toolbar.urls)),
+#     ] + urlpatterns

@@ -1,0 +1,964 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- langing page
+    2018-09-07 by hmc
+ -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>VEHICLE</title>
+  <link rel="shortcut icon" href="{% static 'product/assets/custom/imgs/avata.ico' %}">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta content="Metronic Shop UI description" name="description">
+  <meta content="Metronic Shop UI keywords" name="keywords">
+  <meta content="keenthemes" name="author">
+  <meta property="og:site_name" content="-CUSTOMER VALUE-">
+  <meta property="og:title" content="-CUSTOMER VALUE-">
+  <meta property="og:description" content="-CUSTOMER VALUE-">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
+  <meta property="og:url" content="-CUSTOMER VALUE-">
+  <!-- style sheet files -->
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"><!--- fonts for slider on the index page -->  
+  <link href="{% static 'product/assets/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/pages/css/animate.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/plugins/fancybox/source/jquery.fancybox.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/plugins/owl.carousel/assets/owl.carousel.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/pages/css/components.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/pages/css/slider.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/pages/css/style-shop.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'product/assets/corporate/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/corporate/css/style-responsive.css' %}" rel="stylesheet">
+  <link href="{% static 'product/assets/corporate/css/themes/red.css' %}" rel="stylesheet" id="style-color">
+  <link href="{% static 'product/assets/corporate/css/custom.css' %}" rel="stylesheet">
+    <!-- custom style sheet files -->
+    <link href="{% static 'product/assets/custom/css/front.css' %}" rel="stylesheet">
+    <link href="{% static 'product/assets/custom/css/global.css' %}" rel="stylesheet">
+</head>
+<body class="ecommerce">
+    <!-- HEADER BAR -->
+    <div class="header f_header">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-3 col-xs-12">
+                  <a class="site-logo" href="index.html"><img src="{% static 'product/assets/custom/imgs/logo.png' %}" alt="Metronic Shop UI"></a>
+              </div>
+              <div class="col-md-5 col-xs-12">
+                  <div class="f_search_dv">
+                      <input type="text" class="f_search_ipt" placeholder="Search by VIN or Lot" />
+                      <input type="button" class="f_search_btn" id="f_global_search_btn" value="SEARCH" />
+                  </div>
+              </div>
+              <div class="col-md-4 col-xs-12">
+                  <div class="top-cart-block f_sign_dv">
+                      <ul class="list-unstyled list-inline pull-right">
+                          <li><a href="javascript:void(0);" data-toggle="modal" data-target="#f_refer_a_friend">Refer a Friend</a></li>
+                          <li><a href="{% url 'list_page' %}">Sign In</a></li>
+                          <li><a href="{% url 'list_page' %}">Join Free</a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+    <!-- Header END -->
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="container">
+          <!-- ADVANCED SEARCH -->
+          <div class="row f_asearch_tdv">
+              <div class="col-lg-9 col-md-8 col-sm-8 col-xs-6 f_l_sr_dv">
+                  <div class="f_asearch_tlt_dv">Browse Inventory</div>
+                  <div class="f_asearch_cnt_dv">
+                      <div class="row f_asearch_r_tabs">
+                          <div torder="1" class="col-md-4 col-xs-12 f_asearch_r_tab_clicked">Featured Items</div>
+                          <div torder="2" class="col-md-4 col-xs-12">Vehicle Types</div>
+                          <div torder="3" class="col-md-4 col-xs-12">Makes</div>
+                      </div>
+                      <div class="f_asearch_r_cnts">
+                          <div class="row f_asearch_tab1">
+                              <div class="f_max_1280">
+                                  <div class="col-md-4 col-sd-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-4 col-sd-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-4 col-sd-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                              </div>
+                              <div class="f_min_1280">
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row f_asearch_tab2 g_none_dis">
+                              <div class="f_max_1280">
+                                  <div class="col-md-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Classics (2,389)</a>
+                                      <a href="{% url 'list_page' %}">ATVs (420))</a>
+                                      <a href="{% url 'list_page' %}">Automobiles (120,174)</a>
+                                      <a href="{% url 'list_page' %}">Dirt Bikes (13)</a>
+                                      <a href="{% url 'list_page' %}">Exotics (325)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Classics (2,389)</a>
+                                      <a href="{% url 'list_page' %}">ATVs (420))</a>
+                                      <a href="{% url 'list_page' %}">Automobiles (120,174)</a>
+                                      <a href="{% url 'list_page' %}">Dirt Bikes (13)</a>
+                                      <a href="{% url 'list_page' %}">Exotics (325)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                              </div>
+                              <div class="f_min_1280">
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Classics (2,389)</a>
+                                      <a href="{% url 'list_page' %}">ATVs (420))</a>
+                                      <a href="{% url 'list_page' %}">Automobiles (120,174)</a>
+                                      <a href="{% url 'list_page' %}">Dirt Bikes (13)</a>
+                                      <a href="{% url 'list_page' %}">Exotics (325)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Classics (2,389)</a>
+                                      <a href="{% url 'list_page' %}">ATVs (420))</a>
+                                      <a href="{% url 'list_page' %}">Automobiles (120,174)</a>
+                                      <a href="{% url 'list_page' %}">Dirt Bikes (13)</a>
+                                      <a href="{% url 'list_page' %}">Exotics (325)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row f_asearch_tab3 g_none_dis">
+                              <div class="f_max_1280">
+                                  <div class="col-md-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Acura (1,417)</a>
+                                      <a href="{% url 'list_page' %}">Audi (1,086)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-4 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                              </div>
+                              <div class="f_min_1280">
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Acura (1,417)</a>
+                                      <a href="{% url 'list_page' %}">Audi (1,086)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                                  <div class="col-md-3 col-xs-12">
+                                      <a href="{% url 'list_page' %}">Repossessions (665)</a>
+                                      <a href="{% url 'list_page' %}">Buy It Now (10,784)</a>
+                                      <a href="{% url 'list_page' %}">Clean Title (28,456)</a>
+                                      <a href="{% url 'list_page' %}">Donations (6,385)</a>
+                                      <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                      <a href="{% url 'list_page' %}">Fleet / Lease (437)</a>
+                                      <a href="{% url 'list_page' %}">Front End (59,040)</a>
+                                      <a href="{% url 'list_page' %}">Hail Damage (5,040)</a>
+                                      <a href="{% url 'list_page' %}">Impound Vehicles (29)</a>
+                                      <a href="{% url 'list_page' %}">Lots with Bids (36,363)</a>
+                                      <a href="{% url 'list_page' %}">Minor Dents/Scratch... (6,527)</a>
+                                      <a href="{% url 'list_page' %}">Municipal Fleet (19)</a>
+                                      <a href="{% url 'list_page' %}">New Items (71,517)</a>
+                                  </div>
+                              </div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6 f_l_sr_dv">
+                  <div class="f_asearch_tlt_dv">Vehicle Finder</div>
+                  <div class="f_asearch_cnt_dv f_asearch_rr_cnt">
+                      <div class="row f_site_row">
+                          <div class="col-md-4 col-xs-12"></div>
+                          <div class="col-md-8 col-xs-12">
+                              <div class="row c_row">
+                                  <div class="col-sm-4 col-xs-4"><input type="button" value="All" class="f_asearch_l_btn f_site_copart_btn" /></div>
+                                  <div class="col-sm-4 col-xs-4"><input type="button" value="Copaart" class="f_asearch_l_btn f_site_copart_btn" /></div>
+                                  <div class="col-sm-4 col-xs-4"><input type="button" value="IAAI" class="f_asearch_l_btn" /></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Types</div>
+                          <div class="col-md-8 col-xs-12">
+                              <select class="g_slt f_r_s_slt">
+                                  <option label="ATV" value="object:300">ATV</option>
+                                  <option label="Automobile" value="object:301" selected="selected">Automobile</option>
+                                  <option label="Boat" value="object:302">Boat</option>
+                                  <option label="Dirt Bike" value="object:303">Dirt Bike</option>
+                                  <option label="Heavy Duty Trucks" value="object:304">Heavy Duty Trucks</option>
+                                  <option label="Industrial Equipment" value="object:305">Industrial Equipment</option>
+                                  <option label="Jet Ski" value="object:306">Jet Ski</option>
+                                  <option label="Medium Duty/Box Trucks" value="object:307">Medium Duty/Box Trucks</option>
+                                  <option label="Motorcycle" value="object:308">Motorcycle</option>
+                                  <option label="Other Goods" value="object:309">Other Goods</option>
+                                  <option label="Recreational Vehicle (RV)" value="object:310">Recreational Vehicle (RV)</option>
+                                  <option label="Snowmobile" value="object:311">Snowmobile</option>
+                                  <option label="Trailers" value="object:312">Trailers</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Year</div>
+                          <div class="col-md-8 col-xs-12">
+                              <div class="row c_row">
+                                  <div class="col-sm-5 col-xs-5">
+                                      <select class="g_slt f_as_year_slt f_r_s_slt">
+                                          <option label="2019" value="string:2019">2019</option>
+                                          <option label="2018" value="string:2018">2018</option>
+                                          <option label="2017" value="string:2017">2017</option>
+                                          <option label="2016" value="string:2016">2016</option>
+                                          <option label="2015" value="string:2015">2015</option>
+                                          <option label="2014" value="string:2014">2014</option>
+                                          <option label="2013" value="string:2013">2013</option>
+                                          <option label="2012" value="string:2012">2012</option>
+                                          <option label="2011" value="string:2011">2011</option>
+                                          <option label="2010" value="string:2010">2010</option>
+                                          <option label="2009" value="string:2009">2009</option>
+                                          <option label="2008" value="string:2008" selected="selected">2008</option>
+                                          <option label="2007" value="string:2007">2007</option>
+                                          <option label="2006" value="string:2006">2006</option>
+                                          <option label="2005" value="string:2005">2005</option>
+                                          <option label="2004" value="string:2004">2004</option>
+                                          <option label="2003" value="string:2003">2003</option>
+                                          <option label="2002" value="string:2002">2002</option>
+                                          <option label="2001" value="string:2001">2001</option>
+                                          <option label="2000" value="string:2000">2000</option>
+                                          <option label="1999" value="string:1999">1999</option>
+                                          <option label="1998" value="string:1998">1998</option>
+                                          <option label="1997" value="string:1997">1997</option>
+                                          <option label="1996" value="string:1996">1996</option>
+                                          <option label="1995" value="string:1995">1995</option>
+                                          <option label="1994" value="string:1994">1994</option>
+                                          <option label="1993" value="string:1993">1993</option>
+                                          <option label="1992" value="string:1992">1992</option>
+                                          <option label="1991" value="string:1991">1991</option>
+                                          <option label="1990" value="string:1990">1990</option>
+                                          <option label="1989" value="string:1989">1989</option>
+                                          <option label="1988" value="string:1988">1988</option>
+                                          <option label="1987" value="string:1987">1987</option>
+                                          <option label="1986" value="string:1986">1986</option>
+                                          <option label="1985" value="string:1985">1985</option>
+                                          <option label="1984" value="string:1984">1984</option>
+                                          <option label="1983" value="string:1983">1983</option>
+                                          <option label="1982" value="string:1982">1982</option>
+                                          <option label="1981" value="string:1981">1981</option>
+                                          <option label="1980" value="string:1980">1980</option>
+                                          <option label="1979" value="string:1979">1979</option>
+                                          <option label="1978" value="string:1978">1978</option>
+                                          <option label="1977" value="string:1977">1977</option>
+                                          <option label="1976" value="string:1976">1976</option>
+                                          <option label="1975" value="string:1975">1975</option>
+                                          <option label="1974" value="string:1974">1974</option>
+                                          <option label="1973" value="string:1973">1973</option>
+                                          <option label="1972" value="string:1972">1972</option>
+                                          <option label="1971" value="string:1971">1971</option>
+                                          <option label="1970" value="string:1970">1970</option>
+                                          <option label="1969" value="string:1969">1969</option>
+                                          <option label="1968" value="string:1968">1968</option>
+                                          <option label="1967" value="string:1967">1967</option>
+                                          <option label="1966" value="string:1966">1966</option>
+                                          <option label="1965" value="string:1965">1965</option>
+                                          <option label="1964" value="string:1964">1964</option>
+                                          <option label="1963" value="string:1963">1963</option>
+                                          <option label="1962" value="string:1962">1962</option>
+                                          <option label="1961" value="string:1961">1961</option>
+                                      </select>
+                                  </div>
+                                  <div class="col-sm-2 col-xs-2 g_txt_center">
+                                      To
+                                  </div>
+                                  <div class="col-sm-5 col-xs-5">
+                                      <select class="g_slt  f_as_year_slt f_r_s_slt">
+                                          <option label="2019" value="string:2019" selected="selected">2019</option>
+                                          <option label="2018" value="string:2018">2018</option>
+                                          <option label="2017" value="string:2017">2017</option>
+                                          <option label="2016" value="string:2016">2016</option>
+                                          <option label="2015" value="string:2015">2015</option>
+                                          <option label="2014" value="string:2014">2014</option>
+                                          <option label="2013" value="string:2013">2013</option>
+                                          <option label="2012" value="string:2012">2012</option>
+                                          <option label="2011" value="string:2011">2011</option>
+                                          <option label="2010" value="string:2010">2010</option>
+                                          <option label="2009" value="string:2009">2009</option>
+                                          <option label="2008" value="string:2008">2008</option>
+                                          <option label="2007" value="string:2007">2007</option>
+                                          <option label="2006" value="string:2006">2006</option>
+                                          <option label="2005" value="string:2005">2005</option>
+                                          <option label="2004" value="string:2004">2004</option>
+                                          <option label="2003" value="string:2003">2003</option>
+                                          <option label="2002" value="string:2002">2002</option>
+                                          <option label="2001" value="string:2001">2001</option>
+                                          <option label="2000" value="string:2000">2000</option>
+                                          <option label="1999" value="string:1999">1999</option>
+                                          <option label="1998" value="string:1998">1998</option>
+                                          <option label="1997" value="string:1997">1997</option>
+                                          <option label="1996" value="string:1996">1996</option>
+                                          <option label="1995" value="string:1995">1995</option>
+                                          <option label="1994" value="string:1994">1994</option>
+                                          <option label="1993" value="string:1993">1993</option>
+                                          <option label="1992" value="string:1992">1992</option>
+                                          <option label="1991" value="string:1991">1991</option>
+                                          <option label="1990" value="string:1990">1990</option>
+                                          <option label="1989" value="string:1989">1989</option>
+                                          <option label="1988" value="string:1988">1988</option>
+                                          <option label="1987" value="string:1987">1987</option>
+                                          <option label="1986" value="string:1986">1986</option>
+                                          <option label="1985" value="string:1985">1985</option>
+                                          <option label="1984" value="string:1984">1984</option>
+                                          <option label="1983" value="string:1983">1983</option>
+                                          <option label="1982" value="string:1982">1982</option>
+                                          <option label="1981" value="string:1981">1981</option>
+                                          <option label="1980" value="string:1980">1980</option>
+                                          <option label="1979" value="string:1979">1979</option>
+                                          <option label="1978" value="string:1978">1978</option>
+                                          <option label="1977" value="string:1977">1977</option>
+                                          <option label="1976" value="string:1976">1976</option>
+                                          <option label="1975" value="string:1975">1975</option>
+                                          <option label="1974" value="string:1974">1974</option>
+                                          <option label="1973" value="string:1973">1973</option>
+                                          <option label="1972" value="string:1972">1972</option>
+                                          <option label="1971" value="string:1971">1971</option>
+                                          <option label="1970" value="string:1970">1970</option>
+                                          <option label="1969" value="string:1969">1969</option>
+                                          <option label="1968" value="string:1968">1968</option>
+                                          <option label="1967" value="string:1967">1967</option>
+                                          <option label="1966" value="string:1966">1966</option>
+                                          <option label="1965" value="string:1965">1965</option>
+                                          <option label="1964" value="string:1964">1964</option>
+                                          <option label="1963" value="string:1963">1963</option>
+                                          <option label="1962" value="string:1962">1962</option>
+                                          <option label="1961" value="string:1961">1961</option>
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Make</div>
+                          <div class="col-md-8 col-xs-12">
+                              <select class="g_slt f_r_s_slt">
+                                  <option value="" selected="selected">All Makes</option>
+                                  <option label="Acura" value="object:311">Acura</option>
+                                  <option label="Alfa Romeo" value="object:312">Alfa Romeo</option>
+                                  <option label="American General" value="object:313">American General</option>
+                                  <option label="American Motors" value="object:314">American Motors</option><
+                                  option label="Assembly" value="object:315">Assembly</option><
+                                  option label="Aston Martin" value="object:316">Aston Martin</option>
+                                  <option label="Audi" value="object:317">Audi</option>
+                                  <option label="Austin" value="object:318">Austin</option>
+                                  <option label="Autobianchi" value="object:319">Autobianchi</option>
+                                  <option label="Bentley" value="object:320">Bentley</option>
+                                  <option label="Bertone" value="object:321">Bertone</option>
+                                  <option label="Big Dog" value="object:322">Big Dog</option>
+                                  <option label="BMW" value="object:323">BMW</option>
+                                  <option label="Bricklan" value="object:324">Bricklan</option>
+                                  <option label="Buick" value="object:325">Buick</option>
+                                  <option label="Cadillac" value="object:326">Cadillac</option>
+                                  <option label="Checker" value="object:327">Checker</option>
+                                  <option label="Chevrolet" value="object:328">Chevrolet</option>
+                                  <option label="Chrysler" value="object:329">Chrysler</option>
+                                  <option label="Classic Roadster" value="object:330">Classic Roadster</option>
+                                  <option label="Coach" value="object:331">Coach</option>
+                                  <option label="Daewoo" value="object:332">Daewoo</option>
+                                  <option label="Daihatsu" value="object:333">Daihatsu</option>
+                                  <option label="Datsun" value="object:334">Datsun</option>
+                                  <option label="Delorean" value="object:335">Delorean</option>
+                                  <option label="Desoto" value="object:336">Desoto</option>
+                                  <option label="Dodge" value="object:337">Dodge</option>
+                                  <option label="Ducati" value="object:338">Ducati</option>
+                                  <option label="Eagle" value="object:339">Eagle</option>
+                                  <option label="Eldorado" value="object:340">Eldorado</option>
+                                  <option label="Excalibur" value="object:341">Excalibur</option>
+                                  <option label="Ferrari" value="object:342">Ferrari</option>
+                                  <option label="Fiat" value="object:343">Fiat</option>
+                                  <option label="Ford" value="object:344">Ford</option>
+                                  <option label="GEM" value="object:345">GEM</option>
+                                  <option label="GEO" value="object:346">GEO</option>
+                                  <option label="GM" value="object:347">GM</option>
+                                  <option label="GMC" value="object:348">GMC</option>
+                                  <option label="Golf Cart" value="object:349">Golf Cart</option>
+                                  <option label="Harley Davidson" value="object:350">Harley Davidson</option>
+                                  <option label="Honda" value="object:351">Honda</option>
+                                  <option label="Hummer" value="object:352">Hummer</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Model</div>
+                          <div class="col-md-8 col-xs-12">
+                              <select class="g_slt f_r_s_slt">
+                                  <option value="" selected="selected">All Models</option>
+                                  <option label="ALL MODELS" value="string:ALL MODELS">ALL MODELS</option>
+                                  <option label="GIULIA" value="string:GIULIA">GIULIA</option>
+                                  <option label="STELVIO" value="string:STELVIO">STELVIO</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Location</div>
+                          <div class="col-md-8 col-xs-12">
+                              <input type="radio" name="location" value="1" id="f_as_l_1" checked /> &nbsp; <label for="f_as_l_1">Location</label> <br>
+                              <input type="radio" name="location" value="1" id="f_as_l_2" /> &nbsp; <label for="f_as_l_2">State / Province</label> <br>
+                              <!--<input type="radio" name="location" value="1" id="f_as_l_3" /> &nbsp; <label for="f_as_l_3">Zip / Postal Code</label> <br>-->
+                              <select class="g_slt f_r_s_slt">
+                                  <option value="" selected="selected">All Locations</option>
+                                  <option label="*NCS - Central Region" value="object:532">*NCS - Central Region</option>
+                                  <option label="*NCS - Eastern Region" value="object:533">*NCS - Eastern Region</option>
+                                  <option label="*NCS - Mountain Region" value="object:534">*NCS - Mountain Region</option>
+                                  <option label="*NCS - Pacific Region" value="object:535">*NCS - Pacific Region</option>
+                                  <option label="AB - Calgary" value="object:536">AB - Calgary</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4 col-xs-12"></div>
+                          <div class="col-md-8 col-xs-12 g_txt_right">
+                              <input type="button" class="f_asearch_l_btn" id="f_search_finder_btn" value="Search" />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- NEW ARRIVALS -->
+          <div class="f_new_arrivals">
+              <div class="f_asearch_tlt_dv">New Arrivals</div>
+              <div class="row f_new_arrival_cnts">
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/1.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/2.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/2.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/3.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/3.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/4.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/4.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row f_new_arrival_cnts f_land_hide_arrival g_none_dis">
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/1.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/2.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/2.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/3.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/3.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/4.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/4.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row f_new_arrival_cnts f_land_hide_arrival g_none_dis">
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/1.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/2.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/2.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/3.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/3.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-xs-12">
+                      <div class="product-item">
+                          <div class="pi-img-wrapper">
+                              <img src="{% static 'product/assets/custom/imgs/cars/4.jpg' %}" class="img-responsive" alt="Berry Lace Dress">
+                              <div>
+                                  <a href="{% static 'product/assets/custom/imgs/cars/4.jpg' %}" class="btn btn-default fancybox-button">Zoom</a>
+                              </div>
+                          </div>
+                          <div class="f_pi_detail">
+                              <h3><a href="{% url 'detail_page' %}">Berry Lace Dress</a></h3>
+                              <div class="pi-price">$29.00</div>
+                              <a href="javascript:;" class="btn btn-default add2cart">View Detailes</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="f_arrival_extend_div">
+                  <img src="{% static 'product/assets/custom/imgs/down.png' %}" state="0" class="f_arrival_extend_img" />
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- BEGIN PRE-FOOTER -->
+    <div class="pre-footer">
+      <div class="container">
+        <div class="row">
+          <!-- BEGIN BOTTOM ABOUT BLOCK -->
+          <div class="col-md-6 col-sm-6 col-xs-12 pre-footer-col">
+            <h2>About us</h2>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam sit nonummy nibh euismod tincidunt ut laoreet dolore magna aliquarm erat sit volutpat. Nostrud exerci tation ullamcorper suscipit lobortis nisl aliquip  commodo consequat.
+            Duis autem vel eum iriure dolor vulputate velit esse molestie at dolore.</p>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12 pre-footer-col">
+            <h2>Our Contacts</h2>
+            <address class="margin-bottom-40">
+              35, Lorem Lis Street, Park Ave
+              California, US<br>
+              Phone: 300 323 3456 &nbsp; &nbsp;
+              Fax: 300 323 1456<br>
+              Email: <a href="mailto:info@metronic.com">info@metronic.com</a> &nbsp; &nbsp;
+              Skype: <a href="skype:metronic">metronic</a>
+            </address>
+          </div>
+          <!-- END BOTTOM CONTACTS -->
+        </div>
+        <hr>
+        <div class="row">
+          <!-- BEGIN SOCIAL ICONS -->
+          <div class="col-md-6 col-sm-6">
+            <ul class="social-icons">
+              <li><a class="rss" data-original-title="rss" href="javascript:;"></a></li>
+              <li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
+              <li><a class="twitter" data-original-title="twitter" href="javascript:;"></a></li>
+              <li><a class="googleplus" data-original-title="googleplus" href="javascript:;"></a></li>
+              <li><a class="linkedin" data-original-title="linkedin" href="javascript:;"></a></li>
+              <li><a class="youtube" data-original-title="youtube" href="javascript:;"></a></li>
+              <li><a class="vimeo" data-original-title="vimeo" href="javascript:;"></a></li>
+              <li><a class="skype" data-original-title="skype" href="javascript:;"></a></li>
+            </ul>
+          </div>
+          <div class="col-md-6 col-sm-6">
+            <div class="pre-footer-subscribe-box pull-right">
+              <h2>Newsletter</h2>
+              <form action="#">
+                <div class="input-group">
+                  <input type="text" placeholder="youremail@mail.com" class="form-control">
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                  </span>
+                </div>
+              </form>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END PRE-FOOTER -->
+
+    <!-- MODALS -->
+    <div id="f_refer_a_friend" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Refer a Friend</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="g_ipt_f" id="f_friend_invite" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div> n
+            </div>
+
+        </div>
+    </div>
+
+    <!-- javascript files -->
+{#    <script src="{% static 'product/assets/plugins/respond.min.js' %}" type="text/javascript"></script>#}
+    <script src="{% static 'product/assets/plugins/jquery.min.js' %}" type="text/javascript"></script>
+{#    <script src="{% static 'product/assets/plugins/jquery-migrate.min.js' %}" type="text/javascript"></script>#}
+    <script src="{% static 'product/assets/plugins/bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
+{#    <script src="{% static 'product/assets/corporate/scripts/back-to-top.js' %}" type="text/javascript"></script>#}
+{#    <script src="{% static 'product/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js' %}" type="text/javascript"></script>#}
+{#    <script src="{% static 'product/assets/plugins/fancybox/source/jquery.fancybox.pack.js' %}" type="text/javascript"></script><!-- pop up -->#}
+{#    <script src="{% static 'product/assets/plugins/owl.carousel/owl.carousel.min.js' %}" type="text/javascript"></script><!-- slider for products -->#}
+{#    <script src="{% static 'product/assets/plugins/zoom/jquery.zoom.min.js' %}" type="text/javascript"></script><!-- product zoom -->#}
+{#    <script src="{% static 'product/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js' %}" type="text/javascript"></script><!-- Quantity -->#}
+{#    <script src="{% static 'product/assets/corporate/scripts/layout.js' %}" type="text/javascript"></script>#}
+{#    <script src="{% static 'product/assets/pages/scripts/bs-carousel.js' %}" type="text/javascript"></script>#}
+    <!-- custom javascript files -->
+    <script src="{% static 'product/assets/custom/js/front.js' %}" type="text/javascript"></script>
+
+</body>
+</html>

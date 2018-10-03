@@ -37,11 +37,11 @@ class VehicleAdmin(admin.ModelAdmin):
         ('Foregoing', {'fields': ['foregoing', 'show']}),
     ]
 
-    change_list_template = 'admin/change_list_vehicle.html'
+    # change_list_template = 'admin/change_list_vehicle.html'
 
-    class Media:
-        css = {'all': ('product/css/vehicle.css', 'node_modules/font-awesome/font-awesome.min.css')}
-        js = ('product/js/vehicle.js',)
+    # class Media:
+    #     css = {'all': ('product/css/vehicle.css', 'node_modules/font-awesome/font-awesome.min.css')}
+    #     js = ('product/js/vehicle.js',)
 
 
 # class LocationAdmin(admin.ModelAdmin):
