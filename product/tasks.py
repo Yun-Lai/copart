@@ -7,7 +7,7 @@ import subprocess
 from multiprocessing.pool import ThreadPool
 
 from lxml.html import fromstring
-from datetime import datetime, timedelta
+from datetime import datetime
 from django.utils import timezone
 
 from celery.schedules import crontab
