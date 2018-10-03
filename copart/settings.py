@@ -224,7 +224,7 @@ LANGUAGES = (
     ('zh-cn', gettext('China')),
 )
 
-TIME_ZONE = 'America/Regina'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 

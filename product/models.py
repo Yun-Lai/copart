@@ -107,9 +107,11 @@ class Vehicle(models.Model):
 
     def lot_(self):
         return mark_safe('<a href="https://www.copart.com/lot/' + str(self.lot) + '" target="_blank">' + str(self.lot) + '</a>')
+    lot_.admin_order_field = 'lot'
 
     def odometer(self):
         return str(self.odometer_orr) + ' ' + (self.odometer_ord[0] if self.odometer_ord else '')
+    odometer.admin_order_field = 'odometer_orr'
 
     def lane_row(self):
         if self.source:

@@ -230,7 +230,11 @@ def scrap_copart_lots(make_ids, account):
                 db_item.currency = lot['cuc']
                 # tz
                 if 'ad' in lot:
-                    db_item.sale_date = timezone.make_aware(datetime.fromtimestamp(lot['ad'] / 1000), timezone.get_current_timezone()) + timedelta(hours=14)
+                    db_item.sale_date = timezone.make_aware(datetime.fromtimestamp(lot['ad'] / 1000),
+                                                            timezone.get_current_timezone())
+                if 'lu' in lot:
+                    db_item.last_updated = timezone.make_aware(datetime.fromtimestamp(lot['lu'] / 1000),
+                                                               timezone.get_current_timezone())
                 # at
                 db_item.item = str(lot['aan'])
                 # ahb

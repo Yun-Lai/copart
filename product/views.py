@@ -10,32 +10,32 @@ from product.models import Vehicle
 def switch_language(request, language):
     translation.activate(language)
     request.session[translation.LANGUAGE_SESSION_KEY] = language
-    return redirect('/')
+    return redirect('/admin/')
 
 
 def scrap_copart(request):
     make_id = request.GET.get('id')
     scrap_copart_lots.delay([make_id], {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'})
 
-    return redirect('/product/vehiclemakes/')
+    return redirect('/admin/product/vehiclemakes/')
 
 
 def scrap_coparts(request):
     scrap_copart_lot.delay()
 
-    return redirect('/')
+    return redirect('/admin/')
 
 
 def scrap_iaai(request):
     scrap_iaai_lots.delay()
 
-    return redirect('/')
+    return redirect('/admin/')
 
 
 def scrap_auction(request):
     scrap_live_auctions.delay()
 
-    return redirect('/')
+    return redirect('/admin/')
 
 
 def ajax_getimages(request):
