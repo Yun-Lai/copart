@@ -42,10 +42,10 @@ function front_landing_event_proc_funcs()
     // event extend and pull in
     jQuery(".f_arrival_extend_img").click(function(){
        if ( jQuery(this).attr("state") == "0" ) {
-           jQuery(this).attr("state", "1").attr("src", "static/product/assets/custom/imgs/top.png");
+           jQuery(this).attr("state", "1").attr("src", "static/product/custom/imgs/top.png");
            jQuery(".f_land_hide_arrival").removeClass("g_none_dis");
        } else {
-           jQuery(this).attr("state", "0").attr("src", "static/product/assets/custom/imgs/down.png");
+           jQuery(this).attr("state", "0").attr("src", "static/product/custom/imgs/down.png");
            jQuery(".f_land_hide_arrival").addClass("g_none_dis");
        }
     });

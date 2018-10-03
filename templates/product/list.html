@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <title>VEHICLE</title>
-    <link rel="shortcut icon" href="{% static 'product/assets/custom/imgs/avata.ico' %}">
+    <link rel="shortcut icon" href="{% static 'product/custom/imgs/avata.ico' %}">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="Metronic Shop UI description" name="description">
@@ -22,24 +22,24 @@
     <!-- style sheet files -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"><!--- fonts for slider on the index page -->
-    <link href="{% static 'product/assets/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/pages/css/animate.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/plugins/fancybox/source/jquery.fancybox.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/plugins/owl.carousel/assets/owl.carousel.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/pages/css/components.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/pages/css/slider.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/pages/css/style-shop.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'product/assets/corporate/css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/corporate/css/style-responsive.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/corporate/css/themes/red.css' %}" rel="stylesheet" id="style-color">
-    <link href="{% static 'product/assets/corporate/css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'product/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'product/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'product/pages/css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'product/plugins/fancybox/source/jquery.fancybox.css' %}" rel="stylesheet">
+    <link href="{% static 'product/plugins/owl.carousel/assets/owl.carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'product/pages/css/components.css' %}" rel="stylesheet">
+    <link href="{% static 'product/pages/css/slider.css' %}" rel="stylesheet">
+    <link href="{% static 'product/pages/css/style-shop.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'product/corporate/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'product/corporate/css/style-responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'product/corporate/css/themes/red.css' %}" rel="stylesheet" id="style-color">
+    <link href="{% static 'product/corporate/css/custom.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- custom style sheet files -->
-    <link href="{% static 'product/assets/custom/css/front.css' %}" rel="stylesheet">
-    <link href="{% static 'product/assets/custom/css/global.css' %}" rel="stylesheet">
+    <link href="{% static 'product/custom/css/front.css' %}" rel="stylesheet">
+    <link href="{% static 'product/custom/css/global.css' %}" rel="stylesheet">
 </head>
 <body class="ecommerce" style="font-size: 11px">
 <!-- BEGIN TOP BAR
@@ -74,7 +74,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-xs-12">
-                <a class="site-logo" href="index.html"><img src="{% static 'product/assets/custom/imgs/logo.png' %}"></a>
+                <a class="site-logo" href="{% url 'index_page' %}"><img src="{% static 'product/custom/imgs/logo.png' %}"></a>
             </div>
             <div class="col-md-6 col-xs-12">
                 <div class="f_search_dv">
@@ -197,12 +197,12 @@
                 <div class="f_list_cnt_tdv">
                     <div class="f_l_c_filter_applied">
                         Filters Applied: <div>
-                        <div class="f_l_f_a_item">Classis<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %}" /></div>
-                        <div class="f_l_f_a_item">Hot Items<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
-                        <div class="f_l_f_a_item">Bmw<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
-                        <div class="f_l_f_a_item">Integra Ls<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
-                        <div class="f_l_f_a_item">Honda<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
-                        <div class="f_l_f_a_item">Ford<img class="f_list_fr_close" src="{% static 'product/assets/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Classis<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}" /></div>
+                        <div class="f_l_f_a_item">Hot Items<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Bmw<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Integra Ls<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Honda<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} " /></div>
+                        <div class="f_l_f_a_item">Ford<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} " /></div>
                     </div></div>
                     <div class="f_search_result_tb_top">
                         <div class="row f_r_r_tb_top_top">
@@ -248,7 +248,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -261,7 +261,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -274,7 +274,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -287,7 +287,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -300,7 +300,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -313,7 +313,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -326,7 +326,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -339,7 +339,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -352,7 +352,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -365,7 +365,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -378,7 +378,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -391,7 +391,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -404,7 +404,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -417,7 +417,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -430,7 +430,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -443,7 +443,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -456,7 +456,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -469,7 +469,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -482,7 +482,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -495,7 +495,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -508,7 +508,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -521,7 +521,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -534,7 +534,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -547,7 +547,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -560,7 +560,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -573,7 +573,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -586,7 +586,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -599,7 +599,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -612,7 +612,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -625,7 +625,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -638,7 +638,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -651,7 +651,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -664,7 +664,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -677,7 +677,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -690,7 +690,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -703,7 +703,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -716,7 +716,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -729,7 +729,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -742,7 +742,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -755,7 +755,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -768,7 +768,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -781,7 +781,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -794,7 +794,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -807,7 +807,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -820,7 +820,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -833,7 +833,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -846,7 +846,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -859,7 +859,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -872,7 +872,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -885,7 +885,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -898,7 +898,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -911,7 +911,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -924,7 +924,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -937,7 +937,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -950,7 +950,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -963,7 +963,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -976,7 +976,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -989,7 +989,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1002,7 +1002,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1015,7 +1015,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1028,7 +1028,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1041,7 +1041,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1054,7 +1054,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1067,7 +1067,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1080,7 +1080,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1093,7 +1093,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1106,7 +1106,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1119,7 +1119,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1132,7 +1132,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1145,7 +1145,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1158,7 +1158,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1171,7 +1171,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1184,7 +1184,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1197,7 +1197,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1210,7 +1210,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1223,7 +1223,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1236,7 +1236,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1249,7 +1249,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1262,7 +1262,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1275,7 +1275,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1288,7 +1288,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1301,7 +1301,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1314,7 +1314,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1327,7 +1327,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1340,7 +1340,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1353,7 +1353,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1366,7 +1366,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1379,7 +1379,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1392,7 +1392,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1405,7 +1405,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1418,7 +1418,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1431,7 +1431,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1444,7 +1444,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1457,7 +1457,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1470,7 +1470,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1483,7 +1483,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1496,7 +1496,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1509,7 +1509,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1522,7 +1522,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1535,7 +1535,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1548,7 +1548,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1561,7 +1561,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1574,7 +1574,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1587,7 +1587,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1600,7 +1600,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1613,7 +1613,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1626,7 +1626,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1639,7 +1639,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1652,7 +1652,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1665,7 +1665,7 @@
                                     <td>$1,450USD <br> Buy It Now Price : $3,350 USD</td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/assets/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
+                                    <td><a href="{% url 'detail_page' %}"><img src="{% static 'product/custom/imgs/cars/1.jpg' %} " class="f_l_f_product_img" /><div class="f_lr_td_img_dv">Check Photos</div></a></td>
                                     <td>1992 <br><div class="f_l_y_s f_l_ss">S</div><div class="f_l_y_s f_l_sr">R</div><div class="f_l_y_s f_l_sd">D</div><div class="f_l_y_s f_l_se">E</div></td>
                                     <td>ACURA</td>
                                     <td>INTEGRALS</td>
@@ -1705,12 +1705,12 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-xs-12 g_txt_center f_f_r_t_goto_dv">
-                            Go To Page <input type="text" class="f_f_r_t_goto_ipt" /><img class="f_lr_goto_page_img" src="{% static 'product/assets/custom/imgs/goto.png' %} " /><!-- <div class="f_lr_goto_page">Go</div>-->
+                            Go To Page <input type="text" class="f_f_r_t_goto_ipt" /><img class="f_lr_goto_page_img" src="{% static 'product/custom/imgs/goto.png' %} " /><!-- <div class="f_lr_goto_page">Go</div>-->
                         </div>
                     </div>
                     <div class="row f_lr_back_top">
                         <div class="col-md-12 col-xs-12 g_txt_center f_list_goto_top_dv">
-                            <img src="{% static 'product/assets/custom/imgs/back_top.png' %} " /> &nbsp; Top
+                            <img src="{% static 'product/custom/imgs/back_top.png' %} " /> &nbsp; Top
                         </div>
                     </div>
                 </div>
@@ -1798,24 +1798,24 @@
 </div>
 
 <!-- javascript files -->
-<script src="{% static 'product/assets/plugins/respond.min.js' %} "></script>
-<script src="{% static 'product/assets/plugins/jquery.min.js' %} " type="text/javascript"></script>
-<script src="{% static 'product/assets/plugins/jquery-migrate.min.js' %} " type="text/javascript"></script>
-<script src="{% static 'product/assets/plugins/bootstrap/js/bootstrap.min.js' %} " type="text/javascript"></script>
-<script src="{% static 'product/assets/corporate/scripts/back-to-top.js' %} " type="text/javascript"></script>
-<script src="{% static 'product/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js' %} " type="text/javascript"></script>
-<script src="{% static 'product/assets/plugins/fancybox/source/jquery.fancybox.pack.js' %} " type="text/javascript"></script><!-- pop up -->
-<script src="{% static 'product/assets/plugins/owl.carousel/owl.carousel.min.js' %} " type="text/javascript"></script><!-- slider for products -->
-<script src="{% static 'product/assets/plugins/zoom/jquery.zoom.min.js' %}" type="text/javascript"></script><!-- product zoom -->
-<script src="{% static 'product/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js' %} " type="text/javascript"></script><!-- Quantity -->
-<script src="{% static 'product/assets/corporate/scripts/layout.js' %} " type="text/javascript"></script>
-<script src="{% static 'product/assets/pages/scripts/bs-carousel.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/plugins/respond.min.js' %} "></script>
+<script src="{% static 'product/plugins/jquery.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/plugins/jquery-migrate.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/plugins/bootstrap/js/bootstrap.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/corporate/scripts/back-to-top.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/plugins/jquery-slimscroll/jquery.slimscroll.min.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/plugins/fancybox/source/jquery.fancybox.pack.js' %} " type="text/javascript"></script><!-- pop up -->
+<script src="{% static 'product/plugins/owl.carousel/owl.carousel.min.js' %} " type="text/javascript"></script><!-- slider for products -->
+<script src="{% static 'product/plugins/zoom/jquery.zoom.min.js' %}" type="text/javascript"></script><!-- product zoom -->
+<script src="{% static 'product/plugins/bootstrap-touchspin/bootstrap.touchspin.js' %} " type="text/javascript"></script><!-- Quantity -->
+<script src="{% static 'product/corporate/scripts/layout.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/pages/scripts/bs-carousel.js' %} " type="text/javascript"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
 <!-- custom javascript files -->
-<script src="{% static 'product/assets/custom/js/front.js' %} " type="text/javascript"></script>
+<script src="{% static 'product/custom/js/front.js' %} " type="text/javascript"></script>
 
 </body>
 </html>
