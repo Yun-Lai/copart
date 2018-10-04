@@ -345,6 +345,15 @@
     border: none !important;
 }
 
+.table-bordered th {
+    padding-right: 0 !important;
+}
+
+table tbody tr td {
+    width: 10%;
+
+}
+
 .carousel-inner .item .row div {
     padding-left: 0px !important;
     padding-right: 0px !important;
@@ -888,5 +897,20 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
 
     .f_l_filer_tb_dv .table td:last-child {
         min-width: 250px !important;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .f_asearch_tlt_dv {
+        border-radius: 5px !important;
+        background: #0092c5;
+        padding: 5px 10px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+    }
+
+    .f_asearch_tlt_dv.open {
+        border-radius: 5px 5px 0 0 !important;
     }
 }
