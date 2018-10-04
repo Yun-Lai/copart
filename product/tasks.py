@@ -209,11 +209,6 @@ def scrap_copart_lots(make_ids, account):
                 #     continue
 
                 db_item, created = Vehicle.objects.get_or_create(lot=lot['ln'])
-                if created:
-                    print(description + ' - ' + str(lot['ln']) + ', Insert')
-                else:
-                    print(description + ' - ' + str(lot['ln']) + ', Update')
-
                 db_item.make = lot['mkn']
                 db_item.model = lot['lm']
                 db_item.year = lot['lcy']
@@ -289,6 +284,10 @@ def scrap_copart_lots(make_ids, account):
                 # db_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
 
                 db_item.save()
+                if created:
+                    print(description + ' - ' + str(lot['ln']) + ', Insert')
+                else:
+                    print(description + ' - ' + str(lot['ln']) + ', Update')
 
             if page == pages_num:
                 break
@@ -345,9 +344,9 @@ def scrap_iaai_lots():
         item_id = item_and_stock_number[0]
         stock_id = item_and_stock_number[1]
         try:
-            if Vehicle.objects.filter(lot=int(stock_id)).exists():
-                print('exists - ' + item_id + ', ' + stock_id)
-                return
+            # if Vehicle.objects.filter(lot=int(stock_id)).exists():
+            #     print('exists - ' + item_id + ', ' + stock_id)
+            #     return
 
             while True:
                 try:
@@ -373,8 +372,7 @@ def scrap_iaai_lots():
                 print(item_url(item_id=item_id) + ' - vin not correct ' + lot['VIN'])
                 return
 
-            # db_item, created = Vehicle.objects.get_or_create(lot=item_id)
-            db_item = Vehicle(lot=int(stock_id))
+            db_item, created = Vehicle.objects.get_or_create(lot=int(stock_id))
             db_item.vin = vin
 
             # General Information
@@ -446,6 +444,10 @@ def scrap_iaai_lots():
                 db_item.avatar = 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % images['keys'][0]['K']
 
             db_item.save()
+            if created:
+                print(stock_id + ', Insert')
+            else:
+                print(stock_id + ', Update')
         except Exception as e:
             error_file = open('error.txt', 'a')
             error_file.write(item_url(item_id=item_id) + ' ' + str(e))
