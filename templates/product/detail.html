@@ -1,8 +1,10 @@
 {% extends 'product/base.html' %}
 {% load static %}
 {% load imagekit %}
+{% load humanize %}
+{% load extra_filters %}
 
-{% block title %}Detail{% endblock %}
+{% block title %}{{ lot.name }}{% endblock %}
 
 {% block content %}
     <div class="main f_car_detail_main">
@@ -10,13 +12,12 @@
             <div class="row f_asearch_tdv f_detail_cnt_dv">
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 f_l_detail_photo_cnt">
                     <div>
-                        <div class="f_detail_item_tlt">2005 MAZDA 3 I</div>
-                        <a href="{% static 'product/custom/imgs/cars/1.jpg' %}"
-                           class="btn btn-default fancybox-button f_detail_main_img_a">
-                            <img class="f_l_detail_photo" src="{% static 'product/custom/imgs/cars/1.jpg' %}">
+                        <div class="f_detail_item_tlt">{{ lot.name }}</div>
+                        <a href="{{ lot|get_lot_image:0 }}" class="btn btn-default fancybox-button f_detail_main_img_a">
+                            <img class="f_l_detail_photo" src="{{ lot|get_lot_image:0 }}">
                         </a>
                         <div class="f_detail_img_view_all_photos">View All Photos</div>
-                        <div class="f_detail_img_foregoing">Foregoing</div>
+                        {% if lot.foregoing %} }}<div class="f_detail_img_foregoing">Foregoing</div>{% endif %}
                     </div>
                     <div class="f_l_d_p_c_causel">
                         <div class="row">
@@ -26,74 +27,41 @@
                                         <div class="carousel-inner">
                                             <div class="item active">
                                                 <div class="row">
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/2.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/3.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/4.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/5.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
+                                                    {% for i in 'xxxx' %}
+                                                        <div class="col-md-3 col-xs-3">
+                                                            <a href="#x" class="thumbnail">
+                                                                <img class="p_a_gallery_sub_img"
+                                                                     src="{{ lot|get_lot_image:forloop.counter0 }}"
+                                                                     style="max-width:100%;">
+                                                            </a>
+                                                        </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                             <div class="item">
                                                 <div class="row">
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/6.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/7.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/8.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/9.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
+                                                    {% for i in 'xxxx' %}
+                                                        <div class="col-md-3 col-xs-3">
+                                                            <a href="#x" class="thumbnail">
+                                                                <img class="p_a_gallery_sub_img"
+                                                                     src="{{ lot|get_lot_image4:forloop.counter0 }}"
+                                                                     style="max-width:100%;">
+                                                            </a>
+                                                        </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                             <div class="item">
                                                 <div class="row">
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/10.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
-                                                    <div class="col-md-3 col-xs-3">
-                                                        <a href="#x" class="thumbnail"><img class="p_a_gallery_sub_img"
-                                                                                            src="{% static 'product/custom/imgs/cars/11.jpg' %}"
-                                                                                            alt="Image"
-                                                                                            style="max-width:100%;"></a>
-                                                    </div>
+                                                    {% for i in 'xx' %}
+                                                        <div class="col-md-3 col-xs-3">
+                                                            <a href="#x" class="thumbnail">
+                                                                <img class="p_a_gallery_sub_img"
+                                                                     src="{{ lot|get_lot_image8:forloop.counter0 }}"
+                                                                     style="max-width:100%;">
+                                                            </a>
+                                                        </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                         </div>
@@ -111,74 +79,74 @@
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 f_detail_infos_dv">
                     <div class="row f_detail_right_side_top_row">
                         <div class="col-md-6 col-xs-12 f_d_i_t_dv">
-                            <div class="f_asearch_tlt_dv">Lot #341238479</div>
+                            <div class="f_asearch_tlt_dv">Lot #{{ lot.lot }}</div>
                             <div class="f_detail_info_cnt">
                                 <div class="row">
                                     <div class="col-md-5 col-xs-5">Doc Type:</div>
-                                    <div class="col-md-7 g_txt_right">MI - CERTIFICATE</div>
+                                    <div class="col-md-7 g_txt_right">{{ lot.doc_type_stt }} - {{ lot.doc_type_ts }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-5 col-xs-5">Odometer:</div>
-                                    <div class="col-md-7 g_txt_right">265,865 mi (EXEMPT)</div>
+                                    <div class="col-md-7 g_txt_right">{{ lot.odometer_orr|intcomma }} {{ lot.odometer_ord }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-5 col-xs-5">Highlights:</div>
-                                    <div class="col-md-7 g_txt_right">Run and Drive</div>
+                                    <div class="col-md-7 g_txt_right">{{ lot.lot_highlights }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-7 col-xs-7">Primary Damage:</div>
-                                    <div class="col-md-5 g_txt_right">SCRATCHES</div>
+                                    <div class="col-md-5 g_txt_right">{{ lot.lot_1st_damage }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-7 col-xs-7">Secondary Damage:</div>
-                                    <div class="col-md-5 g_txt_right"></div>
+                                    <div class="col-md-5 g_txt_right">{{ lot.lot_2nd_damage }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-7 col-xs-7">Est.Retail Value:</div>
-                                    <div class="col-md-5 g_txt_right"></div>
+                                    <div class="col-md-5 g_txt_right">${{ lot.retail_value|intcomma }} {{ lot.currency }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 col-xs-4">VIN:</div>
-                                    <div class="col-md-8 g_txt_right">JWWAR54FM9M2524492</div>
+                                    <div class="col-md-8 g_txt_right">{{ lot.vin }}</div>
                                 </div>
                             </div>
                             <div class="f_asearch_tlt_dv">Features</div>
                             <div class="f_detail_info_cnt">
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Body Style:</div>
-                                    <div class="col-md-6 g_txt_right">SEDAN 4D</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.body_style }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Color:</div>
-                                    <div class="col-md-6 g_txt_right">SILVER</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.color }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Engine Type:</div>
-                                    <div class="col-md-6 g_txt_right">2.0L 4</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.engine_type }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Cylinders:</div>
-                                    <div class="col-md-6 g_txt_right">4</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.cylinders }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Transmission:</div>
-                                    <div class="col-md-6 g_txt_right">AUTOMATIC</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.transmission }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Drive:</div>
-                                    <div class="col-md-6 g_txt_right">Front-wheel Drive</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.drive }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Fuel:</div>
-                                    <div class="col-md-6 g_txt_right">GAS</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.fuel }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Keys:</div>
-                                    <div class="col-md-6 g_txt_right">YES</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.keys }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Notes:</div>
-                                    <div class="col-md-6 g_txt_right"></div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.notes }}</div>
                                 </div>
                             </div>
                         </div>
@@ -187,43 +155,43 @@
                             <div class="f_detail_info_cnt">
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Bid State:</div>
-                                    <div class="col-md-6 g_txt_right">Never Bid</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.bid_status }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Sale Status:</div>
-                                    <div class="col-md-6 g_txt_right">Minimum Bid</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.sale_status }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Current Bid:</div>
-                                    <div class="col-md-6 g_txt_right">$4,150 USD</div>
-                                    <div class="col-md-12 g_txt_right f_d_seller_r">Seller Reserve Not Yet Met</div>
+                                    <div class="col-md-6 g_txt_right">${{ lot.current_bid|intcomma }} {{ lot.currency }}</div>
+{#                                    <div class="col-md-12 g_txt_right f_d_seller_r">Seller Reserve Not Yet Met</div>#}
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Want it Today?</div>
-                                    <div class="col-md-6 g_txt_right">$27,500 USD</div>
+                                    <div class="col-md-6 g_txt_right">${{ lot.buy_today_bid|intcomma }} {{ lot.currency }}</div>
                                 </div>
                             </div>
                             <div class="f_asearch_tlt_dv">Sale Information</div>
                             <div class="f_detail_info_cnt">
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Location:</div>
-                                    <div class="col-md-6 g_txt_right">MI - DETROIT Inspection Services</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.location }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Lane/Item/Grid/Row:</div>
-                                    <div class="col-md-6 g_txt_right">A/55/SE001</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.lane }}/{{ lot.item }}/{{ lot.grid }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Sale Name:</div>
-                                    <div class="col-md-6 g_txt_right">MI - DETROIT</div>
+                                    <div class="col-md-6 g_txt_right"></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Sale Date:</div>
-                                    <div class="col-md-6 g_txt_right">Fri. Sep 07, 2018 08:00 PM OMST</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.sale_date }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Last Updated:</div>
-                                    <div class="col-md-6 g_txt_right">09/07/2018 7:14 pm</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.last_updated }}</div>
                                 </div>
                             </div>
                         </div>
@@ -233,66 +201,18 @@
             <div class="f_new_arrivals">
                 <div class="f_asearch_tlt_dv">Similar Vehicles</div>
                 <div class="row f_new_arrival_cnts">
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="product-item">
-                            <div class="pi-img-wrapper">
-                                <img src="{% static 'product/custom/imgs/cars/1.jpg' %}" class="img-responsive"
-                                     alt="Berry Lace Dress">
-                                <div>
-                                    <a href="{% static 'product/custom/imgs/cars/1.jpg' %}"
-                                       class="btn btn-default fancybox-button">Zoom</a>
+                    {% for similar_lot in similar %}
+                        <div class="col-lg-3 col-md-6 col-xs-12">
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="{{ similar_lot|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.name }}">
                                 </div>
+                                <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
+                                <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
+                                <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View</a>
                             </div>
-                            <h3><a href="#" class="g_txt_bold">Berry Lace Dress</a></h3>
-                            <div class="pi-price">$29.00</div>
-                            <a href="javascript:;" class="btn btn-default add2cart">View</a>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="product-item">
-                            <div class="pi-img-wrapper">
-                                <img src="{% static 'product/custom/imgs/cars/2.jpg' %}" class="img-responsive"
-                                     alt="Berry Lace Dress">
-                                <div>
-                                    <a href="{% static 'product/custom/imgs/cars/2.jpg' %}"
-                                       class="btn btn-default fancybox-button">Zoom</a>
-                                </div>
-                            </div>
-                            <h3><a href="#" class="g_txt_bold">Berry Lace Dress</a></h3>
-                            <div class="pi-price">$29.00</div>
-                            <a href="javascript:;" class="btn btn-default add2cart">View</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="product-item">
-                            <div class="pi-img-wrapper">
-                                <img src="{% static 'product/custom/imgs/cars/3.jpg' %}" class="img-responsive"
-                                     alt="Berry Lace Dress">
-                                <div>
-                                    <a href="{% static 'product/custom/imgs/cars/3.jpg' %}"
-                                       class="btn btn-default fancybox-button">Zoom</a>
-                                </div>
-                            </div>
-                            <h3><a href="#" class="g_txt_bold">Berry Lace Dress</a></h3>
-                            <div class="pi-price">$29.00</div>
-                            <a href="javascript:;" class="btn btn-default add2cart">View</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-xs-12">
-                        <div class="product-item">
-                            <div class="pi-img-wrapper">
-                                <img src="{% static 'product/custom/imgs/cars/4.jpg' %}" class="img-responsive"
-                                     alt="Berry Lace Dress">
-                                <div>
-                                    <a href="{% static 'product/custom/imgs/cars/4.jpg' %}"
-                                       class="btn btn-default fancybox-button">Zoom</a>
-                                </div>
-                            </div>
-                            <h3><a href="#" class="g_txt_bold">Berry Lace Dress</a></h3>
-                            <div class="pi-price">$29.00</div>
-                            <a href="javascript:;" class="btn btn-default add2cart">VIEW</a>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

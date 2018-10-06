@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     # 'constance.backends.database',
     # 'debug_toolbar',
     'imagekit',
-    # 'product.templatetags.extra_filters',
+    'product.templatetags.extra_filters',
     # 'silk',
     # 'django_celery_beat',
     # 'celerybeat_status',

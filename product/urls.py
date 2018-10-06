@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^ajax_getimages/', csrf_exempt(views.ajax_getimages), name='ajax_getimages'),
 
     url(r'^$', views.index, name='index_page'),
-    url(r'^list/', views.lot_list, name='list_page'),
-    url(r'^detail/', views.detail, name='detail_page'),
+    url(r'^lots/', views.lot_list, name='list_page'),
+    url(r'^lot/(?P<lot>[\w-]+)/$', views.detail, name='detail_page'),
 ]

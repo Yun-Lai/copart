@@ -1,6 +1,9 @@
+import datetime
+
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import translation
+from django.db.models import Q
 
 from product.tasks import scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions
 from product.tasks import scrap_copart as scrap_copart_lot
@@ -62,12 +65,46 @@ def ajax_getimages(request):
 
 
 def index(request):
-    return render(request, 'product/index.html')
+    new_arrivals = Vehicle.objects.all().order_by('-id')[:12]
+    context = {'arrivals': new_arrivals, 'year_range': range(1920, datetime.datetime.now().year + 1)[::-1]}
+    return render(request, 'product/index.html', context=context)
 
 
 def lot_list(request):
-    return render(request, 'product/list.html')
+    from_year = request.GET.get('from_year', '')
+    to_year = request.GET.get('to_year', '')
+
+    context = {}
+
+    lots = Vehicle.objects.all()
+    if from_year:
+        lots = lots.filter(year__gte=int(from_year))
+        context['from_year'] = from_year
+    if to_year:
+        lots = lots.filter(year__lte=int(to_year))
+        context['to_year'] = to_year
+
+    context['lots'] = lots[:50]
+
+    return render(request, 'product/list.html', context=context)
 
 
-def detail(request):
-    return render(request, 'product/detail.html')
+def detail(request, lot):
+    lot = Vehicle.objects.get(lot=int(lot))
+
+    similar = Vehicle.objects.filter(make=lot.make).filter(model=lot.model).filter(year=lot.year).filter(~Q(lot=int(lot.lot))).order_by('-id')
+    if len(similar) >= 4:
+        similar = similar[:4]
+    else:
+        similar = Vehicle.objects.filter(make=lot.make).filter(model=lot.model).filter(~Q(lot=int(lot.lot))).order_by('-id')
+        if len(similar) >= 4:
+            similar = similar[:4]
+        else:
+            similar = Vehicle.objects.filter(make=lot.make).filter(~Q(lot=int(lot.lot))).order_by('-id')
+            if len(similar) >= 4:
+                similar = similar[:4]
+            else:
+                similar = Vehicle.objects.filter(~Q(lot=int(lot.lot))).order_by('-id')[:4]
+
+    context = {'lot': lot, 'similar': similar}
+    return render(request, 'product/detail.html', context=context)

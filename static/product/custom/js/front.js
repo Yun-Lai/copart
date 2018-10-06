@@ -34,7 +34,9 @@ function front_landing_event_proc_funcs() {
 
     // go to list page
     jQuery("#f_global_search_btn, #f_search_finder_btn").click(function () {
-        location.href = "/list/";
+        var from_year = $('#finder_from_year').val();
+        var to_year = $('#finder_to_year').val();
+        location.href = "/lots/?from_year=" + from_year + "&to_year=" + to_year;
     });
 
     // event extend and pull in
