@@ -5,38 +5,49 @@ from django.shortcuts import redirect, render
 from django.utils import translation
 from django.db.models import Q
 
-from product.tasks import scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions
-from product.tasks import scrap_copart as scrap_copart_lot
-from product.models import Vehicle
+from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_type_lots, scrap_make_lots
+from product.models import Vehicle, TypesLots, MakesLots
 
 
-def switch_language(request, language):
-    translation.activate(language)
-    request.session[translation.LANGUAGE_SESSION_KEY] = language
+# def switch_language(request, language):
+#     translation.activate(language)
+#     request.session[translation.LANGUAGE_SESSION_KEY] = language
+#     return redirect('/admin/')
+
+
+def view_scrap_copart_all(request):
+    scrap_copart_all.delay()
+
     return redirect('/admin/')
 
 
-def scrap_copart(request):
+def view_scrap_copart(request):
     make_id = request.GET.get('id')
     scrap_copart_lots.delay([make_id], {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'})
 
     return redirect('/admin/product/vehiclemakes/')
 
 
-def scrap_coparts(request):
-    scrap_copart_lot.delay()
-
-    return redirect('/admin/')
-
-
-def scrap_iaai(request):
+def view_scrap_iaai(request):
     scrap_iaai_lots.delay()
 
     return redirect('/admin/')
 
 
-def scrap_auction(request):
+def view_scrap_auction(request):
     scrap_live_auctions.delay()
+
+    return redirect('/admin/')
+
+
+def view_scrap_type_lot(request):
+    scrap_type_lots.delay()
+
+    return redirect('/admin/')
+
+
+def view_scrap_make_lot(request):
+    scrap_make_lots.delay()
 
     return redirect('/admin/')
 
@@ -66,7 +77,15 @@ def ajax_getimages(request):
 
 def index(request):
     new_arrivals = Vehicle.objects.all().order_by('-id')[:12]
-    context = {'arrivals': new_arrivals, 'year_range': range(1920, datetime.datetime.now().year + 1)[::-1]}
+    vehicle_types = TypesLots.objects.all()
+    vehicle_makes = MakesLots.objects.all()
+
+    context = {
+        'arrivals': new_arrivals,
+        'vehicle_types': vehicle_types,
+        'vehicle_makes': vehicle_makes,
+        'year_range': range(1920, datetime.datetime.now().year + 1)[::-1]
+    }
     return render(request, 'product/index.html', context=context)
 
 

@@ -901,8 +901,12 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
 }
 
 @media only screen and (max-width: 992px) {
-    .f_asearch_tlt_dv {
-        border-radius: 5px !important;
+    #filter
+    {
+      border-radius:5px !important;
+    }
+    .f_asearch_tlt_dv
+    {
         background: #0092c5;
         padding: 5px 10px;
         font-size: 16px;
@@ -910,7 +914,8 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
         color: white;
     }
 
-    .f_asearch_tlt_dv.open {
+    #filter.f_asearch_tlt_dv.open
+    {
         border-radius: 5px 5px 0 0 !important;
     }
 }

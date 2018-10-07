@@ -28,12 +28,12 @@ GLOBAL = {'live_auctions': []}
 
 @periodic_task(
     run_every=(crontab(minute='0', hour='9')),
-    name="product.tasks.scrap_copart",
+    name="product.tasks.scrap_copart_all",
     ignore_result=True,
     queue='high',
     options={'queue': 'high'}
 )
-def scrap_copart():
+def scrap_copart_all():
     misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
     payloads = 'draw={draw}&columns[0][data]=0&columns[0][name]=&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]=&columns[1][searchable]=true&columns[1][orderable]=false&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=2&columns[2][name]=&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=3&columns[3][name]=&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=4&columns[4][name]=&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=5&columns[5][name]=&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false&columns[6][data]=6&columns[6][name]=&columns[6][searchable]=true&columns[6][orderable]=true&columns[6][search][value]=&columns[6][search][regex]=false&columns[7][data]=7&columns[7][name]=&columns[7][searchable]=true&columns[7][orderable]=true&columns[7][search][value]=&columns[7][search][regex]=false&columns[8][data]=8&columns[8][name]=&columns[8][searchable]=true&columns[8][orderable]=true&columns[8][search][value]=&columns[8][search][regex]=false&columns[9][data]=9&columns[9][name]=&columns[9][searchable]=true&columns[9][orderable]=true&columns[9][search][value]=&columns[9][search][regex]=false&columns[10][data]=10&columns[10][name]=&columns[10][searchable]=true&columns[10][orderable]=true&columns[10][search][value]=&columns[10][search][regex]=false&columns[11][data]=11&columns[11][name]=&columns[11][searchable]=true&columns[11][orderable]=true&columns[11][search][value]=&columns[11][search][regex]=false&columns[12][data]=12&columns[12][name]=&columns[12][searchable]=true&columns[12][orderable]=true&columns[12][search][value]=&columns[12][search][regex]=false&columns[13][data]=13&columns[13][name]=&columns[13][searchable]=true&columns[13][orderable]=true&columns[13][search][value]=&columns[13][search][regex]=false&columns[14][data]=14&columns[14][name]=&columns[14][searchable]=true&columns[14][orderable]=false&columns[14][search][value]=&columns[14][search][regex]=false&columns[15][data]=15&columns[15][name]=&columns[15][searchable]=true&columns[15][orderable]=false&columns[15][search][value]=&columns[15][search][regex]=false&order[0][column]=1&order[0][dir]=asc&start={start}&length={length}&search[value]=&search[regex]=false&sort=auction_date_type desc,auction_date_utc asc&defaultSort=true&filter[MISC]={misc}&query=*&watchListOnly=false&freeFormSearch=false&page={page}&size={size}'.format
 
@@ -209,6 +209,7 @@ def scrap_copart_lots(make_ids, account):
                 #     continue
 
                 db_item, created = Vehicle.objects.get_or_create(lot=lot['ln'])
+                db_item.type = vtype
                 db_item.make = lot['mkn']
                 db_item.model = lot['lm']
                 db_item.year = lot['lcy']
@@ -260,7 +261,17 @@ def scrap_copart_lots(make_ids, account):
                 # lcc
                 db_item.lot_2nd_damage = lot.get('sdd', '')
                 db_item.body_style = lot.get('bstl', '')
-                db_item.lot_highlights = lot.get('lcd', '')
+
+                highlights = []
+                lics = lot.get('lic', [])
+                for lic in lics:
+                    if lic in ICONS_DICT.keys():
+                        highlights.append(ICONS_DICT[lic])
+                lcd = lot.get('lcd', '')
+                if lcd in ICONS_DICT.keys():
+                    highlights.append(ICONS_DICT[lcd])
+                db_item.lot_highlights = ''.join(highlights)
+
                 db_item.fuel = lot.get('ft', '')
                 db_item.keys = lot.get('hk', '')
                 db_item.drive = lot.get('drv', '')
@@ -276,8 +287,9 @@ def scrap_copart_lots(make_ids, account):
                 db_item.lot_seller = lot.get('scn', '')
 
                 db_item.current_bid = lot['dynamicLotDetails']['currentBid']
-                db_item.bid_status = lot['dynamicLotDetails']['bidStatus']
-                db_item.sale_status = lot['dynamicLotDetails']['saleStatus']
+                db_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+                db_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                db_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
 
                 db_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
                 db_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
@@ -572,3 +584,38 @@ def scrap_live_auctions():
         print(len(params))
     except Exception as e:
         print(e)
+
+
+@task(
+    name="product.tasks.scrap_type_lots",
+    ignore_result=True,
+    time_limit=36000,
+    queue='normal',
+    options={'queue': 'normal'}
+)
+def scrap_type_lots():
+    for vehicle_type in dict(TYPES).keys():
+        type_lot, created = TypesLots.objects.get_or_create(type=vehicle_type)
+        type_lot.lots = Vehicle.objects.filter(type=vehicle_type).count()
+        type_lot.save()
+        print(vehicle_type + '-' + dict(TYPES)[vehicle_type] + '-' + str(type_lot.lots))
+
+
+@task(
+    name="product.tasks.scrap_make_lots",
+    ignore_result=True,
+    time_limit=36000,
+    queue='normal',
+    options={'queue': 'normal'}
+)
+def scrap_make_lots():
+    popular_makes = [
+        'Acura', 'Audi', 'BMW', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'GMC', 'Harley', 'Honda',
+        'Hyundai', 'Infiniti', 'Jeep', 'Kia', 'Land Rover', 'Lexus', 'Mazda', 'Mercedes-Benz', 'Mitsubishi', 'Nissan',
+        'Pontiac', 'Subaru', 'Suzuki', 'Toyota', 'Volkswagen', 'Volvo'
+    ]
+    for make in popular_makes:
+        make_lot, created = MakesLots.objects.get_or_create(make=make)
+        make_lot.lots = Vehicle.objects.filter(make__icontains=make).count()
+        make_lot.save()
+        print(make + '-' + str(make_lot.lots))

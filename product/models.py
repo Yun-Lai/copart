@@ -20,6 +20,68 @@ TYPES = (
     ('L', 'Trailers'),
 )
 
+ICONS = (
+    ('R', 'Run & Drive'),
+    ('C', 'Seller Certified'),
+    ('E', 'Enhanced Vehicle'),
+    ('C', 'CrashedToys'),
+    ('S', 'Engine Start Program'),
+    ('F', 'Featured Vehicle'),
+    ('O', 'Offsite Sales'),
+    ('D', 'Donated Vehicle'),
+    ('Q', 'Carb Qualification'),
+    ('B', 'Sealed Bid Repossession'),
+    ('V', 'VIX'),
+    ('F', 'FAST'),
+    ('H', 'Hybrid Vehicles'),
+    ('A', 'www.driveautoauctions.com'),
+)
+
+ICONS_DICT = {
+    'RUNS AND DRIVES': 'R',         # 'lcd'
+    'ENHANCED VEHICLES': 'E',       # 'lcd'
+    'ENGINE START PROGRAM': 'S',    # 'lcd'
+    'FEATURED': 'F',                # 'lic'
+    'OFS': 'O',                     # 'lic'
+    'DONA': 'D',                    # 'lic'
+    'S-RENT': 'B',                  # 'lic'
+    'SITE-DR': 'A',                 # 'lic' -> https://www.driveautoauctions.com/lot/
+}
+
+# Featured Items
+# Buy It Now                buy_today_bid != 0
+# No License Required
+# Pure Sale Items           bid_status = PURE SALE
+# Hot Items
+# New Items                 items added last week
+# Lots with Bids            current_bid != 0
+# No Bids Yet               current_bid == 0
+# Sealed Bid (7)
+
+# Hybrid Vehicles           'H'
+# Repossessions             'B'
+# Donations                 'D'
+# Featured Vehicles         'F'
+# Offsite Sales             'O'
+# Run and Drive             'R'
+
+# Clean Title               doc_type_td not contains salvage
+# Salvage Title             doc_type_td contains salvage
+# Front End                 lot_1st_damage == "Front End" or lot_2nd_damage == "Front End"
+# Hail Damage               lot_1st_damage == "Hail" or lot_2nd_damage == "Hail"
+# Normal Wear
+# Minor Dents/Scratch...
+# Water/Flood
+# Fleet / Lease             'std' = FLEET SELLER
+
+# Classics
+# Exotics
+# Impound Vehicles (48)
+# Municipal Fleet (67)
+# Non-repairable (6,507)
+# Recovered Thefts (2,472)
+# Rentals (481)
+
 
 class VehicleMakes(models.Model):
     type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
@@ -40,12 +102,33 @@ class VehicleMakes(models.Model):
         return mark_safe(scrap_link(id=self.id, description=self.description))
 
 
+class TypesLots(models.Model):
+    type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
+    lots = models.IntegerField(_('Lots Number'), default=0)
+
+    class Meta:
+        verbose_name = _('Lots per Type')
+        verbose_name_plural = _('Lots per Type')
+        ordering = ['pk']
+
+
+class MakesLots(models.Model):
+    make = models.CharField(_('Make'), max_length=50, default='')
+    lots = models.IntegerField(_('Lots Number'), default=0)
+
+    class Meta:
+        verbose_name = _('Lots per Make')
+        verbose_name_plural = _('Lots per Make')
+        ordering = ['pk']
+
+
 class Vehicle(models.Model):
     lot = models.IntegerField(_('Lot'))
     vin = models.CharField(_('VIN'), max_length=17, default='')
 
     # General Information
     name = models.CharField(_('Name'), max_length=255, default='')
+    type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
     make = models.CharField(_('Make'), max_length=50, default='')
     model = models.CharField(_('Model'), max_length=50, default='')
     year = models.IntegerField(_('Year'), null=True, blank=True)
@@ -61,7 +144,7 @@ class Vehicle(models.Model):
     odometer_ord = models.CharField(_('Odometer ORD'), max_length=50, default='')
     lot_highlights = models.CharField(_('Highlights'), max_length=50, null=True, blank=True)
     lot_seller = models.CharField(_('Seller'), max_length=100, null=True, blank=True)
-    lot_1st_damage = models.CharField(_('Damage'), max_length=30, null=True, blank=True)
+    lot_1st_damage = models.CharField(_('Primary Damage'), max_length=30, null=True, blank=True)
     lot_2nd_damage = models.CharField(_('Secondary Damage'), max_length=30, null=True, blank=True)
     retail_value = models.IntegerField(_('Est. Retail Value'), default=0)
 

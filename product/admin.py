@@ -43,6 +43,14 @@ class VehicleMakesAdmin(admin.ModelAdmin):
         return MultipleChangeList
 
 
+class TypesLotsAdmin(admin.ModelAdmin):
+    list_display = ['type', 'lots']
+
+
+class MakesLotsAdmin(admin.ModelAdmin):
+    list_display = ['make', 'lots']
+
+
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ['avatar_img', 'vin', 'lot_', 'year', 'make', 'model', 'est_retail_value',
                     'current_bid_', 'sold_price_', 'sale_date', 'odometer', 'lot_1st_damage', 'source_']
@@ -60,7 +68,7 @@ class VehicleAdmin(admin.ModelAdmin):
     # paginator = LargeTablePaginator
 
     fieldsets = [
-        ('', {'fields': ['vin', 'lot', 'name', 'make', 'model', 'year', 'location', 'source_']}),
+        ('', {'fields': ['vin', 'lot', 'type', 'name', 'make', 'model', 'year', 'location', 'source_']}),
         ('Lot', {'fields': ['doc_type_ts', 'doc_type_stt', 'doc_type_td', 'odometer_orr', 'odometer_ord',
                             'lot_highlights', 'lot_seller', 'lot_1st_damage', 'lot_2nd_damage', 'retail_value']}),
         ('Features', {'fields': ['body_style', 'color', 'engine_type', 'cylinders', 'transmission',
@@ -85,4 +93,6 @@ class VehicleAdmin(admin.ModelAdmin):
 
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(VehicleMakes, VehicleMakesAdmin)
+admin.site.register(TypesLots, TypesLotsAdmin)
+admin.site.register(MakesLots, MakesLotsAdmin)
 # admin.site.register(Location, LocationAdmin)
