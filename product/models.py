@@ -87,7 +87,6 @@ class VehicleMakes(models.Model):
     type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
     code = models.CharField(_('Code'), max_length=4)
     description = models.CharField(_('Description'), max_length=30)
-    count = models.IntegerField(_('Count'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Make')
@@ -95,7 +94,7 @@ class VehicleMakes(models.Model):
         ordering = ['type', 'description']
 
     def __str__(self):
-        return dict(TYPES)[self.type] + '-' + self.description + ' - ' + str(self.count)
+        return dict(TYPES)[self.type] + '-' + self.description
 
     def scrap_link(self):
         scrap_link = '<a href="/scrap_copart/?id={id}">Scrap {description}</a>'.format

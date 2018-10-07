@@ -96,7 +96,7 @@
                                     {% for _ in 'xxx' %}
                                         <div class="col-md-4 col-xs-12">
                                             {% for vehicle_type in vehicle_types %}
-                                                <a href="{% url 'list_page' %}">{{ vehicle_type.type|get_type_description }} ({{ vehicle_type.lots }})</a>
+                                                <a href="{% if 0 == vehicle_type.lots %}#{% else %}{% url 'list_page_by_type' vehicle_type.type %}{% endif %}">{{ vehicle_type.type|get_type_description }} ({{ vehicle_type.lots }})</a>
                                             {% endfor %}
                                         </div>
                                     {% endfor %}
@@ -104,9 +104,9 @@
                                 <div class="f_min_1280">
                                     {% for _ in 'xxxx' %}
                                         <div class="col-md-3 col-xs-12">
-                                        {% for vehicle_type in vehicle_types %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_type.type|get_type_description }} ({{ vehicle_type.lots }})</a>
-                                        {% endfor %}
+                                            {% for vehicle_type in vehicle_types %}
+                                                <a href="{% if 0 == vehicle_type.lots %}#{% else %}{% url 'list_page_by_type' vehicle_type.type %}{% endif %}">{{ vehicle_type.type|get_type_description }} ({{ vehicle_type.lots }})</a>
+                                            {% endfor %}
                                     </div>
                                     {% endfor %}
                                 </div>
@@ -115,39 +115,39 @@
                                 <div class="f_max_1280">
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":9" %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"9:18" %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"18:" %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
                                         {% endfor %}
                                     </div>
                                 </div>
                                 <div class="f_min_1280">
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":7" %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"7:14" %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"14:21" %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"21:" %}
-                                            <a href="{% url 'list_page' %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@
                         <div class="row">
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Types</div>
                             <div class="col-md-8 col-xs-12">
-                                <select class="g_slt f_r_s_slt">
+                                <select class="g_slt f_r_s_slt" id="finder_types">
                                     {% for vehicle_type in vehicle_types %}
                                         <option label="{{ vehicle_type.type|get_type_description }}"
                                                 value="{{ vehicle_type.type }}"
@@ -204,7 +204,7 @@
                                     <div class="col-sm-5 col-xs-5">
                                         <select class="g_slt f_as_year_slt f_r_s_slt" id="finder_to_year">
                                             {% for year in year_range %}
-                                                <option label="{{ year }}" value="{{ year }}" {% if year == 2018 %}selected{% endif %}>{{ year }}</option>
+                                                <option label="{{ year }}" value="{{ year }}" {% if year == 2019 %}selected{% endif %}>{{ year }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -214,62 +214,16 @@
                         <div class="row">
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Make</div>
                             <div class="col-md-8 col-xs-12">
-                                <select class="g_slt f_r_s_slt">
-                                    <option value="" selected="selected">All Makes</option>
-                                    <option label="Acura" value="object:311">Acura</option>
-                                    <option label="Alfa Romeo" value="object:312">Alfa Romeo</option>
-                                    <option label="American General" value="object:313">American General</option>
-                                    <option label="American Motors" value="object:314">American Motors</option>
-                                    <
-                                    option label="Assembly" value="object:315">Assembly</option><
-                                    option label="Aston Martin" value="object:316">Aston Martin</option>
-                                    <option label="Audi" value="object:317">Audi</option>
-                                    <option label="Austin" value="object:318">Austin</option>
-                                    <option label="Autobianchi" value="object:319">Autobianchi</option>
-                                    <option label="Bentley" value="object:320">Bentley</option>
-                                    <option label="Bertone" value="object:321">Bertone</option>
-                                    <option label="Big Dog" value="object:322">Big Dog</option>
-                                    <option label="BMW" value="object:323">BMW</option>
-                                    <option label="Bricklan" value="object:324">Bricklan</option>
-                                    <option label="Buick" value="object:325">Buick</option>
-                                    <option label="Cadillac" value="object:326">Cadillac</option>
-                                    <option label="Checker" value="object:327">Checker</option>
-                                    <option label="Chevrolet" value="object:328">Chevrolet</option>
-                                    <option label="Chrysler" value="object:329">Chrysler</option>
-                                    <option label="Classic Roadster" value="object:330">Classic Roadster</option>
-                                    <option label="Coach" value="object:331">Coach</option>
-                                    <option label="Daewoo" value="object:332">Daewoo</option>
-                                    <option label="Daihatsu" value="object:333">Daihatsu</option>
-                                    <option label="Datsun" value="object:334">Datsun</option>
-                                    <option label="Delorean" value="object:335">Delorean</option>
-                                    <option label="Desoto" value="object:336">Desoto</option>
-                                    <option label="Dodge" value="object:337">Dodge</option>
-                                    <option label="Ducati" value="object:338">Ducati</option>
-                                    <option label="Eagle" value="object:339">Eagle</option>
-                                    <option label="Eldorado" value="object:340">Eldorado</option>
-                                    <option label="Excalibur" value="object:341">Excalibur</option>
-                                    <option label="Ferrari" value="object:342">Ferrari</option>
-                                    <option label="Fiat" value="object:343">Fiat</option>
-                                    <option label="Ford" value="object:344">Ford</option>
-                                    <option label="GEM" value="object:345">GEM</option>
-                                    <option label="GEO" value="object:346">GEO</option>
-                                    <option label="GM" value="object:347">GM</option>
-                                    <option label="GMC" value="object:348">GMC</option>
-                                    <option label="Golf Cart" value="object:349">Golf Cart</option>
-                                    <option label="Harley Davidson" value="object:350">Harley Davidson</option>
-                                    <option label="Honda" value="object:351">Honda</option>
-                                    <option label="Hummer" value="object:352">Hummer</option>
+                                <select class="g_slt f_r_s_slt" id="finder_makes">
+                                    <option value="0">All Makes</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Model</div>
                             <div class="col-md-8 col-xs-12">
-                                <select class="g_slt f_r_s_slt">
-                                    <option value="" selected="selected">All Models</option>
-                                    <option label="ALL MODELS" value="string:ALL MODELS">ALL MODELS</option>
-                                    <option label="GIULIA" value="string:GIULIA">GIULIA</option>
-                                    <option label="STELVIO" value="string:STELVIO">STELVIO</option>
+                                <select class="g_slt f_r_s_slt" id="finder_models">
+                                    <option value="0">All Models</option>'
                                 </select>
                             </div>
                         </div>

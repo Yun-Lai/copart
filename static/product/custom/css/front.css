@@ -516,8 +516,13 @@ table tbody tr td {
 
 .f_paging_active {
     background-color: #0d5db8;
-    color: white !important;
     border: 1px solid #0d5db8 !important;
+}
+.f_paging_active a {
+    color: white !important;
+}
+.f_list_page_num a {
+    color: #0d5db8;
 }
 
 .f_f_r_pagin_btns div:first-child {

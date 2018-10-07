@@ -125,57 +125,39 @@
                     </div>
                 </div>
                 <div class="f_list_search_result_cnt_dv">
-                    <div class="f_asearch_tlt_dv">Search results for: {{ from_year }} to {{ to_year }}</div>
+                    <div class="f_asearch_tlt_dv">Search results for: {{ filter_word }}</div>
                     <div class="f_list_cnt_tdv">
                         <div class="f_l_c_filter_applied">
                             Filters Applied:
                             <div>
-                                <div class="f_l_f_a_item">Classis<img class="f_list_fr_close"
-                                                                      src="{% static 'product/custom/imgs/close.png' %}"/>
-                                </div>
-                                <div class="f_l_f_a_item">Hot Items<img class="f_list_fr_close"
-                                                                        src="{% static 'product/custom/imgs/close.png' %} "/>
-                                </div>
-                                <div class="f_l_f_a_item">Bmw<img class="f_list_fr_close"
-                                                                  src="{% static 'product/custom/imgs/close.png' %} "/>
-                                </div>
-                                <div class="f_l_f_a_item">Integra Ls<img class="f_list_fr_close"
-                                                                         src="{% static 'product/custom/imgs/close.png' %} "/>
-                                </div>
-                                <div class="f_l_f_a_item">Honda<img class="f_list_fr_close"
-                                                                    src="{% static 'product/custom/imgs/close.png' %} "/>
-                                </div>
-                                <div class="f_l_f_a_item">Ford<img class="f_list_fr_close"
-                                                                   src="{% static 'product/custom/imgs/close.png' %} "/>
+                                <div class="f_l_f_a_item">Hot Items
+                                    <img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} "/>
                                 </div>
                             </div>
                         </div>
                         <div class="f_search_result_tb_top">
                             <div class="row f_r_r_tb_top_top">
-                                <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing 1 to 10 <span class="f_list_page_num">of 100 entries</span>
+                                <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing {{ page_start_index }} to {{ page_end_index }}
+                                    <span class="f_list_page_num">of {{ total_lots }} entries</span>
                                 </div>
-                                <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search : <input type="text"
-                                                                                                      class="f_f_r_t_search_ipt"
-                                                                                                      placeholder=" By Lot or VIN"/>
+                                <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :
+                                    <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show
                                     <select class="f_f_r_t_scnt_slt">
-                                        <option value="10">10</option>
-                                        <option value="10">25</option>
-                                        <option value="10">50</option>
-                                        <option value="10">100</option>
+                                        <option value="20"{% if current_entry == 20 %} selected{% endif %}>20</option>
+                                        <option value="50"{% if current_entry == 50 %} selected{% endif %}>50</option>
+                                        <option value="100"{% if current_entry == 100 %} selected{% endif %}>100</option>
                                     </select><span class="f_list_page_num"> entries</span>
                                 </div>
                                 <div class="col-md-8 col-sm-8 col-xs-7 f_l_s_f_sp g_txt_right f_f_r_pagin_btns">
-                                    <div>Last</div>
-                                    <div>Next</div>
-                                    <div class="f_list_page_num">3</div>
-                                    <div class="f_list_page_num">2</div>
-                                    <div class="f_paging_active f_list_page_num">1</div>
-                                    <div>Previous</div>
-                                    <div>First</div>
+                                    {% for page in pages %}
+                                        <div class="{% if current_page == page %}f_paging_active {% endif %}f_list_page_num">
+                                            <a href="?page={{ page }}&entry={{ current_entry }}">{{ page }}</a>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -230,30 +212,27 @@
                             </table>
                         </div>
                         <div class="row f_r_r_tb_top_top">
-                            <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing 1 to 10 <span class="f_list_page_num">of 100 entries</span>
+                            <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing {{ page_start_index }} to {{ page_end_index }}
+                                <span class="f_list_page_num">of {{ total_lots }} entries</span>
                             </div>
-                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search : <input type="text"
-                                                                                                  class="f_f_r_t_search_ipt"
-                                                                                                  placeholder=" By Lot or Vin"/>
+                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :
+                                <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show
                                 <select class="f_f_r_t_scnt_slt">
-                                    <option value="10">10</option>
-                                    <option value="10">25</option>
-                                    <option value="10">50</option>
-                                    <option value="10">100</option>
+                                    <option value="20"{% if current_entry == 20 %} selected{% endif %}>20</option>
+                                    <option value="50"{% if current_entry == 50 %} selected{% endif %}>50</option>
+                                    <option value="100"{% if current_entry == 100 %} selected{% endif %}>100</option>
                                 </select><span class="f_list_page_num"> entries</span>
                             </div>
                             <div class="col-md-8 col-sm-8 col-xs-7 f_l_s_f_sp g_txt_right f_f_r_pagin_btns">
-                                <div>Last</div>
-                                <div>Next</div>
-                                <div class="f_list_page_num">3</div>
-                                <div class="f_list_page_num">2</div>
-                                <div class="f_paging_active f_list_page_num">1</div>
-                                <div>Previous</div>
-                                <div>First</div>
+                                {% for page in pages %}
+                                    <div class="{% if current_page == page %}f_paging_active {% endif %}f_list_page_num">
+                                        <a href="?page={{ page }}&entry={{ current_entry }}">{{ page }}</a>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="row">

@@ -32,13 +32,6 @@ function front_landing_event_proc_funcs() {
         jQuery(".f_asearch_tab" + jQuery(this).attr("torder")).removeClass("g_none_dis");
     });
 
-    // go to list page
-    jQuery("#f_global_search_btn, #f_search_finder_btn").click(function () {
-        var from_year = $('#finder_from_year').val();
-        var to_year = $('#finder_to_year').val();
-        location.href = "/lots/?from_year=" + from_year + "&to_year=" + to_year;
-    });
-
     // event extend and pull in
     jQuery(".f_arrival_extend_img").click(function () {
         if (jQuery(this).attr("state") == "0") {
@@ -50,22 +43,93 @@ function front_landing_event_proc_funcs() {
         }
     });
 
-    // set search result div width
-    /*
-    if ( screen.width <= 550 ) {
-        jQuery(".f_l_sr_dv").addClass("f_100_wth");
-    } else {
-        jQuery(".f_l_sr_dv").removeClass("f_100_wth");
-    }
-
-    jQuery(window).resize(function(){
-        if ( screen.width <= 550 ) {
-            jQuery(".f_l_sr_dv").addClass("f_100_wth");
-        } else {
-            jQuery(".f_l_sr_dv").removeClass("f_100_wth");
-        }
+    // Header Search Button
+    jQuery("#f_global_search_btn").click(function () {
+        var vin_lot = $(".f_search_ipt").val();
+        if ('' === vin_lot)
+            return;
+        $.ajax({
+            type: 'GET',
+            url: '/ajax_get_lot/',
+            data: {vin_or_lot: vin_lot},
+            success: function (response) {
+                if (response.result)
+                    location.href = "/lot/" + response.lot;
+                else {
+                    // raise 404 page
+                }
+            }
+        });
     });
-    */
+
+
+    // Vehicle Finder
+    jQuery("#f_search_finder_btn").click(function () {
+        var types = $("#finder_types").val();
+        var from_year = $("#finder_from_year").val();
+        var to_year = $("#finder_to_year").val();
+        var makes = $("#finder_makes").val();
+        var models = $("#finder_models").val();
+
+        var href = "/lots/?type=" + types + "&from_year=" + from_year + "&to_year=" + to_year;
+
+        if ('0' !== makes)
+            href += "&make=" + makes;
+        if ('0' !== models)
+            href += "&model=" + models;
+        location.href = href;
+    });
+
+    function ajax_get_makes(finder_type) {
+        $.ajax({
+            type: 'GET',
+            url: '/ajax_get_makes/',
+            data: {finder_type: finder_type},
+            success: function (response) {
+                if (response.result) {
+                    var str_makes = '<option value="0">All Makes</option>';
+                    for (var i = 0; i < response.makes.length; i++) {
+                        str_makes += '<option value="' + response.makes[i] + '">' + response.makes[i] + '</option>';
+                    }
+                    $("#finder_makes").html(str_makes);
+                }
+            }
+        });
+    }
+    $("#finder_types").on('change', function() {
+        var finder_type = $(this).val();
+        ajax_get_makes(finder_type);
+    });
+    ajax_get_makes('V');
+
+    function ajax_get_models(finder_type, finder_make) {
+        if ("0" === finder_make) {
+            $("#finder_models").html('<option value="0">All Models</option>');
+            return;
+        }
+        $.ajax({
+            type: 'GET',
+            url: '/ajax_get_models/',
+            data: {
+                finder_type: finder_type,
+                finder_make: finder_make
+            },
+            success: function (response) {
+                if (response.result) {
+                    var str_makes = '<option value="0">All Models</option>';
+                    for (var i = 0; i < response.models.length; i++) {
+                        str_makes += '<option value="' + response.models[i] + '">' + response.models[i] + '</option>';
+                    }
+                    $("#finder_models").html(str_makes);
+                }
+            }
+        });
+    }
+    $("#finder_makes").on('change', function() {
+        var finder_type = $("#finder_types").val();
+        var finder_make = $(this).val();
+        ajax_get_models(finder_type, finder_make);
+    });
 }
 
 /**
@@ -75,7 +139,7 @@ function front_list_event_proc_funcs() {
     // data table load
     if (jQuery("#f_list_page_mark").val() == "1") {
         jQuery('#c_seach_tb').DataTable({
-            "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+            "lengthMenu": [[100], [100]],
             pagerPosition: 'both'
         });
 

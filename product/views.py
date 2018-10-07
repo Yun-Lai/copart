@@ -1,12 +1,13 @@
 import datetime
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import translation
 from django.db.models import Q
 
 from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_type_lots, scrap_make_lots
-from product.models import Vehicle, TypesLots, MakesLots
+from product.models import Vehicle, VehicleMakes, TypesLots, MakesLots, TYPES
 
 
 # def switch_language(request, language):
@@ -75,6 +76,38 @@ def ajax_getimages(request):
     })
 
 
+def view_ajax_get_lot(request):
+    vin_or_lot = request.GET.get('vin_or_lot', '')
+    vin_or_lot = vin_or_lot.strip()
+    if 8 == len(vin_or_lot) and vin_or_lot.isnumeric():
+        if Vehicle.objects.filter(lot=int(vin_or_lot)).exists():
+            return JsonResponse({'result': True, 'lot': vin_or_lot})
+    lot = Vehicle.objects.filter(vin=vin_or_lot).order_by('-id')
+    if len(lot):
+        return JsonResponse({'result': True, 'lot': lot[0].lot})
+    return JsonResponse({'result': False})
+
+
+def view_ajax_get_makes_of_type(request):
+    finder_type = request.GET.get('finder_type', '')
+    vehicle_makes = VehicleMakes.objects.filter(type=finder_type)
+    return JsonResponse({
+        'result': True,
+        'makes': [a.description for a in vehicle_makes],
+    })
+
+
+def view_ajax_get_models_of_make(request):
+    finder_type = request.GET.get('finder_type', '')
+    finder_make = request.GET.get('finder_make', '')
+    vehicle_makes = Vehicle.objects.filter(type=finder_type).filter(make__icontains=finder_make).values_list('model', flat=True)
+    vehicle_makes = sorted(list(set(vehicle_makes)))
+    return JsonResponse({
+        'result': True,
+        'models': [a for a in vehicle_makes],
+    })
+
+
 def index(request):
     new_arrivals = Vehicle.objects.all().order_by('-id')[:12]
     vehicle_types = TypesLots.objects.all()
@@ -84,26 +117,179 @@ def index(request):
         'arrivals': new_arrivals,
         'vehicle_types': vehicle_types,
         'vehicle_makes': vehicle_makes,
-        'year_range': range(1920, datetime.datetime.now().year + 1)[::-1]
+        'year_range': range(1920, datetime.datetime.now().year + 2)[::-1]
     }
     return render(request, 'product/index.html', context=context)
 
 
 def lot_list(request):
-    from_year = request.GET.get('from_year', '')
-    to_year = request.GET.get('to_year', '')
+    types = request.GET.get('type', '')
+    from_year = int(request.GET.get('from_year', ''))
+    to_year = int(request.GET.get('to_year', ''))
+    make = request.GET.get('make', '')
+    model = request.GET.get('model', '')
 
-    context = {}
+    filter_word = dict(TYPES)[types]
 
-    lots = Vehicle.objects.all()
-    if from_year:
-        lots = lots.filter(year__gte=int(from_year))
-        context['from_year'] = from_year
-    if to_year:
-        lots = lots.filter(year__lte=int(to_year))
-        context['to_year'] = to_year
+    lots = Vehicle.objects.filter(type=types).filter(year__gte=from_year).filter(year__lte=to_year)
+    if make:
+        lots = Vehicle.objects.filter(make=make)
+        filter_word += ', ' + make
+    if model:
+        lots = Vehicle.objects.filter(model=model)
+        filter_word += ', ' + model
+    filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
 
-    context['lots'] = lots[:50]
+    page = int(request.GET.get('page', 1))
+    entry = int(request.GET.get('entry', 20))
+
+    paginator = Paginator(lots, entry)
+    try:
+        paged_lots = paginator.page(page)
+    except PageNotAnInteger:
+        paged_lots = paginator.page(1)
+    except EmptyPage:
+        paged_lots = paginator.page(paginator.num_pages)
+
+    pages = ['First', 'Previous']
+    if paginator.num_pages <= 7:
+        pages += [str(a + 1) for a in range(paginator.num_pages)]
+    else:
+        if page < 5:
+            pages += [str(a + 1) for a in range(5)]
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+        elif page > paginator.num_pages - 4:
+            pages.append('1')
+            pages.append('...')
+            pages += [str(a + 1) for a in range(paginator.num_pages - 5, paginator.num_pages)]
+        else:
+            pages.append('1')
+            pages.append('...')
+            pages.append(str(page - 1))
+            pages.append(str(page))
+            pages.append(str(page + 1))
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+    pages += ['Next', 'Last']
+
+    context = {
+        'lots': paged_lots,
+        'total_lots': paginator.count,
+        'pages': pages[::-1],
+        'current_page': str(page),
+        'current_entry': entry,
+        'page_start_index': (page - 1) * entry + 1,
+        'page_end_index': page * entry if page != paginator.num_pages else paginator.count,
+        'filter_word': filter_word,
+    }
+
+    return render(request, 'product/list.html', context=context)
+
+
+def lots_by_type(request, vehicle_type):
+    page = int(request.GET.get('page', 1))
+    entry = int(request.GET.get('entry', 20))
+
+    lots = Vehicle.objects.filter(type=vehicle_type)
+    paginator = Paginator(lots, entry)
+
+    type_lot = TypesLots.objects.get(type=vehicle_type)
+    type_lot.lots = paginator.count
+    type_lot.save()
+
+    try:
+        paged_lots = paginator.page(page)
+    except PageNotAnInteger:
+        paged_lots = paginator.page(1)
+    except EmptyPage:
+        paged_lots = paginator.page(paginator.num_pages)
+
+    pages = ['First', 'Previous']
+    if paginator.num_pages <= 7:
+        pages += [str(a + 1) for a in range(paginator.num_pages)]
+    else:
+        if page < 5:
+            pages += [str(a + 1) for a in range(5)]
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+        elif page > paginator.num_pages - 4:
+            pages.append('1')
+            pages.append('...')
+            pages += [str(a + 1) for a in range(paginator.num_pages - 5, paginator.num_pages)]
+        else:
+            pages.append('1')
+            pages.append('...')
+            pages.append(str(page - 1))
+            pages.append(str(page))
+            pages.append(str(page + 1))
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+    pages += ['Next', 'Last']
+
+    context = {
+        'lots': paged_lots,
+        'total_lots': paginator.count,
+        'pages': pages[::-1],
+        'current_page': str(page),
+        'current_entry': entry,
+        'page_start_index': (page - 1) * entry + 1,
+        'page_end_index': page * entry if page != paginator.num_pages else paginator.count,
+        'filter_word': dict(TYPES)[vehicle_type],
+    }
+
+    return render(request, 'product/list.html', context=context)
+
+
+def lots_by_make(request, vehicle_make):
+    page = int(request.GET.get('page', 1))
+    entry = int(request.GET.get('entry', 20))
+
+    make_lot = MakesLots.objects.get(id=int(vehicle_make))
+    lots = Vehicle.objects.filter(make__icontains=make_lot.make)
+
+    paginator = Paginator(lots, entry)
+    make_lot.lots = paginator.count
+    make_lot.save()
+    try:
+        paged_lots = paginator.page(page)
+    except PageNotAnInteger:
+        paged_lots = paginator.page(1)
+    except EmptyPage:
+        paged_lots = paginator.page(paginator.num_pages)
+
+    pages = ['First', 'Previous']
+    if paginator.num_pages <= 7:
+        pages += [str(a + 1) for a in range(paginator.num_pages)]
+    else:
+        if page < 5:
+            pages += [str(a + 1) for a in range(5)]
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+        elif page > paginator.num_pages - 4:
+            pages.append('1')
+            pages.append('...')
+            pages += [str(a + 1) for a in range(paginator.num_pages - 5, paginator.num_pages)]
+        else:
+            pages.append('1')
+            pages.append('...')
+            pages.append(str(page - 1))
+            pages.append(str(page))
+            pages.append(str(page + 1))
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+    pages += ['Next', 'Last']
+
+    context = {
+        'lots': paged_lots,
+        'total_lots': paginator.count,
+        'pages': pages[::-1],
+        'current_page': str(page),
+        'current_entry': entry,
+        'page_start_index': (page - 1) * entry + 1,
+        'page_end_index': page * entry if page != paginator.num_pages else paginator.count,
+        'filter_word': make_lot.make,
+    }
 
     return render(request, 'product/list.html', context=context)
 
