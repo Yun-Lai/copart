@@ -6,7 +6,8 @@ from django.shortcuts import redirect, render
 from django.utils import translation
 from django.db.models import Q
 
-from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_type_lots, scrap_make_lots
+from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions,\
+    scrap_type_lots, scrap_make_lots, change_highlight_to_icon
 from product.models import Vehicle, VehicleMakes, TypesLots, MakesLots, TYPES
 
 
@@ -49,6 +50,12 @@ def view_scrap_type_lot(request):
 
 def view_scrap_make_lot(request):
     scrap_make_lots.delay()
+
+    return redirect('/admin/')
+
+
+def view_change_highlight_to_icon(request):
+    change_highlight_to_icon.delay()
 
     return redirect('/admin/')
 
@@ -111,7 +118,7 @@ def view_ajax_get_models_of_make(request):
 def index(request):
     new_arrivals = Vehicle.objects.all().order_by('-id')[:12]
     vehicle_types = TypesLots.objects.all()
-    vehicle_makes = MakesLots.objects.all()
+    vehicle_makes = MakesLots.objects.all().order_by('-lots')[:60]
 
     context = {
         'arrivals': new_arrivals,
@@ -131,12 +138,12 @@ def lot_list(request):
 
     filter_word = dict(TYPES)[types]
 
-    lots = Vehicle.objects.filter(type=types).filter(year__gte=from_year).filter(year__lte=to_year)
+    lots = Vehicle.objects.filter(type=types).filter(year__range=(from_year, to_year))
     if make:
-        lots = Vehicle.objects.filter(make=make)
+        lots = lots.filter(make=make)
         filter_word += ', ' + make
     if model:
-        lots = Vehicle.objects.filter(model=model)
+        lots = lots.filter(model=model)
         filter_word += ', ' + model
     filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
 

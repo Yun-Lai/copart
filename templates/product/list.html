@@ -4,7 +4,7 @@
 {% load humanize %}
 {% load extra_filters %}
 
-{% block title %}List{% endblock %}
+{% block title %}{{ filter_word }}{% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css"/>
@@ -43,7 +43,7 @@
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Featured Items</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc21"/><label for="flfc21">Classics (608)</label> <br>
                                 <input type="checkbox" id="flfc22"/><label for="flfc22">Buy It Now (30)</label> <br>
                                 <input type="checkbox" id="flfc23"/><label for="flfc23">Engind Start Prog (387)</label>
@@ -55,7 +55,7 @@
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Make</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc31"/><label for="flfc31">1982(608)</label> <br>
                                 <input type="checkbox" id="flfc32"/><label for="flfc32">1983 (30)</label> <br>
                                 <input type="checkbox" id="flfc33"/><label for="flfc33">1984 (387)</label> <br>
@@ -64,7 +64,7 @@
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Model</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc41"/><label for="flfc41">31 (608)</label> <br>
                                 <input type="checkbox" id="flfc42"/><label for="flfc42">3S (30)</label> <br>
                                 <input type="checkbox" id="flfc43"/><label for="flfc43">3.2tl (387)</label> <br>
@@ -73,7 +73,7 @@
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Year</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc51"/><label for="flfc21">2017 (608)</label> <br>
                                 <input type="checkbox" id="flfc52"/><label for="flfc22">2016 (30)</label> <br>
                                 <input type="checkbox" id="flfc53"/><label for="flfc23">2015 (387)</label> <br>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Odmeter</div>
                             <div class="f_l_f_cnt g_none_dis">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc61"/><label for="flfc61">Less than 25000 (608)</label>
                                 <br>
                                 <input type="checkbox" id="flfc62"/><label for="flfc62">2500 to 50000 (30)</label> <br>
@@ -94,7 +94,7 @@
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Location</div>
                             <div class="f_l_f_cnt g_none_dis">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc71"/><label for="flfc71">AK-ANCHORAGE (608)</label> <br>
                                 <input type="checkbox" id="flfc72"/><label for="flfc72">AL-BIRMINGHAM (30)</label> <br>
                                 <input type="checkbox" id="flfc73"/><label for="flfc73">AL-MOBILE (387)</label> <br>
@@ -104,7 +104,7 @@
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Sale Name</div>
                             <div class="f_l_f_cnt g_none_dis">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc81"/><label for="flfc81">AK-ANCHORAGE (608)</label> <br>
                                 <input type="checkbox" id="flfc82"/><label for="flfc82">AL-BIRMINGHAM (30)</label> <br>
                                 <input type="checkbox" id="flfc83"/><label for="flfc83">AL-MOBILE (387)</label> <br>
@@ -114,7 +114,7 @@
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Featured Items</div>
                             <div class="f_l_f_cnt g_none_dis">
-                                <input type="text" class="g_ipt" placeholder="Search"/>
+                                <input class="g_ipt" placeholder="Search"/>
                                 <input type="checkbox" id="flfc91"/><label for="flfc91">09/08/2018 (608)</label> <br>
                                 <input type="checkbox" id="flfc92"/><label for="flfc92">09/12/2018 (30)</label> <br>
                                 <input type="checkbox" id="flfc93"/><label for="flfc93">09/14/2018 (387)</label> <br>
@@ -130,9 +130,10 @@
                         <div class="f_l_c_filter_applied">
                             Filters Applied:
                             <div>
-                                <div class="f_l_f_a_item">Hot Items
-                                    <img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} "/>
-                                </div>
+                                No Filters Applied
+{#                                <div class="f_l_f_a_item">Hot Items#}
+{#                                    <img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} "/>#}
+{#                                </div>#}
                             </div>
                         </div>
                         <div class="f_search_result_tb_top">
@@ -183,16 +184,17 @@
                                 {% for lot in lots %}
                                     <tr>
                                         <td>
-                                            <a href="{% url 'detail_page' lot.lot %}">
+                                            <a href="{% url 'detail_page' lot.lot %}" target="_blank">
                                                 <img src="{{ lot.avatar }}" class="f_l_f_product_img"/>
                                                 <div class="f_lr_td_img_dv">View All Photos</div>
                                             </a>
                                         </td>
                                         <td>{{ lot.year }}<br>
-                                            <div class="f_l_y_s f_l_ss">S</div>
-                                            <div class="f_l_y_s f_l_sr">R</div>
-                                            <div class="f_l_y_s f_l_sd">D</div>
-                                            <div class="f_l_y_s f_l_se">E</div>
+                                            {% if lot.lot_highlights|is_icon %}
+                                                {% for icon in lot.lot_highlights %}
+                                                    <div class="f_l_y_s f_l_s{{ icon|lower }}">{{ icon }}</div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </td>
                                         <td>{{ lot.make }}</td>
                                         <td>{{ lot.model }}</td>
@@ -237,7 +239,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-xs-12 g_txt_center f_f_r_t_goto_dv">
-                                Go To Page <input type="text" class="f_f_r_t_goto_ipt"/><img class="f_lr_goto_page_img"
+                                Go To Page <input class="f_f_r_t_goto_ipt"/><img class="f_lr_goto_page_img"
                                                                                              src="{% static 'product/custom/imgs/goto.png' %} "/>
                                 <!-- <div class="f_lr_goto_page">Go</div>-->
                             </div>

@@ -609,13 +609,26 @@ def scrap_type_lots():
     options={'queue': 'normal'}
 )
 def scrap_make_lots():
-    popular_makes = [
-        'Acura', 'Audi', 'BMW', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'GMC', 'Harley', 'Honda',
-        'Hyundai', 'Infiniti', 'Jeep', 'Kia', 'Land Rover', 'Lexus', 'Mazda', 'Mercedes-Benz', 'Mitsubishi', 'Nissan',
-        'Pontiac', 'Subaru', 'Suzuki', 'Toyota', 'Volkswagen', 'Volvo'
-    ]
-    for make in popular_makes:
+    makes = Vehicle.objects.values_list('make', flat=True)
+    makes = list(set(makes))
+    makes = sorted(list(set([a.upper() for a in makes])))
+    for make in makes:
         make_lot, created = MakesLots.objects.get_or_create(make=make)
         make_lot.lots = Vehicle.objects.filter(make__icontains=make).count()
         make_lot.save()
         print(make + '-' + str(make_lot.lots))
+
+
+@task(
+    name="product.tasks.change_highlight_to_icon",
+    ignore_result=True,
+    time_limit=36000,
+    queue='normal',
+    options={'queue': 'normal'}
+)
+def change_highlight_to_icon():
+    for lot in Vehicle.objects.all():
+        if lot.lot_highlights in ICONS_DICT.keys():
+            print(lot.lot_highlights, ICONS_DICT[lot.lot_highlights])
+            lot.lot_highlights = ICONS_DICT[lot.lot_highlights]
+            lot.save()

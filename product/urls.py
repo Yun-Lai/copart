@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^scrap_auction/', views.view_scrap_auction),
     url(r'^scrap_type_lot/', views.view_scrap_type_lot),
     url(r'^scrap_make_lot/', views.view_scrap_make_lot),
+    url(r'^scrap_change_highlights/', views.view_change_highlight_to_icon),
 
     url(r'^$', views.index, name='index_page'),
     url(r'^lots_by_type/(?P<vehicle_type>[\w-]+)/', views.lots_by_type, name='list_page_by_type'),

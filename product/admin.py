@@ -79,13 +79,6 @@ class VehicleAdmin(admin.ModelAdmin):
         ('Foregoing', {'fields': ['foregoing', 'show']}),
     ]
 
-    # change_list_template = 'admin/change_list_vehicle.html'
-
-    # class Media:
-    #     css = {'all': ('product/css/vehicle.css', 'node_modules/font-awesome/font-awesome.min.css')}
-    #     js = ('product/js/vehicle.js',)
-
-
 # class LocationAdmin(admin.ModelAdmin):
 #     list_display = ['phone', 'fax', 'hours', 'free_wifi', 'address', 'mailing_address',
 #                     'location', 'general_manager', 'regional_manager']

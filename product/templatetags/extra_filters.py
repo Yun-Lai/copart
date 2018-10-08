@@ -10,26 +10,35 @@ def get_by_index(l, i):
 
 @register.filter
 def get_lot_image(lot, index):
-    if lot.source:
-        return 'https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + lot.images.split('|')[index]
-    else:
-        return 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' + lot.images.split('|')[index]
+    try:
+        if lot.source:
+            return 'https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + lot.images.split('|')[index]
+        else:
+            return 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % lot.images.split('|')[index]
+    except:
+        return ""
 
 
 @register.filter
 def get_lot_image4(lot, index):
-    if lot.source:
-        return 'https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + lot.images.split('|')[index + 4]
-    else:
-        return 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' + lot.images.split('|')[index + 4]
+    try:
+        if lot.source:
+            return 'https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + lot.images.split('|')[index + 4]
+        else:
+            return 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % lot.images.split('|')[index + 4]
+    except:
+        return ""
 
 
 @register.filter
 def get_lot_image8(lot, index):
-    if lot.source:
-        return 'https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + lot.images.split('|')[index + 8]
-    else:
-        return 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' + lot.images.split('|')[index + 8]
+    try:
+        if lot.source:
+            return 'https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + lot.images.split('|')[index + 8]
+        else:
+            return 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % lot.images.split('|')[index + 8]
+    except:
+        return ""
 
 
 @register.filter
@@ -50,3 +59,10 @@ def get_type_description(vehicle_type):
         ('L', 'Trailers'),
     )
     return dict(types)[vehicle_type]
+
+
+@register.filter
+def is_icon(highlights):
+    if highlights.isupper() and highlights.isalpha():
+        return True
+    return False

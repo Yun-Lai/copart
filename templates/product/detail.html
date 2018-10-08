@@ -12,7 +12,13 @@
             <div class="row f_asearch_tdv f_detail_cnt_dv">
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 f_l_detail_photo_cnt">
                     <div>
-                        <div class="f_detail_item_tlt">{{ lot.name }}</div>
+                        <div class="f_detail_item_tlt">{{ lot.name }}
+                            {% if lot.lot_highlights|is_icon %}
+                                {% for icon in lot.lot_highlights %}
+                                    <div class="f_l_y_d f_l_s{{ icon|lower }}">{{ icon }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                         <a href="{{ lot|get_lot_image:0 }}" class="btn btn-default fancybox-button f_detail_main_img_a">
                             <img class="f_l_detail_photo" src="{{ lot|get_lot_image:0 }}">
                         </a>
@@ -152,24 +158,34 @@
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="f_asearch_tlt_dv">Bid Information</div>
+                            {% if lot.sold_price > 0 %}
+                                <div class="f_detail_bid_tlt_r">LOT SOLD for ${{ lot.sold_price|intcomma }} {{ lot.currency }}</div>
+                            {% endif %}
                             <div class="f_detail_info_cnt">
-                                <div class="row">
-                                    <div class="col-md-6 col-xs-6">Bid State:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.bid_status }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-xs-6">Sale Status:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.sale_status }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-xs-6">Current Bid:</div>
-                                    <div class="col-md-6 g_txt_right">${{ lot.current_bid|intcomma }} {{ lot.currency }}</div>
-{#                                    <div class="col-md-12 g_txt_right f_d_seller_r">Seller Reserve Not Yet Met</div>#}
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-xs-6">Want it Today?</div>
-                                    <div class="col-md-6 g_txt_right">${{ lot.buy_today_bid|intcomma }} {{ lot.currency }}</div>
-                                </div>
+                                {% if lot.sold_price > 0 %}
+                                    <div class="f_detail_bid_cnt_r">
+                                        Browser our current inventory of <br> {{ lot.name }} <br>
+                                        <input type="button" class="f_asearch_l_btn f_detail_find_more_btn" value="Find More Like This">
+                                    </div>
+                                {% else %}
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">Bid State:</div>
+                                        <div class="col-md-6 g_txt_right">{{ lot.bid_status }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">Sale Status:</div>
+                                        <div class="col-md-6 g_txt_right">{{ lot.sale_status }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">Current Bid:</div>
+                                        <div class="col-md-6 g_txt_right">${{ lot.current_bid|intcomma }} {{ lot.currency }}</div>
+    {#                                    <div class="col-md-12 g_txt_right f_d_seller_r">Seller Reserve Not Yet Met</div>#}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-xs-6">Want it Today?</div>
+                                        <div class="col-md-6 g_txt_right">${{ lot.buy_today_bid|intcomma }} {{ lot.currency }}</div>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="f_asearch_tlt_dv">Sale Information</div>
                             <div class="f_detail_info_cnt">

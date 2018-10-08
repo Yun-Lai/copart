@@ -38,6 +38,7 @@ ICONS = (
 )
 
 ICONS_DICT = {
+    'Run & Drive': 'R',             # 'lcd'
     'RUNS AND DRIVES': 'R',         # 'lcd'
     'ENHANCED VEHICLES': 'E',       # 'lcd'
     'ENGINE START PROGRAM': 'S',    # 'lcd'
@@ -45,7 +46,7 @@ ICONS_DICT = {
     'OFS': 'O',                     # 'lic'
     'DONA': 'D',                    # 'lic'
     'S-RENT': 'B',                  # 'lic'
-    'SITE-DR': 'A',                 # 'lic' -> https://www.driveautoauctions.com/lot/
+    # 'SITE-DR': 'A',                 # 'lic' -> https://www.driveautoauctions.com/lot/
 }
 
 # Featured Items

@@ -441,28 +441,56 @@ table tbody tr td {
     display: inline-block;
     margin-left: 2px;
     margin-top: 2px;
-    font-size: 10px;
+    font-size: 11px;
 }
 
-.f_l_ss {
-    border: 1px solid #022a79;
-    background: #022a79;
+.f_l_y_d {
+    width: 24px;
+    height: 24px;
+    border-radius: 24px !important;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 18px;
 }
 
 .f_l_sr {
-    border: 1px solid #92b342;
-    background: #92b342;
-}
-
-.f_l_sd {
-    border: 1px solid #075fbd;
-    background: #075fbd;
+    border: 1px solid #90B23F;
+    background: #90B23F;
 }
 
 .f_l_se {
-    border: 1px solid #59aee4;
-    background: #59aee4;
+    border: 1px solid #5EB0E5;
+    background: #5EB0E5;
 }
+
+.f_l_ss {
+    border: 1px solid #002878;
+    background: #002878;
+}
+
+.f_l_sf {
+    border: 1px solid #00A651;
+    background: #00A651;
+}
+
+.f_l_so {
+    border: 1px solid #8560A8;
+    background: #8560A8;
+}
+
+.f_l_sd {
+    border: 1px solid #005ABB;
+    background: #005ABB;
+}
+
+.f_l_sb {
+    border: 1px solid #9E005D;
+    background: #9E005D;
+}
+
 
 #c_seach_tb_wrapper .row:first-child,
 #c_seach_tb_wrapper .row:last-child {
@@ -611,8 +639,8 @@ table tbody tr td {
 }
 
 .f_detail_bid_tlt_r {
-    background: #c13b05;
-    margin: 0px;
+    background: #EA3A32;
+    margin: 0;
     color: white;
     padding: 5px;
     text-align: center;
