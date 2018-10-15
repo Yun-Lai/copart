@@ -45,10 +45,10 @@ async def copart(param):
                         conn.commit()
                         print(','.join([param, data['LOTNO'], data['BID'], 'updated']))
                     except:
-                        query = "INSERT INTO product_vehicle(lot, sold_price, sale_status) VALUES ({}, {}, 'SOLD')".format
-                        cursor.execute(query(data['LOTNO'], data['BID']))
-                        conn.commit()
-                        print(','.join([param, data['LOTNO'], data['BID'], 'inserted']))
+                        # query = "INSERT INTO product_vehicle(lot, sold_price, sale_status) VALUES ({}, {}, 'SOLD')".format
+                        # cursor.execute(query(data['LOTNO'], data['BID']))
+                        # conn.commit()
+                        print(','.join([param, data['LOTNO'], data['BID'], 'not exist on db']))
 
                 if 'TEXT' in data:
                     cursor.close()
