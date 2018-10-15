@@ -64,7 +64,7 @@ def scrap_copart_all():
                 response = requests.request("POST", url, data=payload, headers=headers)
                 break
             except:
-                print('scrap_copart(), 1 - ' + url)
+                print('scrap_copart_all(), 1 - ' + url)
                 time.sleep(1)
 
         try:
@@ -73,7 +73,7 @@ def scrap_copart_all():
             print(','.join([str(id), description, str(total)]))
             data.append([makes.id, total])
         except:
-            print('scrap_copart(), 2 - ' + response.text)
+            print('scrap_copart_all(), 2 - ' + response.text)
             continue
 
     accounts = [
@@ -203,10 +203,8 @@ def scrap_copart_lots(make_ids, account):
                 vin = lot.get('fv', '')
                 if not vin or len(vin) > 17:
                     continue
-
-                # if Vehicle.objects.filter(lot=_lot['ln']).filter(vin=vin).exists():
-                #     print('exists - ' + str(_lot['ln']))
-                #     continue
+                if "Sold" == lot['dynamicLotDetails']['saleStatus']:
+                    continue
 
                 db_item, created = Vehicle.objects.get_or_create(lot=lot['ln'])
                 db_item.type = vtype
@@ -339,6 +337,9 @@ def scrap_copart_lots(make_ids, account):
                 print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
             current_vin = lot.vin
 
+        scrap_type_lots.delay()
+        scrap_make_lots.delay()
+
 
 @periodic_task(
     run_every=(crontab(minute='0', hour='8')),
@@ -356,10 +357,6 @@ def scrap_iaai_lots():
         item_id = item_and_stock_number[0]
         stock_id = item_and_stock_number[1]
         try:
-            # if Vehicle.objects.filter(lot=int(stock_id)).exists():
-            #     print('exists - ' + item_id + ', ' + stock_id)
-            #     return
-
             while True:
                 try:
                     response = requests.get(item_url(item_id=item_id))
@@ -523,15 +520,18 @@ def scrap_iaai_lots():
         pass
 
     current_vin = ''
-    lots = Vehicle.objects.filter(source=False).order_by('vin', 'lot')
+    lots = Vehicle.objects.filter(source=False).order_by('vin')
     for lot_id, lot in enumerate(lots):
-        if lot.vin == current_vin:
+        if lot.vin == current_vin and lot.foregoing is None:
             lots[lot_id - 1].show = False
             lots[lot_id - 1].save()
             lot.foregoing = lots[lot_id - 1]
             lot.save()
             print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
         current_vin = lot.vin
+
+    scrap_type_lots.delay()
+    scrap_make_lots.delay()
 
 
 @periodic_task(
@@ -590,8 +590,8 @@ def scrap_live_auctions():
     name="product.tasks.scrap_type_lots",
     ignore_result=True,
     time_limit=36000,
-    queue='normal',
-    options={'queue': 'normal'}
+    queue='high',
+    options={'queue': 'high'}
 )
 def scrap_type_lots():
     for vehicle_type in dict(TYPES).keys():
@@ -605,30 +605,16 @@ def scrap_type_lots():
     name="product.tasks.scrap_make_lots",
     ignore_result=True,
     time_limit=36000,
-    queue='normal',
-    options={'queue': 'normal'}
+    queue='high',
+    options={'queue': 'high'}
 )
 def scrap_make_lots():
     makes = Vehicle.objects.values_list('make', flat=True)
     makes = list(set(makes))
     makes = sorted(list(set([a.upper() for a in makes])))
     for make in makes:
-        make_lot, created = MakesLots.objects.get_or_create(make=make)
-        make_lot.lots = Vehicle.objects.filter(make__icontains=make).count()
-        make_lot.save()
-        print(make + '-' + str(make_lot.lots))
-
-
-@task(
-    name="product.tasks.change_highlight_to_icon",
-    ignore_result=True,
-    time_limit=36000,
-    queue='normal',
-    options={'queue': 'normal'}
-)
-def change_highlight_to_icon():
-    for lot in Vehicle.objects.all():
-        if lot.lot_highlights in ICONS_DICT.keys():
-            print(lot.lot_highlights, ICONS_DICT[lot.lot_highlights])
-            lot.lot_highlights = ICONS_DICT[lot.lot_highlights]
-            lot.save()
+        if make:
+            make_lot, created = MakesLots.objects.get_or_create(make=make)
+            make_lot.lots = Vehicle.objects.filter(make__icontains=make).count()
+            make_lot.save()
+            print(make + '-' + str(make_lot.lots))

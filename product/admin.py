@@ -61,7 +61,7 @@ class VehicleAdmin(admin.ModelAdmin):
 
     search_fields = ['name', 'vin', 'lot', 'year', 'make', 'model']
 
-    readonly_fields = ['source_', 'images_', 'thumb_images_']
+    readonly_fields = ['source_', 'images_', 'thumb_images_', 'created_at', 'updated_at']
 
     raw_id_fields = ['foregoing']
 
@@ -77,6 +77,7 @@ class VehicleAdmin(admin.ModelAdmin):
         ('Sale Information', {'fields': ['location', 'lane', 'item', 'grid', 'sale_date', 'last_updated']}),
         ('Images', {'fields': ['avatar', 'images_', 'thumb_images_']}),
         ('Foregoing', {'fields': ['foregoing', 'show']}),
+        ('Dates', {'fields': ['created_at', 'updated_at']}),
     ]
 
 # class LocationAdmin(admin.ModelAdmin):
@@ -85,6 +86,7 @@ class VehicleAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Vehicle, VehicleAdmin)
+admin.site.register(VehicleSold, VehicleAdmin)
 admin.site.register(VehicleMakes, VehicleMakesAdmin)
 admin.site.register(TypesLots, TypesLotsAdmin)
 admin.site.register(MakesLots, MakesLotsAdmin)

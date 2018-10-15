@@ -7,7 +7,7 @@ from django.utils import translation
 from django.db.models import Q
 
 from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions,\
-    scrap_type_lots, scrap_make_lots, change_highlight_to_icon
+    scrap_type_lots, scrap_make_lots
 from product.models import Vehicle, VehicleMakes, TypesLots, MakesLots, TYPES
 
 
@@ -50,12 +50,6 @@ def view_scrap_type_lot(request):
 
 def view_scrap_make_lot(request):
     scrap_make_lots.delay()
-
-    return redirect('/admin/')
-
-
-def view_change_highlight_to_icon(request):
-    change_highlight_to_icon.delay()
 
     return redirect('/admin/')
 
@@ -116,9 +110,9 @@ def view_ajax_get_models_of_make(request):
 
 
 def index(request):
-    new_arrivals = Vehicle.objects.all().order_by('-id')[:12]
+    new_arrivals = Vehicle.objects.filter(~Q(retail_value=0)).order_by('-id')[:12]
     vehicle_types = TypesLots.objects.all()
-    vehicle_makes = MakesLots.objects.all().order_by('-lots')[:60]
+    vehicle_makes = MakesLots.objects.all().order_by('-lots')[:55]
 
     context = {
         'arrivals': new_arrivals,

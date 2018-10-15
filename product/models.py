@@ -122,7 +122,7 @@ class MakesLots(models.Model):
         ordering = ['pk']
 
 
-class Vehicle(models.Model):
+class VehicleBase(models.Model):
     lot = models.IntegerField(_('Lot'))
     vin = models.CharField(_('VIN'), max_length=17, default='')
 
@@ -180,9 +180,11 @@ class Vehicle(models.Model):
     images = models.TextField(_('Image Urls'), null=True, blank=True)
     thumb_images = models.TextField(_('Thumbnail Image Urls'), null=True, blank=True)
 
+    created_at = models.DateTimeField(verbose_name=_('Created at'), auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name=_('Updated at'), auto_now=True)
+
     class Meta:
-        verbose_name = _('Vehicle')
-        verbose_name_plural = _('Vehicles')
+        abstract = True
         ordering = ['pk']
 
     def __str__(self):
@@ -248,6 +250,30 @@ class Vehicle(models.Model):
             images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % a for a in self.thumb_images.split('|')]
         return mark_safe('<br>'.join(['<a href="' + a + '">' + a + '</a>' for a in images]))
     thumb_images_.short_description = 'Thumbnail Image Urls'
+
+
+class Vehicle(VehicleBase):
+    class Meta:
+        verbose_name = _('Vehicle')
+        verbose_name_plural = _('Vehicles')
+
+
+class VehicleSold(VehicleBase):
+    class Meta:
+        verbose_name = _('Vehicle Sold')
+        verbose_name_plural = _('Vehicles Sold')
+
+
+class Foregoing(models.Model):
+    vehicle = models.ForeignKey(Vehicle, verbose_name=_('Original Vehicle'), related_name='original_vehicle',
+                                on_delete=models.CASCADE, null=True, blank=True)
+    vehicle_sold = models.ForeignKey(VehicleSold, verbose_name=_('Original Vehicle Sold'), related_name='original_vehicle_sold',
+                                     on_delete=models.CASCADE, null=True, blank=True)
+    foregoing = models.ForeignKey(Vehicle, verbose_name=_('Foregoing Vehicle'), related_name='foregoing_vehicle',
+                                  on_delete=models.CASCADE, null=True, blank=True)
+    foregoing_sold = models.ForeignKey(VehicleSold, verbose_name=_('Foregoing Vehicle Sold'), related_name='foregoing_vehicle_sold',
+                                       on_delete=models.CASCADE, null=True, blank=True)
+
 
 # class Location(models.Model):
 #     phone = models.CharField(_('Phone'), max_length=255, null=True, blank=True)

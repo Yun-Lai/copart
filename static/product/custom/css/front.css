@@ -120,7 +120,8 @@
 .f_asearch_r_tabs > div {
     background: #f3f3f3;
     padding: 5px 20px;
-    border-right: 1px solid white;
+    /*border-right: 1px solid white;*/
+    border: 1px solid white;
     text-transform: uppercase;
     cursor: pointer;
 }
@@ -170,6 +171,7 @@
 }
 
 .f_new_arrival_cnts {
+    padding-top: 10px;
     padding-bottom: 50px;
 }
 
@@ -330,7 +332,13 @@
     padding: 10px 10px 30px;
     border: 1px solid silver;
     margin-bottom: 25px;
-    border-radius: 0px 0px 3px 3px !important;
+    border-radius: 0 0 5px 5px !important;
+    transition: box-shadow 0.3s;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2);
+}
+
+.f_detail_info_cnt:hover {
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
 }
 
 .f_detail_info_cnt .row {
@@ -491,7 +499,6 @@ table tbody tr td {
     background: #9E005D;
 }
 
-
 #c_seach_tb_wrapper .row:first-child,
 #c_seach_tb_wrapper .row:last-child {
     display: none;
@@ -546,9 +553,11 @@ table tbody tr td {
     background-color: #0d5db8;
     border: 1px solid #0d5db8 !important;
 }
+
 .f_paging_active a {
     color: white !important;
 }
+
 .f_list_page_num a {
     color: #0d5db8;
 }
@@ -678,12 +687,40 @@ table tbody tr td {
 }
 
 .f_new_arrival_cnts .product-item {
+    padding-top: 0px !important;
     padding-left: 0px !important;
     padding-right: 0px !important;
+    border-radius: 5px 5px 5px 5px !important;
+}
+
+.f_new_arrival_cnts .product-item img {
+	border-radius: 5px 5px 5px 5px !important;
+}
+
+.all_brd_round_5 {
+    border-radius: 5px 5px 5px 5px !important;
+}
+
+.add2cart {
+    border: 0 !important;
+}
+
+.product-item .add2cart:hover {
+    color: #000 !important;
+    background: none !important;
 }
 
 body {
     color: #02396f;
+}
+
+.my_shadow {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2);
+    transition: box-shadow 0.3s;
+}
+
+.my_shadow:hover {
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
 }
 
 .f_pi_detail {
@@ -934,12 +971,11 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
 }
 
 @media only screen and (max-width: 992px) {
-    #filter
-    {
-      border-radius:5px !important;
+    #filter {
+        border-radius: 5px !important;
     }
-    .f_asearch_tlt_dv
-    {
+
+    .f_asearch_tlt_dv {
         background: #0092c5;
         padding: 5px 10px;
         font-size: 16px;
@@ -947,8 +983,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
         color: white;
     }
 
-    #filter.f_asearch_tlt_dv.open
-    {
+    #filter.f_asearch_tlt_dv.open {
         border-radius: 5px 5px 0 0 !important;
     }
 }
