@@ -371,7 +371,6 @@ def scrap_iaai_lots():
             data = t.xpath('//script[@id="layoutVM"]/text()')[0].strip()
             lot = json.loads(data)['VehicleDetailsViewModel']
 
-            print(', '.join(['ItemID: ' + lot['ItemID'], 'StockNo: ' + lot['StockNo']]))
 
             try:
                 vin = bytearray.fromhex(lot['VIN']).decode()
@@ -380,6 +379,10 @@ def scrap_iaai_lots():
             except:     # Unknown, BILL OF SALE, N/A, NONE
                 print(item_url(item_id=item_id) + ' - vin not correct ' + lot['VIN'])
                 return
+
+            if 'Auction Completed' == lot['AuctionStatusDescription'] and lot['PrebidClosed']:
+                return
+            # print(', '.join(['ItemID: ' + lot['ItemID'], 'StockNo: ' + lot['StockNo']]))
 
             db_item, created = Vehicle.objects.get_or_create(lot=int(stock_id))
             db_item.vin = vin
