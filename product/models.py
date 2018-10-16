@@ -34,7 +34,7 @@ ICONS = (
     ('V', 'VIX'),
     ('F', 'FAST'),
     ('H', 'Hybrid Vehicles'),
-    ('A', 'www.driveautoauctions.com'),
+    # ('A', 'www.driveautoauctions.com'),
 )
 
 ICONS_DICT = {
@@ -83,6 +83,12 @@ ICONS_DICT = {
 # Recovered Thefts (2,472)
 # Rentals (481)
 
+FILTER_TYPES = (
+    ('F', 'Featured Items'),
+    ('T', 'Vehicle Types'),
+    ('M', 'Makes'),
+)
+
 
 class VehicleMakes(models.Model):
     type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
@@ -102,23 +108,14 @@ class VehicleMakes(models.Model):
         return mark_safe(scrap_link(id=self.id, description=self.description))
 
 
-class TypesLots(models.Model):
-    type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
-    lots = models.IntegerField(_('Lots Number'), default=0)
+class Filter(models.Model):
+    name = models.CharField(_('Filter Name'), max_length=50)
+    count = models.IntegerField(_('Lots Number'), default=0)
+    type = models.CharField(_('Filter Type'), choices=FILTER_TYPES, max_length=1)
 
     class Meta:
-        verbose_name = _('Lots per Type')
-        verbose_name_plural = _('Lots per Type')
-        ordering = ['pk']
-
-
-class MakesLots(models.Model):
-    make = models.CharField(_('Make'), max_length=50, default='')
-    lots = models.IntegerField(_('Lots Number'), default=0)
-
-    class Meta:
-        verbose_name = _('Lots per Make')
-        verbose_name_plural = _('Lots per Make')
+        verbose_name = _('Lots per Filter')
+        verbose_name_plural = _('Lots per Filter')
         ordering = ['pk']
 
 

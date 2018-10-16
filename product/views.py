@@ -6,9 +6,8 @@ from django.shortcuts import redirect, render
 from django.utils import translation
 from django.db.models import Q
 
-from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions,\
-    scrap_type_lots, scrap_make_lots
-from product.models import Vehicle, VehicleMakes, TypesLots, MakesLots, TYPES
+from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_filters_count
+from product.models import Vehicle, VehicleMakes, Filter, TYPES
 
 
 # def switch_language(request, language):
@@ -42,14 +41,8 @@ def view_scrap_auction(request):
     return redirect('/admin/')
 
 
-def view_scrap_type_lot(request):
-    scrap_type_lots.delay()
-
-    return redirect('/admin/')
-
-
-def view_scrap_make_lot(request):
-    scrap_make_lots.delay()
+def view_scrap_filters_count(request):
+    scrap_filters_count.delay()
 
     return redirect('/admin/')
 
@@ -111,11 +104,13 @@ def view_ajax_get_models_of_make(request):
 
 def index(request):
     new_arrivals = Vehicle.objects.filter(~Q(retail_value=0)).order_by('-id')[:12]
-    vehicle_types = TypesLots.objects.all()
-    vehicle_makes = MakesLots.objects.all().order_by('-lots')[:55]
+    featured_filters = Filter.objects.filter(type='F')
+    vehicle_types = Filter.objects.filter(type='T')
+    vehicle_makes = Filter.objects.filter(type='M').order_by('-count')[:55]
 
     context = {
         'arrivals': new_arrivals,
+        'featured_filters': featured_filters,
         'vehicle_types': vehicle_types,
         'vehicle_makes': vehicle_makes,
         'year_range': range(1920, datetime.datetime.now().year + 2)[::-1]
@@ -123,21 +118,15 @@ def index(request):
     return render(request, 'product/index.html', context=context)
 
 
-def lot_list(request):
-    types = request.GET.get('type', '')
-    from_year = int(request.GET.get('from_year', ''))
-    to_year = int(request.GET.get('to_year', ''))
-    make = request.GET.get('make', '')
-    model = request.GET.get('model', '')
+def lots_by_search(request, vehicle_type, from_year, to_year, make, model):
+    filter_word = dict(TYPES)[vehicle_type]
 
-    filter_word = dict(TYPES)[types]
-
-    lots = Vehicle.objects.filter(type=types).filter(year__range=(from_year, to_year))
-    if make:
-        lots = lots.filter(make=make)
+    lots = Vehicle.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
+    if '_' != make:
+        lots = lots.filter(make__icontains=make)
         filter_word += ', ' + make
-    if model:
-        lots = lots.filter(model=model)
+    if '_' != model:
+        lots = lots.filter(model__icontains=model)
         filter_word += ', ' + model
     filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
 
@@ -188,6 +177,101 @@ def lot_list(request):
     return render(request, 'product/list.html', context=context)
 
 
+def lots_by_feature(request, feature):
+    page = int(request.GET.get('page', 1))
+    entry = int(request.GET.get('entry', 20))
+
+    featured_filter = Filter.objects.get(id=int(feature))
+
+    if 'Buy It Now' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(~Q(buy_today_bid=0))
+    elif 'Pure Sale Items' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(~Q(bid_status='PURE SALE'))
+    elif 'New Items' == featured_filter.name:
+        cur_date = datetime.datetime.now().date()
+        from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
+        to_date = from_date + datetime.timedelta(days=6)
+        lots = Vehicle.objects.filter(sold_price=0).filter(created_at__range=(from_date, to_date))
+    elif 'Lots with Bids' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(~Q(current_bid=0))
+    elif 'No Bids Yet' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(current_bid=0)
+    elif 'Hybrid Vehicles' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(fuel="HYBRID ENGINE")
+    elif 'Repossessions' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='B')
+    elif 'Donations' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start"))
+    elif 'Featured Vehicles' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='F')
+    elif 'Offsite Sales' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='O')
+    elif 'Run and Drive' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='R')
+    elif 'Clean Title' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(~Q(doc_type_td__icontains='salvage'))
+    elif 'Salvage Title' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(doc_type_td__icontains='salvage')
+    elif 'Front End' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End'))
+    elif 'Hail Damage' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail'))
+    elif 'Normal Wear' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear'))
+    elif 'Minor Dents/Scratch' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor'))
+    elif 'Water/Flood' == featured_filter.name:
+        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood'))
+    else:
+        lots = Vehicle.objects.all()
+
+    paginator = Paginator(lots, entry)
+    featured_filter.count = paginator.count
+    featured_filter.save()
+
+    try:
+        paged_lots = paginator.page(page)
+    except PageNotAnInteger:
+        paged_lots = paginator.page(1)
+    except EmptyPage:
+        paged_lots = paginator.page(paginator.num_pages)
+
+    pages = ['First', 'Previous']
+    if paginator.num_pages <= 7:
+        pages += [str(a + 1) for a in range(paginator.num_pages)]
+    else:
+        if page < 5:
+            pages += [str(a + 1) for a in range(5)]
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+        elif page > paginator.num_pages - 4:
+            pages.append('1')
+            pages.append('...')
+            pages += [str(a + 1) for a in range(paginator.num_pages - 5, paginator.num_pages)]
+        else:
+            pages.append('1')
+            pages.append('...')
+            pages.append(str(page - 1))
+            pages.append(str(page))
+            pages.append(str(page + 1))
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+    pages += ['Next', 'Last']
+
+    context = {
+        'lots': paged_lots,
+        'total_lots': paginator.count,
+        'pages': pages[::-1],
+        'current_page': str(page),
+        'current_entry': entry,
+        'page_start_index': (page - 1) * entry + 1,
+        'page_end_index': page * entry if page != paginator.num_pages else paginator.count,
+        'filter_word': featured_filter.name,
+    }
+
+    return render(request, 'product/list.html', context=context)
+
+
 def lots_by_type(request, vehicle_type):
     page = int(request.GET.get('page', 1))
     entry = int(request.GET.get('entry', 20))
@@ -195,9 +279,9 @@ def lots_by_type(request, vehicle_type):
     lots = Vehicle.objects.filter(type=vehicle_type)
     paginator = Paginator(lots, entry)
 
-    type_lot = TypesLots.objects.get(type=vehicle_type)
-    type_lot.lots = paginator.count
-    type_lot.save()
+    type_filter = Filter.objects.get(name=vehicle_type, type='T')
+    type_filter.count = paginator.count
+    type_filter.save()
 
     try:
         paged_lots = paginator.page(page)
@@ -246,12 +330,12 @@ def lots_by_make(request, vehicle_make):
     page = int(request.GET.get('page', 1))
     entry = int(request.GET.get('entry', 20))
 
-    make_lot = MakesLots.objects.get(id=int(vehicle_make))
-    lots = Vehicle.objects.filter(make__icontains=make_lot.make)
+    make_filter = Filter.objects.get(id=int(vehicle_make))
+    lots = Vehicle.objects.filter(make__icontains=make_filter.name)
 
     paginator = Paginator(lots, entry)
-    make_lot.lots = paginator.count
-    make_lot.save()
+    make_filter.count = paginator.count
+    make_filter.save()
     try:
         paged_lots = paginator.page(page)
     except PageNotAnInteger:
@@ -289,7 +373,7 @@ def lots_by_make(request, vehicle_make):
         'current_entry': entry,
         'page_start_index': (page - 1) * entry + 1,
         'page_end_index': page * entry if page != paginator.num_pages else paginator.count,
-        'filter_word': make_lot.make,
+        'filter_word': make_filter.name,
     }
 
     return render(request, 'product/list.html', context=context)

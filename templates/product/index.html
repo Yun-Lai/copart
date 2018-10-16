@@ -24,71 +24,41 @@
                             <div class="row f_asearch_tab1">
                                 <div class="f_max_1280">
                                     <div class="col-md-4 col-sd-4 col-xs-12">
-                                        <a href="{% url 'list_page' %}">Buy It Now (10,925)</a>
-                                        <a href="{% url 'list_page' %}">No License Required (53,745)</a>
-                                        <a href="{% url 'list_page' %}">Pure Sale Items (87,390)</a>
-                                        <a href="{% url 'list_page' %}">Hot Items (42,676)</a>
-                                        <a href="{% url 'list_page' %}">New Items (75,713)</a>
-                                        <a href="{% url 'list_page' %}">Lots with Bids (39,277)</a>
-                                        <a href="{% url 'list_page' %}">No Bids Yet (98,936)</a>
-                                        <a href="{% url 'list_page' %}">Sealed Bid (7)</a>
+                                        {% for featured_filter in featured_filters|slice:":5" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-sd-4 col-xs-12">
-                                        <a href="{% url 'list_page' %}">Run and Drive (72,358)</a>
-                                        <a href="{% url 'list_page' %}">Donations (6,431)</a>
-                                        <a href="{% url 'list_page' %}">Hybrid Vehicles (2,663)</a>
-                                        <a href="{% url 'list_page' %}">Offsite Sales (684)</a>
-                                        <a href="{% url 'list_page' %}">Repossessions (629)</a>
-                                        <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                        {% for featured_filter in featured_filters|slice:"5:11" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-sd-4 col-xs-12">
-                                        <a href="{% url 'list_page' %}">Clean Title (30,209)</a>
-                                        <a href="{% url 'list_page' %}">Salvage Title (101,460)</a>
-                                        <a href="{% url 'list_page' %}">Front End (63,346)</a>
-                                        <a href="{% url 'list_page' %}">Hail Damage (6,198)</a>
-                                        <a href="{% url 'list_page' %}">Normal Wear (3,033)</a>
-                                        <a href="{% url 'list_page' %}">Minor Dents/Scratch... (7,087)</a>
-                                        <a href="{% url 'list_page' %}">Water/Flood (3,211)</a>
-                                        <a href="{% url 'list_page' %}">Fleet/Lease (602)</a>
+                                        {% for featured_filter in featured_filters|slice:"11:18" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% endfor %}
                                     </div>
                                 </div>
                                 <div class="f_min_1280">
                                     <div class="col-md-3 col-xs-12">
-                                        <a href="{% url 'list_page' %}">Buy It Now (10,925)</a>
-                                        <a href="{% url 'list_page' %}">No License Required (53,745)</a>
-                                        <a href="{% url 'list_page' %}">Pure Sale Items (87,390)</a>
-                                        <a href="{% url 'list_page' %}">Hot Items (42,676)</a>
-                                        <a href="{% url 'list_page' %}">New Items (75,713)</a>
-                                        <a href="{% url 'list_page' %}">Lots with Bids (39,277)</a>
-                                        <a href="{% url 'list_page' %}">No Bids Yet (98,936)</a>
-                                        <a href="{% url 'list_page' %}">Sealed Bid (7)</a>
+                                        {% for featured_filter in featured_filters|slice:":5" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
-                                        <a href="{% url 'list_page' %}">Run and Drive (72,358)</a>
-                                        <a href="{% url 'list_page' %}">Donations (6,431)</a>
-                                        <a href="{% url 'list_page' %}">Hybrid Vehicles (2,663)</a>
-                                        <a href="{% url 'list_page' %}">Offsite Sales (684)</a>
-                                        <a href="{% url 'list_page' %}">Repossessions (629)</a>
-                                        <a href="{% url 'list_page' %}">Featured Vehicles (201)</a>
+                                        {% for featured_filter in featured_filters|slice:"5:11" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
-                                        <a href="{% url 'list_page' %}">Clean Title (30,209)</a>
-                                        <a href="{% url 'list_page' %}">Salvage Title (101,460)</a>
-                                        <a href="{% url 'list_page' %}">Front End (63,346)</a>
-                                        <a href="{% url 'list_page' %}">Hail Damage (6,198)</a>
-                                        <a href="{% url 'list_page' %}">Normal Wear (3,033)</a>
-                                        <a href="{% url 'list_page' %}">Minor Dents/Scratch... (7,087)</a>
-                                        <a href="{% url 'list_page' %}">Water/Flood (3,211)</a>
-                                        <a href="{% url 'list_page' %}">Fleet/Lease (602)</a>
+                                        {% for featured_filter in featured_filters|slice:"11:18" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
-                                        <a href="{% url 'list_page' %}">Classics (2,612)</a>
-                                        <a href="{% url 'list_page' %}">Exotics (371)</a>
-                                        <a href="{% url 'list_page' %}">Impound Vehicles (48)</a>
-                                        <a href="{% url 'list_page' %}">Municipal Fleet (67)</a>
-                                        <a href="{% url 'list_page' %}">Non-repairable (6,507)</a>
-                                        <a href="{% url 'list_page' %}">Recovered Thefts (2,472)</a>
-                                        <a href="{% url 'list_page' %}">Rentals (481)</a>
+                                        {% for featured_filter in featured_filters|slice:"18:" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +67,7 @@
                                     {% for _ in 'xxx' %}
                                         <div class="col-md-4 col-xs-12">
                                             {% for vehicle_type in vehicle_types %}
-                                                <a href="{% if 0 == vehicle_type.lots %}#{% else %}{% url 'list_page_by_type' vehicle_type.type %}{% endif %}">{{ vehicle_type.type|get_type_description }} ({{ vehicle_type.lots }})</a>
+                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}{% url 'list_page_by_type' vehicle_type.name %}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
                                             {% endfor %}
                                         </div>
                                     {% endfor %}
@@ -106,7 +76,7 @@
                                     {% for _ in 'xxxx' %}
                                         <div class="col-md-3 col-xs-12">
                                             {% for vehicle_type in vehicle_types %}
-                                                <a href="{% if 0 == vehicle_type.lots %}#{% else %}{% url 'list_page_by_type' vehicle_type.type %}{% endif %}">{{ vehicle_type.type|get_type_description }} ({{ vehicle_type.lots }})</a>
+                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}{% url 'list_page_by_type' vehicle_type.name %}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
                                             {% endfor %}
                                     </div>
                                     {% endfor %}
@@ -116,42 +86,42 @@
                                 <div class="f_max_1280">
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":14" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"14:28" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"28:41" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
-                                        <a href="{% url 'list_page' %}">More...</a>
+                                        <a href="#">More...</a>
                                     </div>
                                 </div>
                                 <div class="f_min_1280">
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":14" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"14:28" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"28:42" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"42:55" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.make }} ({{ vehicle_make.lots }})</a>
+                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
-                                        <a href="{% url 'list_page' %}">More...</a>
+                                        <a href="#">More...</a>
                                     </div>
                                 </div>
                             </div>
@@ -183,10 +153,10 @@
                             <div class="col-md-8 col-xs-12">
                                 <select class="g_slt f_r_s_slt" id="finder_types">
                                     {% for vehicle_type in vehicle_types %}
-                                        <option label="{{ vehicle_type.type|get_type_description }}"
-                                                value="{{ vehicle_type.type }}"
-                                                {% if 'V' == vehicle_type.type %}selected{% endif %}>
-                                            {{ vehicle_type.type|get_type_description }}
+                                        <option label="{{ vehicle_type.name|get_type_description }}"
+                                                value="{{ vehicle_type.name }}"
+                                                {% if 'V' == vehicle_type.name %}selected{% endif %}>
+                                            {{ vehicle_type.name|get_type_description }}
                                         </option>
                                     {% endfor %}
                                 </select>
@@ -220,7 +190,6 @@
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Make</div>
                             <div class="col-md-8 col-xs-12">
                                 <select class="g_slt f_r_s_slt" id="finder_makes">
-                                    <option value="0">All Makes</option>
                                 </select>
                             </div>
                         </div>
@@ -228,7 +197,6 @@
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Model</div>
                             <div class="col-md-8 col-xs-12">
                                 <select class="g_slt f_r_s_slt" id="finder_models">
-                                    <option value="0">All Models</option>'
                                 </select>
                             </div>
                         </div>

@@ -71,13 +71,11 @@ function front_landing_event_proc_funcs() {
         var makes = $("#finder_makes").val();
         var models = $("#finder_models").val();
 
-        var href = "/lots/?type=" + types + "&from_year=" + from_year + "&to_year=" + to_year;
-
-        if ('0' !== makes)
-            href += "&make=" + makes;
-        if ('0' !== models)
-            href += "&model=" + models;
-        location.href = href;
+        if ('0' === makes)
+            makes = '_';
+        if ('0' === models)
+            models = '_';
+        location.href = "/lots_by_search/" + types + "/" + from_year + "/" + to_year + "/" + makes + "/" + models + "/";
     });
 
     function ajax_get_makes(finder_type) {
@@ -129,6 +127,11 @@ function front_landing_event_proc_funcs() {
         var finder_type = $("#finder_types").val();
         var finder_make = $(this).val();
         ajax_get_models(finder_type, finder_make);
+    });
+    $("#finder_models").html('<option value="0">All Models</option>');
+
+    $("#detail_find_more").on('click', function () {
+        location.href = "/lots_by_search/" + $("#lot_type").html() + "/2008/2019/" + $("#lot_make").html() + "/_/";
     });
 }
 

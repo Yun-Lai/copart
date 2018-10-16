@@ -66,3 +66,24 @@ def is_icon(highlights):
     if highlights.isupper() and highlights.isalpha():
         return True
     return False
+
+
+@register.filter
+def get_highlights(highlights):
+    icons = (
+        ('R', 'Run & Drive'),
+        ('C', 'Seller Certified'),
+        ('E', 'Enhanced Vehicle'),
+        ('C', 'CrashedToys'),
+        ('S', 'Engine Start Program'),
+        ('F', 'Featured Vehicle'),
+        ('O', 'Offsite Sales'),
+        ('D', 'Donated Vehicle'),
+        ('Q', 'Carb Qualification'),
+        ('B', 'Sealed Bid Repossession'),
+        ('V', 'VIX'),
+        ('F', 'FAST'),
+        ('H', 'Hybrid Vehicles'),
+        # ('A', 'www.driveautoauctions.com'),
+    )
+    return dict(icons)[highlights]

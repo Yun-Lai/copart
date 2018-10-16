@@ -6,8 +6,10 @@ import random
 import subprocess
 from multiprocessing.pool import ThreadPool
 
+from django.db.models import Q
 from lxml.html import fromstring
 from datetime import datetime
+import datetime as dt
 from django.utils import timezone
 
 from celery.schedules import crontab
@@ -343,8 +345,7 @@ def scrap_copart_lots(make_ids, account):
                 print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
             current_vin = lot.vin
 
-        scrap_type_lots.delay()
-        scrap_make_lots.delay()
+        scrap_filters_count.delay()
 
 
 # @periodic_task(
@@ -384,7 +385,6 @@ def scrap_iaai_lots():
             data = t.xpath('//script[@id="layoutVM"]/text()')[0].strip()
             lot = json.loads(data)['VehicleDetailsViewModel']
 
-
             try:
                 vin = bytearray.fromhex(lot['VIN']).decode()
                 if not vin or len(vin) != 17:
@@ -419,7 +419,13 @@ def scrap_iaai_lots():
             odometer_orr = re.sub('[^0-9]', '', odometer_orr)
             db_item.odometer_orr = int(odometer_orr) if odometer_orr else 0
             db_item.odometer_ord = get_item(lot['ConditionInfo'], 'Odometer', 1)
-            db_item.lot_highlights = get_item(lot['ConditionInfo'], 'runAndDrive')
+
+            highlights = get_item(lot['ConditionInfo'], 'runAndDrive')
+            if highlights in ICONS_DICT.keys():
+                db_item.lot_highlights = ICONS_DICT[highlights]
+            else:
+                db_item.lot_highlights = highlights
+
             db_item.lot_seller = lot['SaleInfo']['Seller']
             db_item.lot_1st_damage = get_item(lot['ConditionInfo'], 'PrimaryDamage')
             db_item.lot_2nd_damage = get_item(lot['ConditionInfo'], 'SecondaryDamage')
@@ -546,8 +552,7 @@ def scrap_iaai_lots():
             print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
         current_vin = lot.vin
 
-    scrap_type_lots.delay()
-    scrap_make_lots.delay()
+    scrap_filters_count.delay()
 
 
 # @periodic_task(
@@ -558,13 +563,6 @@ def scrap_iaai_lots():
 #     queue='low',
 #     options={'queue': 'low'}
 # )
-@task(
-    name="product.tasks.scrap_live_auctions",
-    ignore_result=True,
-    time_limit=3600,
-    queue='low',
-    options={'queue': 'low'}
-)
 def scrap_live_auctions():
     try:
         while True:
@@ -610,34 +608,151 @@ def scrap_live_auctions():
 
 
 @task(
-    name="product.tasks.scrap_type_lots",
+    name="product.tasks.scrap_filters_count",
     ignore_result=True,
     time_limit=36000,
     queue='high',
     options={'queue': 'high'}
 )
-def scrap_type_lots():
+def scrap_filters_count():
     for vehicle_type in dict(TYPES).keys():
-        type_lot, created = TypesLots.objects.get_or_create(type=vehicle_type)
-        type_lot.lots = Vehicle.objects.filter(type=vehicle_type).count()
-        type_lot.save()
-        print(vehicle_type + '-' + dict(TYPES)[vehicle_type] + '-' + str(type_lot.lots))
+        type_filter, created = Filter.objects.get_or_create(name=vehicle_type, type='T')
+        type_filter.count = Vehicle.objects.filter(type=vehicle_type).count()
+        type_filter.save()
+        print(vehicle_type + '-' + dict(TYPES)[vehicle_type] + '-' + str(type_filter.count))
 
-
-@task(
-    name="product.tasks.scrap_make_lots",
-    ignore_result=True,
-    time_limit=36000,
-    queue='high',
-    options={'queue': 'high'}
-)
-def scrap_make_lots():
     makes = Vehicle.objects.values_list('make', flat=True)
     makes = list(set(makes))
     makes = sorted(list(set([a.upper() for a in makes])))
     for make in makes:
         if make:
-            make_lot, created = MakesLots.objects.get_or_create(make=make)
-            make_lot.lots = Vehicle.objects.filter(make__icontains=make).count()
-            make_lot.save()
-            print(make + '-' + str(make_lot.lots))
+            make_filter, created = Filter.objects.get_or_create(name=make, type='M')
+            make_filter.count = Vehicle.objects.filter(make__icontains=make).count()
+            make_filter.save()
+            print(make + '-' + str(make_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Buy It Now', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(buy_today_bid=0)).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Pure Sale Items', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(bid_status='PURE SALE')).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    cur_date = datetime.now().date()
+    from_date = cur_date - dt.timedelta(days=cur_date.weekday() + 7)
+    to_date = from_date + dt.timedelta(days=6)
+    featured_filter, created = Filter.objects.get_or_create(name='New Items', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(created_at__range=(from_date, to_date)).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Lots with Bids', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(current_bid=0)).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='No Bids Yet', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(current_bid=0).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Hybrid Vehicles', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(fuel="HYBRID ENGINE").count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Repossessions', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='B').count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Donations', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start")).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Featured Vehicles', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='F').count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Offsite Sales', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='O').count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Run and Drive', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='R').count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Clean Title', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(doc_type_td__icontains='salvage')).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Salvage Title', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(doc_type_td__icontains='salvage').count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Front End', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End')).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Hail Damage', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail')).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Normal Wear', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear')).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Minor Dents/Scratch', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor')).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Water/Flood', type='F')
+    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood')).count()
+    featured_filter.save()
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='No License Required', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Hot Items', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Sealed Bid', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Fleet / Lease', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Classics', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Exotics', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Impound Vehicles', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Municipal Fleet', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Non-repairable', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Recovered Thefts', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))
+
+    featured_filter, created = Filter.objects.get_or_create(name='Rentals', type='F')
+    print(featured_filter.name + '-' + str(featured_filter.count))

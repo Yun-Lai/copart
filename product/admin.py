@@ -43,12 +43,8 @@ class VehicleMakesAdmin(admin.ModelAdmin):
         return MultipleChangeList
 
 
-class TypesLotsAdmin(admin.ModelAdmin):
-    list_display = ['type', 'lots']
-
-
-class MakesLotsAdmin(admin.ModelAdmin):
-    list_display = ['make', 'lots']
+class FilterAdmin(admin.ModelAdmin):
+    list_display = ['name', 'count', 'type']
 
 
 class VehicleAdmin(admin.ModelAdmin):
@@ -88,6 +84,5 @@ class VehicleAdmin(admin.ModelAdmin):
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(VehicleSold, VehicleAdmin)
 admin.site.register(VehicleMakes, VehicleMakesAdmin)
-admin.site.register(TypesLots, TypesLotsAdmin)
-admin.site.register(MakesLots, MakesLotsAdmin)
+admin.site.register(Filter, FilterAdmin)
 # admin.site.register(Location, LocationAdmin)
