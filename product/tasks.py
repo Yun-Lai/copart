@@ -26,8 +26,14 @@ from product.models import *
 GLOBAL = {'live_auctions': []}
 
 
-@periodic_task(
-    run_every=(crontab(minute='0', hour='9')),
+# @periodic_task(
+#     run_every=(crontab(minute='0', hour='9')),
+#     name="product.tasks.scrap_copart_all",
+#     ignore_result=True,
+#     queue='high',
+#     options={'queue': 'high'}
+# )
+@task(
     name="product.tasks.scrap_copart_all",
     ignore_result=True,
     queue='high',
@@ -295,9 +301,9 @@ def scrap_copart_lots(make_ids, account):
 
                 db_item.save()
                 if created:
-                    print(description + ' - ' + str(lot['ln']) + ', Insert')
+                    print('copart - ' + description + ' - ' + str(lot['ln']) + ', Insert')
                 else:
-                    print(description + ' - ' + str(lot['ln']) + ', Update')
+                    print('copart - ' + description + ' - ' + str(lot['ln']) + ', Update')
 
             if page == pages_num:
                 break
@@ -341,8 +347,15 @@ def scrap_copart_lots(make_ids, account):
         scrap_make_lots.delay()
 
 
-@periodic_task(
-    run_every=(crontab(minute='0', hour='8')),
+# @periodic_task(
+#     run_every=(crontab(minute='0', hour='8')),
+#     name="product.tasks.scrap_iaai_lots",
+#     ignore_result=True,
+#     time_limit=36000,
+#     queue='normal',
+#     options={'queue': 'normal'}
+# )
+@task(
     name="product.tasks.scrap_iaai_lots",
     ignore_result=True,
     time_limit=36000,
@@ -457,9 +470,9 @@ def scrap_iaai_lots():
 
             db_item.save()
             if created:
-                print(stock_id + ', Insert')
+                print('iaai - ' + stock_id + ', Insert')
             else:
-                print(stock_id + ', Update')
+                print('iaai - ' + stock_id + ', Update')
         except Exception as e:
             error_file = open('error.txt', 'a')
             error_file.write(item_url(item_id=item_id) + ' ' + str(e))
@@ -537,8 +550,15 @@ def scrap_iaai_lots():
     scrap_make_lots.delay()
 
 
-@periodic_task(
-    run_every=crontab(minute='0', hour='*', day_of_week='mon,tue,wed,thu,fri'),
+# @periodic_task(
+#     run_every=crontab(minute='0', hour='*', day_of_week='mon,tue,wed,thu,fri'),
+#     name="product.tasks.scrap_live_auctions",
+#     ignore_result=True,
+#     time_limit=3600,
+#     queue='low',
+#     options={'queue': 'low'}
+# )
+@task(
     name="product.tasks.scrap_live_auctions",
     ignore_result=True,
     time_limit=3600,
