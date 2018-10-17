@@ -1,7 +1,7 @@
 import datetime
 from urllib.parse import urlencode
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -9,7 +9,7 @@ from django.utils import translation
 from django.db.models import Q
 
 from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_filters_count
-from product.models import Vehicle, VehicleMakes, Filter, TYPES
+from product.models import Vehicle, VehicleMakes, Filter, Location, TYPES
 
 
 # def switch_language(request, language):
@@ -114,18 +114,20 @@ def index(request):
     featured_filters = Filter.objects.filter(type='F')
     vehicle_types = Filter.objects.filter(type='T')
     vehicle_makes = Filter.objects.filter(type='M').order_by('-count')[:55]
+    locations = Location.objects.all()
 
     context = {
         'arrivals': new_arrivals,
         'featured_filters': featured_filters,
         'vehicle_types': vehicle_types,
         'vehicle_makes': vehicle_makes,
+        'locations': locations,
         'year_range': range(1920, datetime.datetime.now().year + 2)[::-1]
     }
     return render(request, 'product/index.html', context=context)
 
 
-def lots_by_search(request, vehicle_type, from_year, to_year, make, model):
+def lots_by_search(request, vehicle_type, from_year, to_year, make, model, location):
     filter_word = dict(TYPES)[vehicle_type]
 
     lots = Vehicle.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
@@ -135,6 +137,9 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model):
     if '_' != model:
         lots = lots.filter(model__icontains=model)
         filter_word += ', ' + model
+    if '_' != location:
+        lots = lots.filter(location=location)
+        filter_word += ', ' + location
     filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
 
     page = int(request.GET.get('page', 1))
@@ -142,7 +147,7 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model):
 
     paginator = Paginator(lots, entry)
     if page > paginator.num_pages:
-        return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model,
+        return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model, location,
                                page=paginator.num_pages, entry=entry)
     paged_lots = paginator.get_page(page)
 

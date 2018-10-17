@@ -190,6 +190,7 @@
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Make</div>
                             <div class="col-md-8 col-xs-12">
                                 <select class="g_slt f_r_s_slt" id="finder_makes">
+                                    <option value="0">All Makes</option>
                                 </select>
                             </div>
                         </div>
@@ -197,28 +198,21 @@
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Model</div>
                             <div class="col-md-8 col-xs-12">
                                 <select class="g_slt f_r_s_slt" id="finder_models">
+                                    <option value="0">All Models</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-xs-12 g_txt_right f_as_rr_label">Location</div>
                             <div class="col-md-8 col-xs-12">
-                                <input type="radio" name="location" value="1" id="f_as_l_1" checked/> &nbsp; <label
-                                    for="f_as_l_1">Location</label> <br>
-                                <input type="radio" name="location" value="1" id="f_as_l_2"/> &nbsp; <label
-                                    for="f_as_l_2">State / Province</label> <br>
-                                <!--<input type="radio" name="location" value="1" id="f_as_l_3" /> &nbsp; <label for="f_as_l_3">Zip / Postal Code</label> <br>-->
-                                <select class="g_slt f_r_s_slt">
-                                    <option value="" selected="selected">All Locations</option>
-                                    <option label="*NCS - Central Region" value="object:532">*NCS - Central Region
-                                    </option>
-                                    <option label="*NCS - Eastern Region" value="object:533">*NCS - Eastern Region
-                                    </option>
-                                    <option label="*NCS - Mountain Region" value="object:534">*NCS - Mountain Region
-                                    </option>
-                                    <option label="*NCS - Pacific Region" value="object:535">*NCS - Pacific Region
-                                    </option>
-                                    <option label="AB - Calgary" value="object:536">AB - Calgary</option>
+                                <!--<input type="radio" name="location" value="1" id="f_as_l_1" checked/> &nbsp; <label for="f_as_l_1">Location</label> <br>
+                                <input type="radio" name="location" value="1" id="f_as_l_2"/> &nbsp; <label for="f_as_l_2">State / Province</label> <br>
+                                <input type="radio" name="location" value="1" id="f_as_l_3" /> &nbsp; <label for="f_as_l_3">Zip / Postal Code</label> <br>-->
+                                <select class="g_slt f_r_s_slt" id="finder_location">
+                                    <option value="0">All Locations</option>
+                                    {% for location in locations %}
+                                        <option label="{{ location.location }}" value="{{ location.location }}">{{ location.location }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>

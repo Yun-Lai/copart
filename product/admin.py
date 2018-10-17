@@ -78,7 +78,8 @@ class VehicleAdmin(admin.ModelAdmin):
 
 
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ['state', 'city', 'source']
+    list_filter = ['source']
+    list_display = ['location', 'count', 'source']
 
 
 admin.site.register(Vehicle, VehicleAdmin)

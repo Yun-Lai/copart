@@ -168,7 +168,7 @@ class VehicleBase(models.Model):
 
     # Sale Information
     location = models.CharField(_('Location'), max_length=50, default='')
-    lane = models.CharField(_('Lane'), max_length=1, default='-')
+    lane = models.CharField(_('Lane'), max_length=1, default='')
     item = models.CharField(_('Item'), max_length=20, default='')
     grid = models.CharField(_('Grid/Row'), max_length=5, default='')
     sale_date = models.DateTimeField(_('Sale Date'), null=True, blank=True)
@@ -185,7 +185,6 @@ class VehicleBase(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ['pk']
 
     def __str__(self):
         return self.vin + ' ' + str(self.lot)
@@ -276,22 +275,14 @@ class Foregoing(models.Model):
 
 
 class Location(models.Model):
-    state = models.CharField(_('State'), max_length=2, null=True, blank=True)
-    city = models.CharField(_('City'), max_length=255, null=True, blank=True)
+    location = models.CharField(_('Location'), max_length=50, default='')
+    count = models.IntegerField(_('Lots Number'), default=0)
     source = models.CharField(_('Source'), choices=SOURCE, max_length=1, default='C')
-
-    # phone = models.CharField(_('Phone'), max_length=255, null=True, blank=True)
-    # fax = models.CharField(_('Fax'), max_length=255, null=True, blank=True)
-    # hours = models.CharField(_('Hours'), max_length=255, null=True, blank=True)
-    # free_wifi = models.CharField(_('Free WiFi'), max_length=255, null=True, blank=True)
-    # address = models.CharField(_('Address'), max_length=255, null=True, blank=True)
-    # mailing_address = models.CharField(_('Mailing Address'), max_length=255, null=True, blank=True)
-    # general_manager = models.CharField(_('General Manager'), max_length=255, null=True, blank=True)
-    # regional_manager = models.CharField(_('Regional Manager'), max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Location')
         verbose_name_plural = _('Locations')
+        ordering = ['pk']
 
     def __str__(self):
-        return self.state + ' - ' + self.city
+        return self.source + '-' + self.location

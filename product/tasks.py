@@ -228,7 +228,7 @@ def scrap_copart_lots(make_ids, account):
                 db_item.engine_type = lot.get('egn', '')
                 db_item.cylinders = lot.get('cy', '')
                 db_item.name = lot['ld']
-                db_item.location = lot['yn']
+                db_item.location = lot['yn'] if lot['yn'] != 'ABBOTSFORD' else 'BC - ABBOTSFORD'
                 # db_item.location = lot['locState'] + ' - ' + lot['locCity']
                 db_item.currency = lot['cuc']
                 # tz
@@ -451,8 +451,7 @@ def scrap_iaai_lots():
             # db_item.sold_price = models.IntegerField(_('Sold Price'), default=0)
 
             # Sale Information
-            db_item.location = lot['SaleInfo']['TitleState'] if lot['SaleInfo']['TitleState'] else ''
-            # db_item.location = lot['BranchLink']    # ADESA Birmingham (AL), Lafayette (LA)
+            db_item.location = lot['BranchLink']
 
             db_item.lane = lot['AuctionLane'] if lot['AuctionLane'] else '-'
             db_item.item = lot['Slot']
@@ -759,3 +758,17 @@ def scrap_filters_count():
 
     featured_filter, created = Filter.objects.get_or_create(name='Rentals', type='F')
     print(featured_filter.name + '-' + str(featured_filter.count))
+
+    locations = Vehicle.objects.filter(source=True).values_list('location', flat=True)
+    locations = sorted(list(set(locations)))
+    for location in locations:
+        db_location, _ = Location.objects.get_or_create(location=location)
+        db_location.count = Vehicle.objects.filter(location=location).count()
+        db_location.save()
+
+    locations = Vehicle.objects.filter(source=False).values_list('location', flat=True)
+    locations = sorted(list(set(locations)))
+    for location in locations:
+        db_location, _ = Location.objects.get_or_create(location=location, source='I')
+        db_location.count = Vehicle.objects.filter(location=location).count()
+        db_location.save()

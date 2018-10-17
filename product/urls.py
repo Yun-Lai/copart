@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^lots_by_feature/(?P<feature>[\d]+)/', views.lots_by_feature, name='list_page_by_feature'),
     url(r'^lots_by_type/(?P<vehicle_type>[\w])/', views.lots_by_type, name='list_page_by_type'),
     url(r'^lots_by_make/(?P<vehicle_make>[\d]+)/', views.lots_by_make, name='list_page_by_make'),
-    url(r'^lots_by_search/(?P<vehicle_type>[\w])/(?P<from_year>[\d]+)/(?P<to_year>[\d]+)/(?P<make>[\w]+)/(?P<model>.+)/',
+    url(r'^lots_by_search/(?P<vehicle_type>[\w])/(?P<from_year>[\d]+)/(?P<to_year>[\d]+)/(?P<make>.+)/(?P<model>.+)/(?P<location>.+)/',
         views.lots_by_search, name='list_page_by_search'),
     url(r'^lot/(?P<lot>[\w-]+)/$', views.detail, name='detail_page'),
 
