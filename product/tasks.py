@@ -229,6 +229,7 @@ def scrap_copart_lots(make_ids, account):
                 db_item.cylinders = lot.get('cy', '')
                 db_item.name = lot['ld']
                 db_item.location = lot['yn']
+                # db_item.location = lot['locState'] + ' - ' + lot['locCity']
                 db_item.currency = lot['cuc']
                 # tz
                 if 'ad' in lot:
@@ -451,6 +452,8 @@ def scrap_iaai_lots():
 
             # Sale Information
             db_item.location = lot['SaleInfo']['TitleState'] if lot['SaleInfo']['TitleState'] else ''
+            # db_item.location = lot['BranchLink']    # ADESA Birmingham (AL), Lafayette (LA)
+
             db_item.lane = lot['AuctionLane'] if lot['AuctionLane'] else '-'
             db_item.item = lot['Slot']
             # db_item.grid = models.CharField(_('Grid/Row'), max_length=5, default='')

@@ -4,22 +4,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 
-TYPES = (
-    ('A', 'ATV'),
-    ('V', 'Automobile'),
-    ('M', 'Boat'),
-    ('D', 'Dirt Bike'),
-    ('U', 'Heavy Duty Trucks'),
-    ('E', 'Industrial Equipment'),
-    ('J', 'Jet Ski'),
-    ('K', 'Medium Duty/Box Trucks'),
-    ('C', 'Motorcycle'),
-    ('H', 'Other Goods'),
-    ('R', 'Recreational Vehicle (RV)'),
-    ('S', 'Snowmobile'),
-    ('L', 'Trailers'),
-)
-
 ICONS = (
     ('R', 'Run & Drive'),
     ('C', 'Seller Certified'),
@@ -83,13 +67,22 @@ ICONS_DICT = {
 # Recovered Thefts (2,472)
 # Rentals (481)
 
-FILTER_TYPES = (
-    ('F', 'Featured Items'),
-    ('T', 'Vehicle Types'),
-    ('M', 'Makes'),
+
+TYPES = (
+    ('A', 'ATV'),
+    ('V', 'Automobile'),
+    ('M', 'Boat'),
+    ('D', 'Dirt Bike'),
+    ('U', 'Heavy Duty Trucks'),
+    ('E', 'Industrial Equipment'),
+    ('J', 'Jet Ski'),
+    ('K', 'Medium Duty/Box Trucks'),
+    ('C', 'Motorcycle'),
+    ('H', 'Other Goods'),
+    ('R', 'Recreational Vehicle (RV)'),
+    ('S', 'Snowmobile'),
+    ('L', 'Trailers'),
 )
-
-
 class VehicleMakes(models.Model):
     type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
     code = models.CharField(_('Code'), max_length=4)
@@ -108,6 +101,11 @@ class VehicleMakes(models.Model):
         return mark_safe(scrap_link(id=self.id, description=self.description))
 
 
+FILTER_TYPES = (
+    ('F', 'Featured Items'),
+    ('T', 'Vehicle Types'),
+    ('M', 'Makes'),
+)
 class Filter(models.Model):
     name = models.CharField(_('Filter Name'), max_length=50)
     count = models.IntegerField(_('Lots Number'), default=0)
@@ -119,6 +117,10 @@ class Filter(models.Model):
         ordering = ['pk']
 
 
+SOURCE = (
+    ('C', 'Copart'),
+    ('I', 'IAAI'),
+)
 class VehicleBase(models.Model):
     lot = models.IntegerField(_('Lot'))
     vin = models.CharField(_('VIN'), max_length=17, default='')
@@ -132,6 +134,7 @@ class VehicleBase(models.Model):
     currency = models.CharField(_('Currency'), max_length=3, default='')
     avatar = models.URLField(_('Avatar'), null=True, blank=True)
     source = models.BooleanField(_('Source'), default=True)
+    # source = models.CharField(_('Source'), choices=SOURCE, max_length=1, default='C')
 
     # Lot Information
     doc_type_ts = models.CharField(_('Doc Type TS'), max_length=2, default='')
@@ -272,20 +275,23 @@ class Foregoing(models.Model):
                                        on_delete=models.CASCADE, null=True, blank=True)
 
 
-# class Location(models.Model):
-#     phone = models.CharField(_('Phone'), max_length=255, null=True, blank=True)
-#     fax = models.CharField(_('Fax'), max_length=255, null=True, blank=True)
-#     hours = models.CharField(_('Hours'), max_length=255, null=True, blank=True)
-#     free_wifi = models.CharField(_('Free WiFi'), max_length=255, null=True, blank=True)
-#     address = models.CharField(_('Address'), max_length=255, null=True, blank=True)
-#     mailing_address = models.CharField(_('Mailing Address'), max_length=255, null=True, blank=True)
-#     location = models.CharField(_('Location'), max_length=255, null=True, blank=True)
-#     general_manager = models.CharField(_('General Manager'), max_length=255, null=True, blank=True)
-#     regional_manager = models.CharField(_('Regional Manager'), max_length=255, null=True, blank=True)
-#
-#     class Meta:
-#         verbose_name = _('Location')
-#         verbose_name_plural = _('Locations')
-#
-#     def __str__(self):
-#         return self.address
+class Location(models.Model):
+    state = models.CharField(_('State'), max_length=2, null=True, blank=True)
+    city = models.CharField(_('City'), max_length=255, null=True, blank=True)
+    source = models.CharField(_('Source'), choices=SOURCE, max_length=1, default='C')
+
+    # phone = models.CharField(_('Phone'), max_length=255, null=True, blank=True)
+    # fax = models.CharField(_('Fax'), max_length=255, null=True, blank=True)
+    # hours = models.CharField(_('Hours'), max_length=255, null=True, blank=True)
+    # free_wifi = models.CharField(_('Free WiFi'), max_length=255, null=True, blank=True)
+    # address = models.CharField(_('Address'), max_length=255, null=True, blank=True)
+    # mailing_address = models.CharField(_('Mailing Address'), max_length=255, null=True, blank=True)
+    # general_manager = models.CharField(_('General Manager'), max_length=255, null=True, blank=True)
+    # regional_manager = models.CharField(_('Regional Manager'), max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Location')
+        verbose_name_plural = _('Locations')
+
+    def __str__(self):
+        return self.state + ' - ' + self.city

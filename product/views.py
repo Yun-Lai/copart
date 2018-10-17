@@ -1,8 +1,10 @@
 import datetime
+from urllib.parse import urlencode
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import translation
 from django.db.models import Q
 
@@ -14,6 +16,11 @@ from product.models import Vehicle, VehicleMakes, Filter, TYPES
 #     translation.activate(language)
 #     request.session[translation.LANGUAGE_SESSION_KEY] = language
 #     return redirect('/admin/')
+
+def custom_redirect(url_name, *args, **kwargs):
+    url = reverse(url_name, args=args)
+    params = urlencode(kwargs)
+    return HttpResponseRedirect(url + "?%s" % params)
 
 
 def view_scrap_copart_all(request):
@@ -134,12 +141,10 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model):
     entry = int(request.GET.get('entry', 20))
 
     paginator = Paginator(lots, entry)
-    try:
-        paged_lots = paginator.page(page)
-    except PageNotAnInteger:
-        paged_lots = paginator.page(1)
-    except EmptyPage:
-        paged_lots = paginator.page(paginator.num_pages)
+    if page > paginator.num_pages:
+        return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model,
+                               page=paginator.num_pages, entry=entry)
+    paged_lots = paginator.get_page(page)
 
     pages = ['First', 'Previous']
     if paginator.num_pages <= 7:
@@ -201,7 +206,8 @@ def lots_by_feature(request, feature):
     elif 'Repossessions' == featured_filter.name:
         lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='B')
     elif 'Donations' == featured_filter.name:
-        lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start"))
+        lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='D').filter(
+            ~Q(lot_highlights="Did Not Test Start"))
     elif 'Featured Vehicles' == featured_filter.name:
         lots = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='F')
     elif 'Offsite Sales' == featured_filter.name:
@@ -213,15 +219,20 @@ def lots_by_feature(request, feature):
     elif 'Salvage Title' == featured_filter.name:
         lots = Vehicle.objects.filter(sold_price=0).filter(doc_type_td__icontains='salvage')
     elif 'Front End' == featured_filter.name:
-        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End'))
+        lots = Vehicle.objects.filter(sold_price=0).filter(
+            Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End'))
     elif 'Hail Damage' == featured_filter.name:
-        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail'))
+        lots = Vehicle.objects.filter(sold_price=0).filter(
+            Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail'))
     elif 'Normal Wear' == featured_filter.name:
-        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear'))
+        lots = Vehicle.objects.filter(sold_price=0).filter(
+            Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear'))
     elif 'Minor Dents/Scratch' == featured_filter.name:
-        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor'))
+        lots = Vehicle.objects.filter(sold_price=0).filter(
+            Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor'))
     elif 'Water/Flood' == featured_filter.name:
-        lots = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood'))
+        lots = Vehicle.objects.filter(sold_price=0).filter(
+            Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood'))
     else:
         lots = Vehicle.objects.all()
 
@@ -229,12 +240,9 @@ def lots_by_feature(request, feature):
     featured_filter.count = paginator.count
     featured_filter.save()
 
-    try:
-        paged_lots = paginator.page(page)
-    except PageNotAnInteger:
-        paged_lots = paginator.page(1)
-    except EmptyPage:
-        paged_lots = paginator.page(paginator.num_pages)
+    if page > paginator.num_pages:
+        return custom_redirect('list_page_by_feature', feature, page=paginator.num_pages, entry=entry)
+    paged_lots = paginator.get_page(page)
 
     pages = ['First', 'Previous']
     if paginator.num_pages <= 7:
@@ -283,12 +291,9 @@ def lots_by_type(request, vehicle_type):
     type_filter.count = paginator.count
     type_filter.save()
 
-    try:
-        paged_lots = paginator.page(page)
-    except PageNotAnInteger:
-        paged_lots = paginator.page(1)
-    except EmptyPage:
-        paged_lots = paginator.page(paginator.num_pages)
+    if page > paginator.num_pages:
+        return custom_redirect('list_page_by_type', vehicle_type, page=paginator.num_pages, entry=entry)
+    paged_lots = paginator.get_page(page)
 
     pages = ['First', 'Previous']
     if paginator.num_pages <= 7:
@@ -336,12 +341,10 @@ def lots_by_make(request, vehicle_make):
     paginator = Paginator(lots, entry)
     make_filter.count = paginator.count
     make_filter.save()
-    try:
-        paged_lots = paginator.page(page)
-    except PageNotAnInteger:
-        paged_lots = paginator.page(1)
-    except EmptyPage:
-        paged_lots = paginator.page(paginator.num_pages)
+
+    if page > paginator.num_pages:
+        return custom_redirect('list_page_by_make', vehicle_make, page=paginator.num_pages, entry=entry)
+    paged_lots = paginator.get_page(page)
 
     pages = ['First', 'Previous']
     if paginator.num_pages <= 7:

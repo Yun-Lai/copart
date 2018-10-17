@@ -76,13 +76,13 @@ class VehicleAdmin(admin.ModelAdmin):
         ('Dates', {'fields': ['created_at', 'updated_at']}),
     ]
 
-# class LocationAdmin(admin.ModelAdmin):
-#     list_display = ['phone', 'fax', 'hours', 'free_wifi', 'address', 'mailing_address',
-#                     'location', 'general_manager', 'regional_manager']
+
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ['state', 'city', 'source']
 
 
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(VehicleSold, VehicleAdmin)
 admin.site.register(VehicleMakes, VehicleMakesAdmin)
 admin.site.register(Filter, FilterAdmin)
-# admin.site.register(Location, LocationAdmin)
+admin.site.register(Location, LocationAdmin)

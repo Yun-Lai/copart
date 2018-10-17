@@ -133,6 +133,14 @@ function front_landing_event_proc_funcs() {
     $("#detail_find_more").on('click', function () {
         location.href = "/lots_by_search/" + $("#lot_type").html() + "/2008/2019/" + $("#lot_make").html() + "/_/";
     });
+
+    $(".f_f_r_t_scnt_slt").on('change', function() {
+        var url = window.location.href;
+        if (url.endsWith('/'))
+            window.location.href = url + "?page=1&entry=" + $(this).val();
+        else
+            window.location.href = url.split('&')[0] + '&entry=' + $(this).val();
+    });
 }
 
 /**
