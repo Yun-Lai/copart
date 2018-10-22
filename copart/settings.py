@@ -36,29 +36,43 @@ SITE_ID = 1
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'jet.dashboard',
     'jet',
     # 'modeltranslation',
+
+    # Default Django apps:
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Useful template tags:
     'django.contrib.humanize',
-    'product',
+]
+
+THIRD_PARTY_APPS = [
     # 'ckeditor',
     # 'rosetta',
     # 'constance',
     # 'constance.backends.database',
     # 'debug_toolbar',
     'imagekit',
-    'product.templatetags.extra_filters',
     # 'silk',
     # 'django_celery_beat',
     # 'celerybeat_status',
- ]
+]
+
+LOCAL_APPS = [
+    # custom users app
+    'product',
+    'product.templatetags.extra_filters',
+    # Your stuff: custom apps go here
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',

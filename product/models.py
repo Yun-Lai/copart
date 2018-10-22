@@ -264,14 +264,9 @@ class VehicleSold(VehicleBase):
 
 
 class Foregoing(models.Model):
-    vehicle = models.ForeignKey(Vehicle, verbose_name=_('Original Vehicle'), related_name='original_vehicle',
-                                on_delete=models.CASCADE, null=True, blank=True)
-    vehicle_sold = models.ForeignKey(VehicleSold, verbose_name=_('Original Vehicle Sold'), related_name='original_vehicle_sold',
-                                     on_delete=models.CASCADE, null=True, blank=True)
-    foregoing = models.ForeignKey(Vehicle, verbose_name=_('Foregoing Vehicle'), related_name='foregoing_vehicle',
-                                  on_delete=models.CASCADE, null=True, blank=True)
-    foregoing_sold = models.ForeignKey(VehicleSold, verbose_name=_('Foregoing Vehicle Sold'), related_name='foregoing_vehicle_sold',
-                                       on_delete=models.CASCADE, null=True, blank=True)
+    lot = models.IntegerField(_('Lot'))
+    foregoing = models.ForeignKey(VehicleSold, verbose_name=_('Foregoing'), on_delete=models.CASCADE)
+    sold = models.BooleanField(_('Sold'))
 
 
 class Location(models.Model):
