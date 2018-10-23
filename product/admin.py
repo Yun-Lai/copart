@@ -59,8 +59,6 @@ class VehicleAdmin(admin.ModelAdmin):
 
     readonly_fields = ['source_', 'images_', 'thumb_images_', 'created_at', 'updated_at']
 
-    raw_id_fields = ['foregoing']
-
     # paginator = LargeTablePaginator
 
     fieldsets = [
@@ -72,7 +70,6 @@ class VehicleAdmin(admin.ModelAdmin):
         ('Bid Information', {'fields': ['bid_status', 'sale_status', 'current_bid', 'buy_today_bid', 'sold_price', 'currency']}),
         ('Sale Information', {'fields': ['location', 'lane', 'item', 'grid', 'sale_date', 'last_updated']}),
         ('Images', {'fields': ['avatar', 'images_', 'thumb_images_']}),
-        ('Foregoing', {'fields': ['foregoing', 'show']}),
         ('Dates', {'fields': ['created_at', 'updated_at']}),
     ]
 

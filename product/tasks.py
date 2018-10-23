@@ -335,16 +335,16 @@ def scrap_copart_lots(make_ids, account):
     # 2018-07-11    444     bbb     222         true
     # 2018-08-09    555     aaa     333         true
     if [553] == make_ids:
-        current_vin = ''
-        lots = Vehicle.objects.filter(source=True).order_by('vin')
-        for lot_id, lot in enumerate(lots):
-            if lot.vin == current_vin and lot.foregoing is None:
-                lots[lot_id - 1].show = False
-                lots[lot_id - 1].save()
-                lot.foregoing = lots[lot_id - 1]
-                lot.save()
-                print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
-            current_vin = lot.vin
+        # current_vin = ''
+        # lots = Vehicle.objects.filter(source=True).order_by('vin')
+        # for lot_id, lot in enumerate(lots):
+        #     if lot.vin == current_vin and lot.foregoing is None:
+        #         lots[lot_id - 1].show = False
+        #         lots[lot_id - 1].save()
+        #         lot.foregoing = lots[lot_id - 1]
+        #         lot.save()
+        #         print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
+        #     current_vin = lot.vin
 
         scrap_filters_count.delay()
 
@@ -543,28 +543,28 @@ def scrap_iaai_lots():
     for _ in pool.imap_unordered(get_detail, lots):
         pass
 
-    current_vin = ''
-    lots = Vehicle.objects.filter(source=False).order_by('vin')
-    for lot_id, lot in enumerate(lots):
-        if lot.vin == current_vin and lot.foregoing is None:
-            lots[lot_id - 1].show = False
-            lots[lot_id - 1].save()
-            lot.foregoing = lots[lot_id - 1]
-            lot.save()
-            print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
-        current_vin = lot.vin
+    # current_vin = ''
+    # lots = Vehicle.objects.filter(source=False).order_by('vin')
+    # for lot_id, lot in enumerate(lots):
+    #     if lot.vin == current_vin and lot.foregoing is None:
+    #         lots[lot_id - 1].show = False
+    #         lots[lot_id - 1].save()
+    #         lot.foregoing = lots[lot_id - 1]
+    #         lot.save()
+    #         print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
+    #     current_vin = lot.vin
 
     scrap_filters_count.delay()
 
 
-# @periodic_task(
-#     run_every=crontab(minute='0', hour='*', day_of_week='mon,tue,wed,thu,fri'),
-#     name="product.tasks.scrap_live_auctions",
-#     ignore_result=True,
-#     time_limit=3600,
-#     queue='low',
-#     options={'queue': 'low'}
-# )
+@periodic_task(
+    run_every=crontab(minute='0', hour='*', day_of_week='mon,tue,wed,thu,fri'),
+    name="product.tasks.scrap_live_auctions",
+    ignore_result=True,
+    time_limit=3600,
+    queue='low',
+    options={'queue': 'low'}
+)
 def scrap_live_auctions():
     try:
         while True:

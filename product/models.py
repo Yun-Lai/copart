@@ -174,9 +174,6 @@ class VehicleBase(models.Model):
     sale_date = models.DateTimeField(_('Sale Date'), null=True, blank=True)
     last_updated = models.DateTimeField(_('Last Updated'), null=True, blank=True)
 
-    foregoing = models.ForeignKey('self', verbose_name=_('Foregoing'), on_delete=models.CASCADE, null=True, blank=True)
-    show = models.BooleanField(_('Show'), default=True)
-
     images = models.TextField(_('Image Urls'), null=True, blank=True)
     thumb_images = models.TextField(_('Thumbnail Image Urls'), null=True, blank=True)
 
