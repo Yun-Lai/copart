@@ -82,8 +82,15 @@ class LocationAdmin(admin.ModelAdmin):
     list_display = ['location', 'count', 'source']
 
 
+class ForegoingAdmin(admin.ModelAdmin):
+    list_filter = ['lot', 'sold']
+    raw_id_fields = ['foregoing']
+    list_display = ['lot', 'foregoing', 'sold']
+
+
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(VehicleSold, VehicleAdmin)
 admin.site.register(VehicleMakes, VehicleMakesAdmin)
 admin.site.register(Filter, FilterAdmin)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(Foregoing, ForegoingAdmin)
