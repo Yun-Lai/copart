@@ -80,9 +80,10 @@ class LocationAdmin(admin.ModelAdmin):
 
 
 class ForegoingAdmin(admin.ModelAdmin):
-    list_filter = ['lot', 'sold']
-    raw_id_fields = ['foregoing']
-    list_display = ['lot', 'foregoing', 'sold']
+    list_filter = ['sold']
+    search_fields = ['parent_lot_id']
+    raw_id_fields = ['foregoing_lot']
+    list_display = ['parent_lot_id', 'foregoing_lot', 'sold']
 
 
 admin.site.register(Vehicle, VehicleAdmin)

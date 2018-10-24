@@ -261,9 +261,9 @@ class VehicleSold(VehicleBase):
 
 
 class Foregoing(models.Model):
-    lot = models.IntegerField(_('Lot'))
-    foregoing = models.ForeignKey(VehicleSold, verbose_name=_('Foregoing'),
-                                  related_name='foregoing_vehicle', on_delete=models.CASCADE)
+    parent_lot_id = models.IntegerField(_('Lot'))
+    foregoing_lot = models.ForeignKey(VehicleSold, verbose_name=_('Foregoing'),
+                                      related_name='foregoing_vehicle', on_delete=models.CASCADE)
     sold = models.BooleanField(_('Sold'))
 
 
