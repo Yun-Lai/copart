@@ -28,14 +28,8 @@ from product.models import *
 GLOBAL = {'live_auctions': []}
 
 
-# @periodic_task(
-#     run_every=(crontab(minute='0', hour='9')),
-#     name="product.tasks.scrap_copart_all",
-#     ignore_result=True,
-#     queue='high',
-#     options={'queue': 'high'}
-# )
-@task(
+@periodic_task(
+    run_every=(crontab(minute='0', hour='9')),
     name="product.tasks.scrap_copart_all",
     ignore_result=True,
     queue='high',
@@ -327,25 +321,7 @@ def scrap_copart_lots(make_ids, account):
     driver.close()
     driver.quit()
 
-    # Checking Foregoing Lots
-    # created_at    lot     vin     foregoing   show
-    # 2018-07-08    111     aaa     empty       false
-    # 2018-07-09    222     bbb     empty       false
-    # 2018-07-10    333     aaa     111         false
-    # 2018-07-11    444     bbb     222         true
-    # 2018-08-09    555     aaa     333         true
     if [553] == make_ids:
-        # current_vin = ''
-        # lots = Vehicle.objects.filter(source=True).order_by('vin')
-        # for lot_id, lot in enumerate(lots):
-        #     if lot.vin == current_vin and lot.foregoing is None:
-        #         lots[lot_id - 1].show = False
-        #         lots[lot_id - 1].save()
-        #         lot.foregoing = lots[lot_id - 1]
-        #         lot.save()
-        #         print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
-        #     current_vin = lot.vin
-
         scrap_filters_count.delay()
 
 
@@ -543,22 +519,11 @@ def scrap_iaai_lots():
     for _ in pool.imap_unordered(get_detail, lots):
         pass
 
-    # current_vin = ''
-    # lots = Vehicle.objects.filter(source=False).order_by('vin')
-    # for lot_id, lot in enumerate(lots):
-    #     if lot.vin == current_vin and lot.foregoing is None:
-    #         lots[lot_id - 1].show = False
-    #         lots[lot_id - 1].save()
-    #         lot.foregoing = lots[lot_id - 1]
-    #         lot.save()
-    #         print(', '.join([current_vin, str(lots[lot_id - 1].lot), str(lot.lot)]))
-    #     current_vin = lot.vin
-
     scrap_filters_count.delay()
 
 
 @periodic_task(
-    run_every=crontab(minute='0', hour='*', day_of_week='mon,tue,wed,thu,fri'),
+    run_every=crontab(minute='*/20', hour='*', day_of_week='mon,tue,wed,thu,fri'),
     name="product.tasks.scrap_live_auctions",
     ignore_result=True,
     time_limit=3600,

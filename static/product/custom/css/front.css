@@ -200,6 +200,11 @@
     margin-right: 5px;
 }
 
+.f_l_f_sub {
+    max-height: 100px;
+    overflow: auto;
+}
+
 .f_list_filter_cnt {
     padding-top: 10px !important;
     padding-bottom: 147px;

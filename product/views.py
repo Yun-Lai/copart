@@ -6,10 +6,10 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import translation
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_filters_count
-from product.models import Vehicle, VehicleMakes, Filter, Location, TYPES
+from product.models import Vehicle, VehicleSold, VehicleMakes, Filter, Location, TYPES
 
 
 # def switch_language(request, language):
@@ -131,14 +131,18 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
     filter_word = dict(TYPES)[vehicle_type]
 
     lots = Vehicle.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
+    sold_lots = VehicleSold.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
     if '_' != make:
         lots = lots.filter(make__icontains=make)
+        sold_lots = sold_lots.filter(make__icontains=make)
         filter_word += ', ' + make
     if '_' != model:
         lots = lots.filter(model__icontains=model)
+        sold_lots = sold_lots.filter(model__icontains=model)
         filter_word += ', ' + model
     if '_' != location:
         lots = lots.filter(location=location)
+        sold_lots = sold_lots.filter(location=location)
         filter_word += ', ' + location
     filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
 
@@ -173,6 +177,49 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
             pages.append(str(paginator.num_pages))
     pages += ['Next', 'Last']
 
+    # Filters
+    copart_count = lots.filter(source=True).count()
+    iaai_count = paginator.count - copart_count
+    sold_count = sold_lots.count()
+
+    flfc21_count = lots.filter(~Q(buy_today_bid=0)).count()
+    flfc22_count = lots.filter(lot_highlights__contains='R').count()
+    flfc23_count = 0
+    flfc24_count = lots.filter(~Q(bid_status='PURE SALE')).count()
+    flfc25_count = 0
+    flfc26_count = 0
+    flfc27_count = 0
+    flfc28_count = 0
+    flfc29_count = 0
+    cur_date = datetime.datetime.now().date()
+    from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
+    to_date = from_date + datetime.timedelta(days=6)
+    flfc30_count = lots.filter(created_at__range=(from_date, to_date)).count()
+
+    makes = lots.values('make').annotate(count=Count('make'))
+    models = lots.values('model').annotate(count=Count('model'))
+    years = lots.values('year').annotate(count=Count('year'))[::-1]
+    odometers = lots.raw(
+        'SELECT ROW_NUMBER() OVER (ORDER BY 1) AS id,'
+        'SUM(CASE WHEN odometer_orr < 25000 THEN 1 ELSE 0 END) AS count_0,'
+        'SUM(CASE WHEN odometer_orr >= 25000 AND odometer_orr <= 50000 THEN 1 ELSE 0 END) AS count_1,'
+        'SUM(CASE WHEN odometer_orr > 50000 AND odometer_orr <= 75000 THEN 1 ELSE 0 END) AS count_2,'
+        'SUM(CASE WHEN odometer_orr > 75000 AND odometer_orr <= 100000 THEN 1 ELSE 0 END) AS count_3,'
+        'SUM(CASE WHEN odometer_orr > 100000 AND odometer_orr <= 150000 THEN 1 ELSE 0 END) AS count_4,'
+        'SUM(CASE WHEN odometer_orr > 150000 AND odometer_orr <= 200000 THEN 1 ELSE 0 END) AS count_5,'
+        'SUM(CASE WHEN odometer_orr > 200000 THEN 1 ELSE 0 END) AS count_6 '
+        'FROM product_vehicle')
+    odometers = [
+        {'odometer': '< 25,000', 'count': odometers[0].count_0},
+        {'odometer': '25,000 to 50,000', 'count': odometers[0].count_1},
+        {'odometer': '50,001 to 75,000', 'count': odometers[0].count_2},
+        {'odometer': '75,001 to 100,000', 'count': odometers[0].count_3},
+        {'odometer': '100,001 to 150,000', 'count': odometers[0].count_4},
+        {'odometer': '150,001 to 200,000', 'count': odometers[0].count_5},
+        {'odometer': '> 200,000', 'count': odometers[0].count_6},
+    ]
+    locations = lots.values('location').annotate(count=Count('location'))
+
     context = {
         'lots': paged_lots,
         'total_lots': paginator.count,
@@ -182,6 +229,27 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
         'page_start_index': (page - 1) * entry + 1,
         'page_end_index': page * entry if page != paginator.num_pages else paginator.count,
         'filter_word': filter_word,
+
+        'copart_count': copart_count,
+        'iaai_count': iaai_count,
+        'sold_count': sold_count,
+
+        'flfc21_count': flfc21_count,
+        'flfc22_count': flfc22_count,
+        'flfc23_count': flfc23_count,
+        'flfc24_count': flfc24_count,
+        'flfc25_count': flfc25_count,
+        'flfc26_count': flfc26_count,
+        'flfc27_count': flfc27_count,
+        'flfc28_count': flfc28_count,
+        'flfc29_count': flfc29_count,
+        'flfc30_count': flfc30_count,
+
+        'makes': makes,
+        'models': models,
+        'years': years,
+        'odometers': odometers,
+        'locations': locations,
     }
 
     return render(request, 'product/list.html', context=context)
