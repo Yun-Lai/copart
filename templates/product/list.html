@@ -45,23 +45,27 @@
                                 <div class="f_l_f_sub">
                                     <input type="checkbox" id="flfc21"/><label for="flfc21">Buy It Now ({{ flfc21_count }})</label><br>
                                     <input type="checkbox" id="flfc22"/><label for="flfc22">Run and Drive ({{ flfc22_count }})</label><br>
-                                    <input type="checkbox" id="flfc23"/><label for="flfc23">No License Required ({{ flfc23_count }})</label><br>
+{#                                    <input type="checkbox" id="flfc23"/><label for="flfc23">No License Required ({{ flfc23_count }})</label><br>#}
                                     <input type="checkbox" id="flfc24"/><label for="flfc24">Pure Sale Items ({{ flfc24_count }})</label><br>
-                                    <input type="checkbox" id="flfc25"/><label for="flfc25">Hot Items ({{ flfc25_count }})</label><br>
-                                    <input type="checkbox" id="flfc26"/><label for="flfc26">Engine Start Program ({{ flfc26_count }})</label><br>
-                                    <input type="checkbox" id="flfc27"/><label for="flfc27">Enhanced Vehicles ({{ flfc27_count }})</label><br>
-                                    <input type="checkbox" id="flfc28"/><label for="flfc28">Classics ({{ flfc28_count }})</label><br>
-                                    <input type="checkbox" id="flfc29"/><label for="flfc29">Exotics ({{ flfc29_count }})</label><br>
-                                    <input type="checkbox" id="flfc30"/><label for="flfc30">New Items ({{ flfc30_count }})</label><br>
+{#                                    <input type="checkbox" id="flfc25"/><label for="flfc25">Hot Items ({{ flfc25_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc26"/><label for="flfc26">Engine Start Program ({{ flfc26_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc27"/><label for="flfc27">Enhanced Vehicles ({{ flfc27_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc28"/><label for="flfc28">Classics ({{ flfc28_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc29"/><label for="flfc29">Exotics ({{ flfc29_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc30"/><label for="flfc30">New Items ({{ flfc30_count }})</label><br>#}
                                 </div>
                             </div>
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Make</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input class="g_ipt" placeholder="Search"/>
-                                <div class="f_l_f_sub">
+                                <input id="input_filter_make" class="g_ipt" placeholder="Search"/>
+                                <script>
+                                    var all_makes_for_filter = {{ makes|safe }};
+                                    var applied_filter_makes = {{ applied_filter_makes|safe }};
+                                </script>
+                                <div id="div_filter_make" class="f_l_f_sub">
                                     {% for make in makes|slice:":10" %}
-                                        <input type="checkbox" id="flfc_make_{{ forloop.counter0 }}"/><label for="flfc_make_{{ forloop.counter0 }}">{{ make.make }} ({{ make.count }})</label> <br>
+                                        <input type="checkbox" id="id_make_{{ make.make }}" class="checkbox_make"{% if make.make in applied_filter_makes %} checked{% endif %}/><label for="id_make_{{ make.make }}">{{ make.make }} ({{ make.count }})</label> <br>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -109,11 +113,15 @@
                     <div class="f_list_cnt_tdv">
                         <div class="f_l_c_filter_applied">
                             Filters Applied:
-                            <div>
-                                No Filters Applied
-{#                                <div class="f_l_f_a_item">Hot Items#}
-{#                                    <img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %} "/>#}
-{#                                </div>#}
+                            <div id="id_filters_applied">
+                                {% if applied_filter_makes %}
+                                    {% for applied_filter_make in applied_filter_makes %}
+                                        <div id="id_filter_make_{{ applied_filter_make }}" class="f_l_f_a_item filter_make">{{ applied_filter_make }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                                {% else %}
+                                    No Filters Applied
+                                {% endif %}
+
                             </div>
                         </div>
                         <div class="f_search_result_tb_top">
@@ -121,9 +129,9 @@
                                 <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing {{ page_start_index }} to {{ page_end_index }}
                                     <span class="f_list_page_num">of {{ total_lots }} entries</span>
                                 </div>
-                                <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :
-                                    <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>
-                                </div>
+{#                                <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :#}
+{#                                    <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>#}
+{#                                </div>#}
                             </div>
                             <div class="row">
                                 <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show
@@ -136,7 +144,8 @@
                                 <div class="col-md-8 col-sm-8 col-xs-7 f_l_s_f_sp g_txt_right f_f_r_pagin_btns">
                                     {% for page in pages %}
                                         <div class="{% if current_page == page %}f_paging_active {% endif %}f_list_page_num">
-                                            <a href="?page={{ page }}&entry={{ current_entry }}">{{ page }}</a>
+                                            <a href="{% get_page_url page current_entry current_page pages %}"
+                                               class="{% check_page_url page current_page pages %}">{{ page }}</a>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -197,9 +206,9 @@
                             <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing {{ page_start_index }} to {{ page_end_index }}
                                 <span class="f_list_page_num">of {{ total_lots }} entries</span>
                             </div>
-                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :
-                                <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>
-                            </div>
+{#                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :#}
+{#                                <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>#}
+{#                            </div>#}
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show
@@ -212,16 +221,17 @@
                             <div class="col-md-8 col-sm-8 col-xs-7 f_l_s_f_sp g_txt_right f_f_r_pagin_btns">
                                 {% for page in pages %}
                                     <div class="{% if current_page == page %}f_paging_active {% endif %}f_list_page_num">
-                                        <a href="?page={{ page }}&entry={{ current_entry }}">{{ page }}</a>
+                                        <a href="{% get_page_url page current_entry current_page pages %}"
+                                           class="{% check_page_url page current_page pages %}">{{ page }}</a>
                                     </div>
                                 {% endfor %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-xs-12 g_txt_center f_f_r_t_goto_dv">
-                                Go To Page <input class="f_f_r_t_goto_ipt"/><img class="f_lr_goto_page_img"
-                                                                                             src="{% static 'product/custom/imgs/goto.png' %} "/>
-                                <!-- <div class="f_lr_goto_page">Go</div>-->
+                                Go To Page
+                                <input class="f_f_r_t_goto_ipt"/>
+                                <img class="f_lr_goto_page_img" src="{% static 'product/custom/imgs/goto.png' %} "/>
                             </div>
                         </div>
                         <div class="row f_lr_back_top">

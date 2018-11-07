@@ -1,3 +1,15 @@
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(../imgs/loading.gif) center no-repeat #fff;
+}
+
 .site-logo img {
     height: 45px;
     max-width: 300px;
@@ -565,6 +577,12 @@ table tbody tr td {
 
 .f_list_page_num a {
     color: #0d5db8;
+}
+
+.f_paging_disabled {
+    pointer-events: none;
+    cursor: none;
+    opacity: 0.6;
 }
 
 .f_f_r_pagin_btns div:first-child {

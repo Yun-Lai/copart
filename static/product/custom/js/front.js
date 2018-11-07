@@ -1,4 +1,8 @@
 jQuery(function () {
+    $(window).load(function() {
+		$(".se-pre-con").fadeOut("slow");
+	});
+
     // global event function
     front_global_event_proc_funcs();
     // landing page event functions
@@ -138,11 +142,40 @@ function front_landing_event_proc_funcs() {
     });
 
     $(".f_f_r_t_scnt_slt").on('change', function() {
-        var url = window.location.href;
-        if (url.endsWith('/'))
-            window.location.href = url + "?page=1&entry=" + $(this).val();
-        else
-            window.location.href = url.split('&')[0] + '&entry=' + $(this).val();
+        let current_url = decodeURI(location.href);
+        if (current_url.endsWith('/')) {
+            location.href = encodeURI(current_url + "?page=1&entry=" + $(this).val());
+        }
+        else {
+            let params = decodeURI(location.search).slice(1).split('&');
+            for (let i = 0; i < params.length; i++) {
+                if (params[i].startsWith('entry=')) {
+                    params[i] = 'entry=' + $(this).val();
+                    break;
+                }
+            }
+            params = params.join('&');
+            location.href = encodeURI(location.pathname + '?' + params);
+        }
+    });
+
+    $(".f_lr_goto_page_img").on('click', function() {
+        let current_url = decodeURI(location.href);
+        let page = $(".f_f_r_t_goto_ipt").val();
+        if (current_url.endsWith('/')) {
+            location.href = encodeURI(current_url + "?page=" + page + "&entry=" + $(this).val());
+        }
+        else {
+            let params = decodeURI(location.search).slice(1).split('&');
+            for (let i = 0; i < params.length; i++) {
+                if (params[i].startsWith('page=')) {
+                    params[i] = 'page=' + page;
+                    break;
+                }
+            }
+            params = params.join('&');
+            location.href = encodeURI(location.pathname + '?' + params);
+        }
     });
 }
 
@@ -213,6 +246,108 @@ function front_list_event_proc_funcs() {
             var tw = jQuery(".f_asearch_tdv").width();
             var fw = jQuery(".f_list_filter_dv").width();
             // jQuery(".f_list_search_result_cnt_dv").width(tw-fw-20);
+        }
+    });
+
+    change_make_filter_input();
+}
+
+let clicked_makes = applied_filter_makes;
+
+function change_make_filter_input() {
+    $("#input_filter_make").on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let makes = all_makes_for_filter;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < 10; i++)
+                html += '<input type="checkbox" id="id_make_' + makes[i].make + '" class="checkbox_make"' + (clicked_makes.includes(makes[i].make) ? ' checked' : '') + '/><label for="id_make_' + makes[i].make + '">' + makes[i].make + ' (' + makes[i].count + ')</label> <br>';
+        }
+        else {
+            makes = makes.filter(item => item.make.toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < makes.length; i++)
+                html += '<input type="checkbox" id="id_make_' + makes[i].make + '" class="checkbox_make"' + (clicked_makes.includes(makes[i].make) ? ' checked' : '') + '/><label for="id_make_' + makes[i].make + '">' + makes[i].make + ' (' + makes[i].count + ')</label> <br>';
+        }
+        $("#div_filter_make").html(html);
+        click_make_checkbox();
+    });
+
+    click_make_checkbox();
+    click_make_filter();
+}
+
+function click_make_checkbox() {
+    $(".checkbox_make").on('click', function () {
+        let make_name = $(this).prop('id').substring(8);
+        if ($(this).prop('checked'))
+            clicked_makes.push(make_name);
+        else
+            clicked_makes = clicked_makes.filter(item => item !== make_name);
+        let html = "";
+        if ($("#id_filters_applied").html().includes("No Filters Applied")) {
+            html = '<div id="id_filter_make_' + make_name + '" class="f_l_f_a_item filter_make">' + make_name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+        }
+        else if (clicked_makes.length > 0) {
+            for (let i = 0; i < clicked_makes.length; i++)
+                html += '<div id="id_filter_make_' + clicked_makes[i] + '" class="f_l_f_a_item filter_make">' + clicked_makes[i] + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+        }
+        else {
+            html = 'No Filters Applied';
+        }
+        $("#id_filters_applied").html(html);
+        click_make_filter();
+
+        let current_url = decodeURI(location.href);
+        if (current_url.endsWith('/')) {
+            location.href = encodeURI(current_url + '?makes=[' + clicked_makes[0] + ']');
+        }
+        else {
+            let params = location.search.slice(1).split('&');
+            params = params.filter(item => !item.startsWith('makes='));
+            if (clicked_makes.length > 0)
+                params.push('makes=[' + clicked_makes.join(',') + ']');
+            params = params.join('&');
+            location.href = encodeURI(location.pathname + '?' + params);
+        }
+    });
+}
+
+function click_make_filter() {
+    $(".filter_make").on('click', function () {
+        let make_name = $(this).prop('id').substring(15);
+        if (make_name.includes(' ')) {
+            let start_make = make_name.split(' ')[0];
+            $("[id^=id_make_" + start_make + "]").prop('checked', false);
+        }
+        else {
+            $("#id_make_" + make_name).prop('checked', false);
+        }
+
+        clicked_makes = clicked_makes.filter(item => item !== make_name);
+        let html = "";
+        if (clicked_makes.length > 0) {
+            for (let i = 0; i < clicked_makes.length; i++)
+                html += '<div id="id_filter_make_' + clicked_makes[i] + '" class="f_l_f_a_item filter_make">' + clicked_makes[i] + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+        }
+        else {
+            html = 'No Filters Applied';
+        }
+        $("#id_filters_applied").html(html);
+        click_make_filter();
+
+        let current_url = decodeURI(location.href);
+        if (current_url.endsWith('/')) {
+            location.href = encodeURI(current_url + '?makes=[' + clicked_makes[0] + ']');
+        }
+        else {
+            let params = location.search.slice(1).split('&');
+            params = params.filter(item => !item.startsWith('makes='));
+            if (clicked_makes.length > 0)
+                params.push('makes=[' + clicked_makes.join(',') + ']');
+            params = params.join('&');
+            location.href = encodeURI(location.pathname + '?' + params);
         }
     });
 }

@@ -130,6 +130,10 @@ def index(request):
 def lots_by_search(request, vehicle_type, from_year, to_year, make, model, location):
     filter_word = dict(TYPES)[vehicle_type]
 
+    applied_filter_makes = request.GET.get('makes', [])
+    applied_makes = []
+
+    result_lots = None
     lots = Vehicle.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
     sold_lots = VehicleSold.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
     if '_' != make:
@@ -144,13 +148,27 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
         lots = lots.filter(location=location)
         sold_lots = sold_lots.filter(location=location)
         filter_word += ', ' + location
+    if applied_filter_makes:
+        applied_makes = applied_filter_makes[1:-1]
+        applied_makes = applied_makes.split(',')
+        query = Q(make__icontains=applied_makes[0])
+        for applied_make in applied_makes[1:]:
+            query |= Q(make__icontains=applied_make)
+        result_lots = lots.filter(query)
+
     filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
 
     page = int(request.GET.get('page', 1))
     entry = int(request.GET.get('entry', 20))
 
-    paginator = Paginator(lots, entry)
+    if result_lots:
+        paginator = Paginator(result_lots, entry)
+    else:
+        paginator = Paginator(lots, entry)
     if page > paginator.num_pages:
+        if applied_filter_makes:
+            return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model, location,
+                                   page=paginator.num_pages, entry=entry, makes=applied_filter_makes)
         return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model, location,
                                page=paginator.num_pages, entry=entry)
     paged_lots = paginator.get_page(page)
@@ -178,7 +196,10 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
     pages += ['Next', 'Last']
 
     # Filters
-    copart_count = lots.filter(source=True).count()
+    if result_lots:
+        copart_count = result_lots.filter(source=True).count()
+    else:
+        copart_count = lots.filter(source=True).count()
     iaai_count = paginator.count - copart_count
     sold_count = sold_lots.count()
 
@@ -196,7 +217,7 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
     to_date = from_date + datetime.timedelta(days=6)
     flfc30_count = lots.filter(created_at__range=(from_date, to_date)).count()
 
-    makes = lots.values('make').annotate(count=Count('make'))
+    makes = list(lots.values('make').annotate(count=Count('make')))
     models = lots.values('model').annotate(count=Count('model'))
     years = lots.values('year').annotate(count=Count('year'))[::-1]
     odometers = lots.raw(
@@ -250,6 +271,8 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
         'years': years,
         'odometers': odometers,
         'locations': locations,
+
+        'applied_filter_makes': applied_makes,
     }
 
     return render(request, 'product/list.html', context=context)

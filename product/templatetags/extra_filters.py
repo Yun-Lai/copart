@@ -1,4 +1,5 @@
 from django import template
+import urllib
 
 register = template.Library()
 
@@ -87,3 +88,47 @@ def get_highlights(highlights):
         # ('A', 'www.driveautoauctions.com'),
     )
     return dict(icons)[highlights]
+
+
+@register.simple_tag(takes_context=True)
+def get_page_url(context, page, entry, current_page, pages):
+    last_page = pages[2]
+    if ('1' == current_page and ('First' == page or 'Previous' == page)) or\
+            (last_page == current_page and ('Last' == page or 'Next' == page)) or\
+            '...' == page:
+        return '#'
+
+    if 'First' == page:
+        page = '1'
+    elif 'Previous' == page:
+        page = str(int(current_page) - 1)
+    elif 'Next' == page:
+        page = str(int(current_page) + 1)
+    elif 'Last' == page:
+        page = last_page
+
+    url = {}
+    params = context.request.GET
+    for key, value in params.items():
+        if 'page' == key:
+            url['page'] = page
+        elif 'entry' == key:
+            url['entry'] = entry
+        else:
+            url[key] = value
+    if 'page' not in params:
+        url['page'] = page
+    if 'entry' not in params:
+        url['entry'] = entry
+
+    return '?' + urllib.parse.urlencode(url)
+
+
+@register.simple_tag
+def check_page_url(page, current_page, pages):
+    last_page = pages[2]
+    if ('1' == current_page and ('First' == page or 'Previous' == page)) or\
+            (last_page == current_page and ('Last' == page or 'Next' == page)) or\
+            '...' == page:
+        return 'f_paging_disabled'
+    return ''
