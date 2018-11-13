@@ -144,11 +144,11 @@ def scrap_copart_lots(make_ids, account):
                               desired_capabilities=DesiredCapabilities.CHROME)
 
     driver.get('https://www.copart.com/login/')
-    print(driver.title)
-
-    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
-    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
-    wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+    while "https://www.copart.com/dashboard/" != driver.current_url:
+        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
+        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
+        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+        time.sleep(3)
 
     page_count = 1000
     misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
@@ -599,12 +599,12 @@ def scrap_filters_count():
             print(make + '-' + str(make_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Buy It Now', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(buy_today_bid=0)).count()
+    featured_filter.count = Vehicle.objects.filter(~Q(buy_today_bid=0)).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Pure Sale Items', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(bid_status='PURE SALE')).count()
+    featured_filter.count = Vehicle.objects.filter(~Q(bid_status='PURE SALE')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
@@ -612,82 +612,82 @@ def scrap_filters_count():
     from_date = cur_date - dt.timedelta(days=cur_date.weekday() + 7)
     to_date = from_date + dt.timedelta(days=6)
     featured_filter, created = Filter.objects.get_or_create(name='New Items', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(created_at__range=(from_date, to_date)).count()
+    featured_filter.count = Vehicle.objects.filter(created_at__range=(from_date, to_date)).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Lots with Bids', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(current_bid=0)).count()
+    featured_filter.count = Vehicle.objects.filter(~Q(current_bid=0)).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='No Bids Yet', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(current_bid=0).count()
+    featured_filter.count = Vehicle.objects.filter(current_bid=0).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Hybrid Vehicles', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(fuel="HYBRID ENGINE").count()
+    featured_filter.count = Vehicle.objects.filter(fuel="HYBRID ENGINE").count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Repossessions', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='B').count()
+    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='B').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Donations', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start")).count()
+    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start")).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Featured Vehicles', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='F').count()
+    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='F').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Offsite Sales', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='O').count()
+    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='O').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Run and Drive', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(lot_highlights__contains='R').count()
+    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='R').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Clean Title', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(~Q(doc_type_td__icontains='salvage')).count()
+    featured_filter.count = Vehicle.objects.filter(~Q(doc_type_td__icontains='salvage')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Salvage Title', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(doc_type_td__icontains='salvage').count()
+    featured_filter.count = Vehicle.objects.filter(doc_type_td__icontains='salvage').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Front End', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Hail Damage', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Normal Wear', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Minor Dents/Scratch', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Water/Flood', type='F')
-    featured_filter.count = Vehicle.objects.filter(sold_price=0).filter(Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
@@ -737,3 +737,50 @@ def scrap_filters_count():
         db_location, _ = Location.objects.get_or_create(location=location, source='I')
         db_location.count = Vehicle.objects.filter(location=location).count()
         db_location.save()
+
+
+@task(
+    name="product.tasks.find_correct_vin",
+    ignore_result=True,
+    time_limit=36000,
+    queue='high',
+    options={'queue': 'high'}
+)
+def find_correct_vin():
+    driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
+                              desired_capabilities=DesiredCapabilities.CHROME)
+
+    driver.get('https://www.copart.com/login/')
+    while "https://www.copart.com/dashboard/" != driver.current_url:
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(
+            'vdm.cojocaru@gmail.com')
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(
+            'c0p2rt')
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+        time.sleep(3)
+
+    detail_url = 'https://www.copart.com/public/data/lotdetails/solr/lotImages/{}'.format
+    lots = Vehicle.objects.filter(vin__contains="******")
+    print(len(lots))
+    for db_item in lots:
+        driver.get(detail_url(db_item.lot))
+        try:
+            lot_data = json.loads(driver.page_source[121:-20])['data']
+            lot = lot_data['lotDetails']
+        except Exception as e:
+            print('find_correct_vin(), 1 - No lotDetails, ' + detail_url(db_item.lot), e)
+            continue
+
+        try:
+            vin = lot.get('fv', '')
+            print(db_item.vin + ', ' + vin)
+            db_item.vin = vin
+            db_item.save()
+        except Exception as e:
+            print(str(db_item.lot) + '- cannot find', e)
+
+    driver.close()
+    driver.quit()

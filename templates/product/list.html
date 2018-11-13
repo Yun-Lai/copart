@@ -27,14 +27,14 @@
                         <div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Sites</div>
                             <div class="f_l_f_cnt">
-                                <input type="radio" name="f_list_filter_site" id="flfc10" checked/><label for="flfc10">&nbsp;All</label><br>
-                                <input type="radio" name="f_list_filter_site" id="flfc11"/><label for="flfc11">&nbsp;Copart ({{ copart_count }})</label><br>
-                                <input type="radio" name="f_list_filter_site" id="flfc12"/><label for="flfc12">&nbsp;IAAI ({{ iaai_count }})</label><br>
+                                <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc10"{% if '' == applied_filter_source %} checked{% endif %}/><label for="flfc10">&nbsp;All</label><br>
+                                <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc11"{% if 'copart' == applied_filter_source %} checked{% endif %}/><label for="flfc11">&nbsp;Copart ({{ copart_count }})</label><br>
+                                <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc12"{% if 'iaai' == applied_filter_source %} checked{% endif %}/><label for="flfc12">&nbsp;IAAI ({{ iaai_count }})</label><br>
                             </div>
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Already Sold</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input type="checkbox" name="f_list_filter_site" id="flfc100"/>
+                                <input type="checkbox" name="f_list_filter_sold" id="flfc100"/>
                                 <label for="flfc100">&nbsp;Show Real Price ({{ sold_count }})</label>
                                 <br>
                             </div>
@@ -45,14 +45,14 @@
                                 <div class="f_l_f_sub">
                                     <input type="checkbox" id="flfc21"/><label for="flfc21">Buy It Now ({{ flfc21_count }})</label><br>
                                     <input type="checkbox" id="flfc22"/><label for="flfc22">Run and Drive ({{ flfc22_count }})</label><br>
-{#                                    <input type="checkbox" id="flfc23"/><label for="flfc23">No License Required ({{ flfc23_count }})</label><br>#}
-                                    <input type="checkbox" id="flfc24"/><label for="flfc24">Pure Sale Items ({{ flfc24_count }})</label><br>
-{#                                    <input type="checkbox" id="flfc25"/><label for="flfc25">Hot Items ({{ flfc25_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc26"/><label for="flfc26">Engine Start Program ({{ flfc26_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc27"/><label for="flfc27">Enhanced Vehicles ({{ flfc27_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc28"/><label for="flfc28">Classics ({{ flfc28_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc29"/><label for="flfc29">Exotics ({{ flfc29_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc30"/><label for="flfc30">New Items ({{ flfc30_count }})</label><br>#}
+                                    <input type="checkbox" id="flfc23"/><label for="flfc23">Pure Sale Items ({{ flfc23_count }})</label><br>
+                                    <input type="checkbox" id="flfc24"/><label for="flfc24">New Items ({{ flfc24_count }})</label><br>
+{#                                    <input type="checkbox" id="flfc25"/><label for="flfc25">No License Required ({{ flfc25_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc26"/><label for="flfc26">Hot Items ({{ flfc26_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc27"/><label for="flfc27">Engine Start Program ({{ flfc27_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc28"/><label for="flfc28">Enhanced Vehicles ({{ flfc28_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc29"/><label for="flfc29">Classics ({{ flfc29_count }})</label><br>#}
+{#                                    <input type="checkbox" id="flfc30"/><label for="flfc30">Exotics ({{ flfc30_count }})</label><br>#}
                                 </div>
                             </div>
 
@@ -61,6 +61,7 @@
                                 <input id="input_filter_make" class="g_ipt" placeholder="Search"/>
                                 <script>
                                     var all_makes_for_filter = {{ makes|safe }};
+                                    var applied_filter_source = "{{ applied_filter_source|safe }}";
                                     var applied_filter_makes = {{ applied_filter_makes|safe }};
                                 </script>
                                 <div id="div_filter_make" class="f_l_f_sub">
@@ -271,4 +272,5 @@
             });
         });
     </script>
+    <script src="{% static 'product/custom/js/list.js' %}" type="text/javascript"></script>
 {% endblock %}

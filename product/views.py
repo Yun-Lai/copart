@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import translation
 from django.db.models import Q, Count
 
-from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_filters_count
+from product.tasks import scrap_copart_all, scrap_copart_lots, scrap_iaai_lots, scrap_live_auctions, scrap_filters_count, find_correct_vin
 from product.models import Vehicle, VehicleSold, VehicleMakes, Filter, Location, TYPES
 
 
@@ -50,6 +50,12 @@ def view_scrap_auction(request):
 
 def view_scrap_filters_count(request):
     scrap_filters_count.delay()
+
+    return redirect('/admin/')
+
+
+def view_find_correct_vin(request):
+    find_correct_vin.delay()
 
     return redirect('/admin/')
 
@@ -127,50 +133,171 @@ def index(request):
     return render(request, 'product/index.html', context=context)
 
 
-def lots_by_search(request, vehicle_type, from_year, to_year, make, model, location):
+def lots_by_search(request):
+    # get params from url
+    vehicle_type = request.GET.get('type', '')
+    year_range = request.GET.get('year', '')
+    make = request.GET.get('make', '')
+    model = request.GET.get('model', '')
+    location = request.GET.get('location', '')
+    params = request.GET.get('params', {})
+
+    print(request.GET.url)
+
+    # check important params
+    if not vehicle_type or not year_range:
+        vehicle_type = 'V'
+        year_range = '[2008,2019]'
+
     filter_word = dict(TYPES)[vehicle_type]
 
-    applied_filter_makes = request.GET.get('makes', [])
-    applied_makes = []
+    # extract from_year and to_year from year_range
+    year_range = year_range.replace('%2C', ',')[1:-1].split(',')
+    print(year_range)
+    from_year = year_range[0]
+    to_year = year_range[1]
 
-    result_lots = None
-    lots = Vehicle.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
-    sold_lots = VehicleSold.objects.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
-    if '_' != make:
+    # check if 'Show Real Price' checked
+    sold = False
+    if params:
+        print(params)
+        params = eval(params)
+        if 'sold' in params and 'yes' == params['sold']:
+            sold = True
+
+    lots = VehicleSold.objects if sold else Vehicle.objects
+    lots = lots.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
+    if make:
         lots = lots.filter(make__icontains=make)
-        sold_lots = sold_lots.filter(make__icontains=make)
         filter_word += ', ' + make
-    if '_' != model:
-        lots = lots.filter(model__icontains=model)
-        sold_lots = sold_lots.filter(model__icontains=model)
+    if model:
+        lots = lots.filter(model=model)
         filter_word += ', ' + model
-    if '_' != location:
+    if location:
         lots = lots.filter(location=location)
-        sold_lots = sold_lots.filter(location=location)
         filter_word += ', ' + location
-    if applied_filter_makes:
-        applied_makes = applied_filter_makes[1:-1]
-        applied_makes = applied_makes.split(',')
-        query = Q(make__icontains=applied_makes[0])
-        for applied_make in applied_makes[1:]:
-            query |= Q(make__icontains=applied_make)
-        result_lots = lots.filter(query)
-
     filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
 
+    # initialize the results
+    filter_source = ''
+    filter_featured = []
+    filter_makes = []
+    filter_models = []
+    filter_year = []
+    filter_odometer = []
+    filter_location = []
+    for key, value in params.items():
+        # AND condition filters
+        if 'source' == key:
+            filter_source = value
+        elif 'featured' == key:
+            filter_featured = value
+        # OR condition filters
+        elif 'makes' == key:
+            filter_makes = value
+        elif 'models' == key:
+            filter_models = value
+
+    def filter_by_filters(lots_, ignore=''):
+        for param_key, param_value in params.items():
+            # AND condition filters
+            if 'source' == param_key and 'source' != ignore:
+                if 'copart' == param_value:
+                    lots_ = lots_.filter(source=True)
+                elif 'iaai' == param_value:
+                    lots_ = lots_.filter(source=False)
+            elif 'featured' == param_key and 'featured' != ignore:
+                for value in param_value:
+                    if 'Buy It Now' == value:
+                        lots_ = lots_.filter(~Q(buy_today_bid=0))
+                    elif 'Run and Drive' == value:
+                        lots_ = lots_.filter(lot_highlights__contains='R')
+                    elif 'Pure Sale Items' == value:
+                        lots_ = lots_.filter(~Q(bid_status='PURE SALE'))
+                    elif 'New Items' == value:
+                        c_date = datetime.datetime.now().date()
+                        f_date = c_date - datetime.timedelta(days=c_date.weekday() + 7)
+                        t_date = f_date + datetime.timedelta(days=6)
+                        lots_ = lots_.filter(created_at__range=(f_date, t_date))
+            # OR condition filters
+            elif 'makes' == param_key and 'makes' != ignore:
+                if len(param_value) > 0:
+                    query = Q(make__icontains=param_value[0])
+                    for make in param_value[1:]:
+                        query |= Q(make__icontains=make)
+                    lots_ = lots_.filter(query)
+            elif 'models' == param_key and 'models' != ignore:
+                if len(param_value) > 0:
+                    query = Q(model=param_value[0])
+                    for model in param_value[1:]:
+                        query |= Q(model=model)
+                    lots_ = lots_.filter(query)
+        return lots_
+
+    # get filters count
+    copart_count = lots.filter(source=True).count()
+    iaai_count = lots.filter(source=False).count()
+    sold_count = VehicleSold.objects.count()
+
+    featured_lots = filter_by_filters(lots, 'featured')
+    flfc21_count = featured_lots.filter(~Q(buy_today_bid=0)).count()
+    flfc22_count = featured_lots.filter(lot_highlights__contains='R').count()
+    flfc23_count = featured_lots.filter(~Q(bid_status='PURE SALE')).count()
+    cur_date = datetime.datetime.now().date()
+    from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
+    to_date = from_date + datetime.timedelta(days=6)
+    flfc24_count = featured_lots.filter(created_at__range=(from_date, to_date)).count()
+    # flfc25_count = 0
+    # flfc26_count = 0
+    # flfc27_count = 0
+    # flfc28_count = 0
+    # flfc29_count = 0
+    # flfc30_count = 0
+
+    make_lots = filter_by_filters(lots, 'makes')
+    count_makes = list(make_lots.values('make').annotate(count=Count('make')))
+
+    model_lots = filter_by_filters(lots, 'models')
+    count_models = model_lots.values('model').annotate(count=Count('model'))
+
+    year_lots = filter_by_filters(lots, 'years')
+    count_years = year_lots.values('year').annotate(count=Count('year'))[::-1]
+
+    odometer_lots = filter_by_filters(lots, 'odometers')
+    odometers = odometer_lots.raw(
+        'SELECT ROW_NUMBER() OVER (ORDER BY 1) AS id,'
+        'SUM(CASE WHEN odometer_orr < 25000 THEN 1 ELSE 0 END) AS count_0,'
+        'SUM(CASE WHEN odometer_orr >= 25000 AND odometer_orr <= 50000 THEN 1 ELSE 0 END) AS count_1,'
+        'SUM(CASE WHEN odometer_orr > 50000 AND odometer_orr <= 75000 THEN 1 ELSE 0 END) AS count_2,'
+        'SUM(CASE WHEN odometer_orr > 75000 AND odometer_orr <= 100000 THEN 1 ELSE 0 END) AS count_3,'
+        'SUM(CASE WHEN odometer_orr > 100000 AND odometer_orr <= 150000 THEN 1 ELSE 0 END) AS count_4,'
+        'SUM(CASE WHEN odometer_orr > 150000 AND odometer_orr <= 200000 THEN 1 ELSE 0 END) AS count_5,'
+        'SUM(CASE WHEN odometer_orr > 200000 THEN 1 ELSE 0 END) AS count_6 '
+        'FROM product_vehicle')
+    count_odometers = [
+        {'odometer': '< 25,000', 'count': odometers[0].count_0},
+        {'odometer': '25,000 to 50,000', 'count': odometers[0].count_1},
+        {'odometer': '50,001 to 75,000', 'count': odometers[0].count_2},
+        {'odometer': '75,001 to 100,000', 'count': odometers[0].count_3},
+        {'odometer': '100,001 to 150,000', 'count': odometers[0].count_4},
+        {'odometer': '150,001 to 200,000', 'count': odometers[0].count_5},
+        {'odometer': '> 200,000', 'count': odometers[0].count_6},
+    ]
+
+    location_lots = filter_by_filters(lots, 'locations')
+    count_locations = location_lots.values('location').annotate(count=Count('location'))
+
+    lots = filter_by_filters(lots)
     page = int(request.GET.get('page', 1))
     entry = int(request.GET.get('entry', 20))
 
-    if result_lots:
-        paginator = Paginator(result_lots, entry)
-    else:
-        paginator = Paginator(lots, entry)
-    if page > paginator.num_pages:
-        if applied_filter_makes:
-            return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model, location,
-                                   page=paginator.num_pages, entry=entry, makes=applied_filter_makes)
-        return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model, location,
-                               page=paginator.num_pages, entry=entry)
+    paginator = Paginator(lots, entry)
+    # if page > paginator.num_pages:
+    #     if filter_makes:
+    #         return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model, location,
+    #                                page=paginator.num_pages, entry=entry, makes=filter_makes)
+    #     return custom_redirect('list_page_by_search', vehicle_type, from_year, to_year, make, model, location,
+    #                            page=paginator.num_pages, entry=entry)
     paged_lots = paginator.get_page(page)
 
     pages = ['First', 'Previous']
@@ -195,52 +322,6 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
             pages.append(str(paginator.num_pages))
     pages += ['Next', 'Last']
 
-    # Filters
-    if result_lots:
-        copart_count = result_lots.filter(source=True).count()
-    else:
-        copart_count = lots.filter(source=True).count()
-    iaai_count = paginator.count - copart_count
-    sold_count = sold_lots.count()
-
-    flfc21_count = lots.filter(~Q(buy_today_bid=0)).count()
-    flfc22_count = lots.filter(lot_highlights__contains='R').count()
-    flfc23_count = 0
-    flfc24_count = lots.filter(~Q(bid_status='PURE SALE')).count()
-    flfc25_count = 0
-    flfc26_count = 0
-    flfc27_count = 0
-    flfc28_count = 0
-    flfc29_count = 0
-    cur_date = datetime.datetime.now().date()
-    from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
-    to_date = from_date + datetime.timedelta(days=6)
-    flfc30_count = lots.filter(created_at__range=(from_date, to_date)).count()
-
-    makes = list(lots.values('make').annotate(count=Count('make')))
-    models = lots.values('model').annotate(count=Count('model'))
-    years = lots.values('year').annotate(count=Count('year'))[::-1]
-    odometers = lots.raw(
-        'SELECT ROW_NUMBER() OVER (ORDER BY 1) AS id,'
-        'SUM(CASE WHEN odometer_orr < 25000 THEN 1 ELSE 0 END) AS count_0,'
-        'SUM(CASE WHEN odometer_orr >= 25000 AND odometer_orr <= 50000 THEN 1 ELSE 0 END) AS count_1,'
-        'SUM(CASE WHEN odometer_orr > 50000 AND odometer_orr <= 75000 THEN 1 ELSE 0 END) AS count_2,'
-        'SUM(CASE WHEN odometer_orr > 75000 AND odometer_orr <= 100000 THEN 1 ELSE 0 END) AS count_3,'
-        'SUM(CASE WHEN odometer_orr > 100000 AND odometer_orr <= 150000 THEN 1 ELSE 0 END) AS count_4,'
-        'SUM(CASE WHEN odometer_orr > 150000 AND odometer_orr <= 200000 THEN 1 ELSE 0 END) AS count_5,'
-        'SUM(CASE WHEN odometer_orr > 200000 THEN 1 ELSE 0 END) AS count_6 '
-        'FROM product_vehicle')
-    odometers = [
-        {'odometer': '< 25,000', 'count': odometers[0].count_0},
-        {'odometer': '25,000 to 50,000', 'count': odometers[0].count_1},
-        {'odometer': '50,001 to 75,000', 'count': odometers[0].count_2},
-        {'odometer': '75,001 to 100,000', 'count': odometers[0].count_3},
-        {'odometer': '100,001 to 150,000', 'count': odometers[0].count_4},
-        {'odometer': '150,001 to 200,000', 'count': odometers[0].count_5},
-        {'odometer': '> 200,000', 'count': odometers[0].count_6},
-    ]
-    locations = lots.values('location').annotate(count=Count('location'))
-
     context = {
         'lots': paged_lots,
         'total_lots': paginator.count,
@@ -259,20 +340,21 @@ def lots_by_search(request, vehicle_type, from_year, to_year, make, model, locat
         'flfc22_count': flfc22_count,
         'flfc23_count': flfc23_count,
         'flfc24_count': flfc24_count,
-        'flfc25_count': flfc25_count,
-        'flfc26_count': flfc26_count,
-        'flfc27_count': flfc27_count,
-        'flfc28_count': flfc28_count,
-        'flfc29_count': flfc29_count,
-        'flfc30_count': flfc30_count,
+        # 'flfc25_count': flfc25_count,
+        # 'flfc26_count': flfc26_count,
+        # 'flfc27_count': flfc27_count,
+        # 'flfc28_count': flfc28_count,
+        # 'flfc29_count': flfc29_count,
+        # 'flfc30_count': flfc30_count,
 
-        'makes': makes,
-        'models': models,
-        'years': years,
-        'odometers': odometers,
-        'locations': locations,
+        'makes': count_makes,
+        'models': count_models,
+        'years': count_years,
+        'odometers': count_odometers,
+        'locations': count_locations,
 
-        'applied_filter_makes': applied_makes,
+        'applied_filter_source': filter_source,
+        'applied_filter_makes': filter_makes,
     }
 
     return render(request, 'product/list.html', context=context)

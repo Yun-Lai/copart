@@ -5,48 +5,14 @@ jQuery(function () {
 
     // global event function
     front_global_event_proc_funcs();
-    // landing page event functions
-    front_landing_event_proc_funcs();
     // list page event proc functions
     front_list_event_proc_funcs();
-    // detail page event proc functions
-    front_detail_event_proc_funcs();
 });
 
 /**
  * global event functions
  * */
 function front_global_event_proc_funcs() {
-    // Layout.init();
-    // Layout.initOWL();
-    // Layout.initImageZoom();
-    // Layout.initTouchspin();
-    // Layout.initTwitter();
-}
-
-/**
- * landing page event functions
- * */
-function front_landing_event_proc_funcs() {
-    // tabs event
-    jQuery(".f_asearch_r_tabs").children("div").click(function () {
-        jQuery(".f_asearch_r_tabs").children("div").removeClass("f_asearch_r_tab_clicked");
-        jQuery(this).addClass("f_asearch_r_tab_clicked");
-        jQuery(".f_asearch_r_cnts").children(".row").addClass("g_none_dis");
-        jQuery(".f_asearch_tab" + jQuery(this).attr("torder")).removeClass("g_none_dis");
-    });
-
-    // event extend and pull in
-    jQuery(".f_arrival_extend_img").click(function () {
-        if (jQuery(this).attr("state") == "0") {
-            jQuery(this).attr("state", "1").attr("src", "static/product/custom/imgs/top.png");
-            jQuery(".f_land_hide_arrival").removeClass("g_none_dis");
-        } else {
-            jQuery(this).attr("state", "0").attr("src", "static/product/custom/imgs/down.png");
-            jQuery(".f_land_hide_arrival").addClass("g_none_dis");
-        }
-    });
-
     // Header Search Button
     jQuery("#f_global_search_btn").click(function () {
         var vin_lot = $(".f_search_ipt").val();
@@ -65,118 +31,6 @@ function front_landing_event_proc_funcs() {
             }
         });
     });
-
-
-    // Vehicle Finder
-    jQuery("#f_search_finder_btn").click(function () {
-        var types = $("#finder_types").val();
-        var from_year = $("#finder_from_year").val();
-        var to_year = $("#finder_to_year").val();
-        var makes = $("#finder_makes").val();
-        var models = $("#finder_models").val();
-        var locations = $("#finder_location").val();
-
-        if ('0' === makes)
-            makes = '_';
-        if ('0' === models)
-            models = '_';
-        if ('0' === locations)
-            locations = '_';
-        location.href = "/lots_by_search/" + types + "/" + from_year + "/" + to_year + "/" + makes + "/" + models + "/" + locations + "/";
-    });
-
-    function ajax_get_makes(finder_type) {
-        $.ajax({
-            type: 'GET',
-            url: '/ajax_get_makes/',
-            data: {finder_type: finder_type},
-            success: function (response) {
-                if (response.result) {
-                    var str_makes = '<option value="0">All Makes</option>';
-                    for (var i = 0; i < response.makes.length; i++) {
-                        str_makes += '<option value="' + response.makes[i] + '">' + response.makes[i] + '</option>';
-                    }
-                    $("#finder_makes").html(str_makes);
-                }
-            }
-        });
-    }
-    $("#finder_types").on('change', function() {
-        var finder_type = $(this).val();
-        ajax_get_makes(finder_type);
-    });
-    ajax_get_makes('V');
-
-    function ajax_get_models(finder_type, finder_make) {
-        if ("0" === finder_make) {
-            $("#finder_models").html('<option value="0">All Models</option>');
-            return;
-        }
-        $.ajax({
-            type: 'GET',
-            url: '/ajax_get_models/',
-            data: {
-                finder_type: finder_type,
-                finder_make: finder_make
-            },
-            success: function (response) {
-                if (response.result) {
-                    var str_makes = '<option value="0">All Models</option>';
-                    for (var i = 0; i < response.models.length; i++) {
-                        str_makes += '<option value="' + response.models[i] + '">' + response.models[i] + '</option>';
-                    }
-                    $("#finder_models").html(str_makes);
-                }
-            }
-        });
-    }
-    $("#finder_makes").on('change', function() {
-        var finder_type = $("#finder_types").val();
-        var finder_make = $(this).val();
-        ajax_get_models(finder_type, finder_make);
-    });
-    $("#finder_models").html('<option value="0">All Models</option>');
-
-    $("#detail_find_more").on('click', function () {
-        location.href = "/lots_by_search/" + $("#lot_type").html() + "/2008/2019/" + $("#lot_make").html() + "/_/_/";
-    });
-
-    $(".f_f_r_t_scnt_slt").on('change', function() {
-        let current_url = decodeURI(location.href);
-        if (current_url.endsWith('/')) {
-            location.href = encodeURI(current_url + "?page=1&entry=" + $(this).val());
-        }
-        else {
-            let params = decodeURI(location.search).slice(1).split('&');
-            for (let i = 0; i < params.length; i++) {
-                if (params[i].startsWith('entry=')) {
-                    params[i] = 'entry=' + $(this).val();
-                    break;
-                }
-            }
-            params = params.join('&');
-            location.href = encodeURI(location.pathname + '?' + params);
-        }
-    });
-
-    $(".f_lr_goto_page_img").on('click', function() {
-        let current_url = decodeURI(location.href);
-        let page = $(".f_f_r_t_goto_ipt").val();
-        if (current_url.endsWith('/')) {
-            location.href = encodeURI(current_url + "?page=" + page + "&entry=" + $(this).val());
-        }
-        else {
-            let params = decodeURI(location.search).slice(1).split('&');
-            for (let i = 0; i < params.length; i++) {
-                if (params[i].startsWith('page=')) {
-                    params[i] = 'page=' + page;
-                    break;
-                }
-            }
-            params = params.join('&');
-            location.href = encodeURI(location.pathname + '?' + params);
-        }
-    });
 }
 
 /**
@@ -189,7 +43,6 @@ function front_list_event_proc_funcs() {
             "lengthMenu": [[100], [100]],
             pagerPosition: 'both'
         });
-
     }
 
     // left filter function
@@ -224,18 +77,6 @@ function front_list_event_proc_funcs() {
         location.href = "#f_lr_main_dv";
     });
 
-    // set search result div width
-    // if ( screen.width <= 992 ) {
-    // jQuery(".f_list_filter_cnt").hide();
-    // var tw = jQuery(".f_asearch_tdv").width();
-    // jQuery(".f_list_search_result_cnt_dv").width(tw);
-    // } else {
-    // jQuery(".f_list_filter_cnt").show();
-    // var tw = jQuery(".f_asearch_tdv").width();
-    // var fw = jQuery(".f_list_filter_dv").width();
-    // jQuery(".f_list_search_result_cnt_dv").width(tw-fw-20);
-    // }
-
     jQuery(window).resize(function () {
         if (screen.width <= 992) {
             // jQuery(".f_list_filter_cnt").hide();
@@ -248,6 +89,135 @@ function front_list_event_proc_funcs() {
             // jQuery(".f_list_search_result_cnt_dv").width(tw-fw-20);
         }
     });
+
+    // page entry changed
+    $(".f_f_r_t_scnt_slt").on('change', function() {
+        let current_url = decodeURI(location.href);
+        if (current_url.endsWith('/')) {
+            location.href = encodeURI(current_url + "?page=1&entry=" + $(this).val());
+        }
+        else {
+            let exists = false;
+            let params = decodeURI(location.search).slice(1).split('&');
+            for (let i = 0; i < params.length; i++) {
+                if (params[i].startsWith('entry=')) {
+                    params[i] = 'entry=' + $(this).val();
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                params.push('page=1');
+                params.push('entry=' + $(this).val());
+            }
+            params = params.join('&');
+            location.href = encodeURI(location.pathname + '?' + params);
+        }
+    });
+
+    // Go To Page clicked
+    $(".f_lr_goto_page_img").on('click', function() {
+        let current_url = decodeURI(location.href);
+        let page = $(".f_f_r_t_goto_ipt").val();
+        let entry = $(".f_f_r_t_scnt_slt").val();
+        if (current_url.endsWith('/')) {
+            location.href = encodeURI(current_url + "?page=" + page + "&entry=" + entry);
+        }
+        else {
+            let exists = false;
+            let params = decodeURI(location.search).slice(1).split('&');
+            for (let i = 0; i < params.length; i++) {
+                if (params[i].startsWith('page=')) {
+                    params[i] = 'page=' + page;
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                params.push('page=' + page);
+                params.push('entry=' + entry);
+            }
+            params = params.join('&');
+            location.href = encodeURI(location.pathname + '?' + params);
+        }
+    });
+
+    // ------------Left Filters Start------------
+
+    // Sites
+    $(".f_list_filter_site").on('click', function () {
+        let filters = location.search;
+        let filter_source = applied_filter_source;
+        let id = $(this).prop('id');
+
+        if ("" === filters) {
+            if ("flfc10" === id && "" !== filter_source) {
+                // all, remove 'source' from url
+            }
+            else if ("flfc11" === id && "copart" !== filter_source) {
+                // copart, add or change 'source' in url
+                location.href = encodeURI(location.pathname + '?params={"source": "copart"}');
+            }
+            else if ("flfc12" === id && "iaai" !== filter_source) {
+                // iaai, add or change 'source' in url
+                location.href = encodeURI(location.pathname + '?params={"source": "iaai"}');
+            }
+        }
+        else {
+            let exists = false;
+            filters = decodeURI(location.search).slice(1).split('&');
+            for (let i = 0; i < filters.length; i++) {
+                if (filters[i].startsWith('params=')) {
+                    let param = JSON.parse(filters[i].split('=')[1]);
+                    if ("flfc10" === id && "" !== filter_source) {
+                        delete param.source;
+                    }
+                    else if ("flfc11" === id && "copart" !== filter_source) {
+                        param.source = "copart";
+                    }
+                    else if ("flfc12" === id && "iaai" !== filter_source) {
+                        param.source = "iaai";
+                    }
+                    filters[i] = 'params=' + JSON.stringify(param);
+                    exists = true;
+                }
+            }
+
+            if (!exists) {
+                if ("flfc10" === id && "" !== filter_source) {
+                    // all, remove 'source' from url
+                }
+                else if ("flfc11" === id && "copart" !== filter_source) {
+                    // copart, add or change 'source' in url
+                    filters.push('params={"source": "copart"}');
+                }
+                else if ("flfc12" === id && "iaai" !== filter_source) {
+                    // iaai, add or change 'source' in url
+                    filters.push('params={"source": "iaai"}');
+                }
+            }
+
+            for (let i = 0; i < filters.length; i++) {
+                if (filters[i].startsWith('params=') && "params={}" === filters[i]) {
+                    filters = filters.filter(item => "params={}" !== item);
+                }
+            }
+
+            if (filters.length > 0)
+                location.href = encodeURI(location.pathname + '?' + filters.join('&'));
+            else
+                location.href = location.pathname;
+        }
+    });
+
+    // Already Sold
+    // Featured Items
+    // Make
+    // Model
+    // Year
+    // Odometer
+    // Location
+    // ------------Left Filters End------------
 
     change_make_filter_input();
 }
@@ -350,26 +320,4 @@ function click_make_filter() {
             location.href = encodeURI(location.pathname + '?' + params);
         }
     });
-}
-
-/**
- * detail page event proc functions
- * */
-function front_detail_event_proc_funcs() {
-    jQuery(".p_a_gallery_sub_img").click(function () {
-        jQuery(".f_l_detail_photo").attr("src", jQuery(this).attr("src"));
-        jQuery(".f_detail_main_img_a").attr("href", jQuery(this).attr("src"));
-    });
-
-    // gallery arrow margintop setting
-    var ih = parseInt(jQuery(".p_a_gallery_sub_img").height());
-    var mt = ( ih - 30 ) / 2 - 30;
-    jQuery(".f_detail_arrow_a").css("margin-top", mt);
-
-    jQuery(window).resize(function () {
-        var ih = parseInt(jQuery(".p_a_gallery_sub_img").height());
-        var mt = ( ih - 30 ) / 2 - 30;
-        jQuery(".f_detail_arrow_a").css("margin-top", mt);
-    });
-
 }
