@@ -121,7 +121,7 @@ def get_page_url(context, page, entry, current_page, pages):
     if 'entry' not in params:
         url['entry'] = entry
 
-    return '?' + urllib.parse.urlencode(url)
+    return '?' + urllib.parse.urlencode(url, safe="~@#$&()*!+=:;,.?/'").replace('+', '%20')
 
 
 @register.simple_tag

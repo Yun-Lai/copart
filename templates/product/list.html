@@ -17,6 +17,22 @@
 {% endblock %}
 
 {% block content %}
+    <script>
+        let applied_filter_source = "{{ applied_filter_source|safe }}";
+        let applied_sold = "{{ applied_sold|safe }}";
+        let all_features_for_filter = {{ features|safe }};
+        let applied_filter_features = {{ applied_filter_features|safe }};
+        let all_makes_for_filter = {{ makes|safe }};
+        let applied_filter_makes = {{ applied_filter_makes|safe }};
+        let all_models_for_filter = {{ models|safe }};
+        let applied_filter_models = {{ applied_filter_models|safe }};
+        let all_years_for_filter = {{ years|safe }};
+        let applied_filter_years = {{ applied_filter_years|safe }};
+        let all_odometers_for_filter = {{ odometers|safe }};
+        let applied_filter_odometers = {{ applied_filter_odometers|safe }};
+        let all_locations_for_filter = {{ locations|safe }};
+        let applied_filter_locations = {{ applied_filter_locations|safe }};
+    </script>
     <div class="main" id="f_lr_main_dv">
         <div class="container">
             <div class="row f_asearch_tdv">
@@ -34,75 +50,69 @@
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Already Sold</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input type="checkbox" name="f_list_filter_sold" id="flfc100"/>
+                                <input type="checkbox" name="f_list_filter_sold" id="flfc100"{% if 'yes' == applied_sold %} checked{% endif %}/>
                                 <label for="flfc100">&nbsp;Show Real Price ({{ sold_count }})</label>
                                 <br>
                             </div>
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Featured Items</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
-                                <input class="g_ipt" placeholder="Search"/>
-                                <div class="f_l_f_sub">
-                                    <input type="checkbox" id="flfc21"/><label for="flfc21">Buy It Now ({{ flfc21_count }})</label><br>
-                                    <input type="checkbox" id="flfc22"/><label for="flfc22">Run and Drive ({{ flfc22_count }})</label><br>
-                                    <input type="checkbox" id="flfc23"/><label for="flfc23">Pure Sale Items ({{ flfc23_count }})</label><br>
-                                    <input type="checkbox" id="flfc24"/><label for="flfc24">New Items ({{ flfc24_count }})</label><br>
-{#                                    <input type="checkbox" id="flfc25"/><label for="flfc25">No License Required ({{ flfc25_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc26"/><label for="flfc26">Hot Items ({{ flfc26_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc27"/><label for="flfc27">Engine Start Program ({{ flfc27_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc28"/><label for="flfc28">Enhanced Vehicles ({{ flfc28_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc29"/><label for="flfc29">Classics ({{ flfc29_count }})</label><br>#}
-{#                                    <input type="checkbox" id="flfc30"/><label for="flfc30">Exotics ({{ flfc30_count }})</label><br>#}
+                                <input id="input_filter_featured" class="g_ipt" placeholder="Search"/>
+                                <div id="div_filter_featured" class="f_l_f_sub">
+                                    {% for feature in features %}
+                                        <input type="checkbox" id="id_featured_{{ feature.feature }}" class="checkbox_featured"{% if feature.feature in applied_filter_features %} checked{% endif %}/>
+                                        <label for="id_featured_{{ feature.feature }}">{{ feature.feature }} ({{ feature.count }})</label> <br>
+                                    {% endfor %}
                                 </div>
                             </div>
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-minus-square"></i>Make</div>
                             <div class="f_l_f_cnt f_l_f_cnt_sp">
                                 <input id="input_filter_make" class="g_ipt" placeholder="Search"/>
-                                <script>
-                                    var all_makes_for_filter = {{ makes|safe }};
-                                    var applied_filter_source = "{{ applied_filter_source|safe }}";
-                                    var applied_filter_makes = {{ applied_filter_makes|safe }};
-                                </script>
                                 <div id="div_filter_make" class="f_l_f_sub">
                                     {% for make in makes|slice:":10" %}
-                                        <input type="checkbox" id="id_make_{{ make.make }}" class="checkbox_make"{% if make.make in applied_filter_makes %} checked{% endif %}/><label for="id_make_{{ make.make }}">{{ make.make }} ({{ make.count }})</label> <br>
+                                        <input type="checkbox" id="id_make_{{ make.make }}" class="checkbox_make"{% if make.make in applied_filter_makes %} checked{% endif %}/>
+                                        <label for="id_make_{{ make.make }}">{{ make.make }} ({{ make.count }})</label> <br>
                                     {% endfor %}
                                 </div>
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Model</div>
                             <div class="f_l_f_cnt g_none_dis">
-                                <input class="g_ipt" placeholder="Search"/>
-                                <div class="f_l_f_sub">
+                                <input id="input_filter_model" class="g_ipt" placeholder="Search"/>
+                                <div id="div_filter_model" class="f_l_f_sub">
                                     {% for model in models|slice:":10" %}
-                                        <input type="checkbox" id="flfc_model_{{ forloop.counter0 }}"/><label for="flfc_model_{{ forloop.counter0 }}">{{ model.model }} ({{ model.count }})</label> <br>
+                                        <input type="checkbox" id="id_model_{{ model.model }}" class="checkbox_model"{% if model.model in applied_filter_models %} checked{% endif %}/>
+                                        <label for="id_model_{{ model.model }}">{{ model.model }} ({{ model.count }})</label> <br>
                                     {% endfor %}
                                 </div>
                             </div>
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Year</div>
                             <div class="f_l_f_cnt g_none_dis">
-                                <input class="g_ipt" placeholder="Search"/>
-                                <div class="f_l_f_sub">
+                                <input id="input_filter_year" class="g_ipt" placeholder="Search"/>
+                                <div id="div_filter_year" class="f_l_f_sub">
                                     {% for year in years|slice:":10" %}
-                                        <input type="checkbox" id="flfc_year_{{ forloop.counter0 }}"/><label for="flfc_year_{{ forloop.counter0 }}">{{ year.year }} ({{ year.count }})</label> <br>
+                                        <input type="checkbox" id="id_year_{{ year.year }}" class="checkbox_year"{% if year.year|stringformat:"i" in applied_filter_years %} checked{% endif %}/>
+                                        <label for="id_year_{{ year.year }}">{{ year.year }} ({{ year.count }})</label> <br>
                                     {% endfor %}
                                 </div>
                             </div>
-                            <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Odometer</div>
-                            <div class="f_l_f_cnt g_none_dis">
-                                <input class="g_ipt" placeholder="Search"/>
-                                <div class="f_l_f_sub">
-                                    {% for odometer in odometers %}
-                                        <input type="checkbox" id="flfc_odometers_{{ forloop.counter0 }}"/><label for="flfc_odometer_{{ forloop.counter0 }}">{{ odometer.odometer }} ({{ odometer.count }})</label> <br>
-                                    {% endfor %}
-                                </div>
-                            </div>
+{#                            <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Odometer</div>#}
+{#                            <div class="f_l_f_cnt g_none_dis">#}
+{#                                <input id="input_filter_odometer" class="g_ipt" placeholder="Search"/>#}
+{#                                <div id="div_filter_odometer" class="f_l_f_sub">#}
+{#                                    {% for odometer in odometers %}#}
+{#                                        <input type="checkbox" id="id_odometer_{{ odometer.odometer }}" class="checkbox_odometer"{% if odometer.odometer in applied_filter_odometers %} checked{% endif %}/>#}
+{#                                        <label for="id_odometer_{{ odometer.odometer }}">{{ odometer.odometer }} ({{ odometer.count }})</label> <br>#}
+{#                                    {% endfor %}#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="f_l_f_tlt"><i class="fa fa-fw fa-plus-square"></i>Location</div>
                             <div class="f_l_f_cnt g_none_dis">
-                                <input class="g_ipt" placeholder="Search"/>
-                                <div class="f_l_f_sub">
+                                <input id="input_filter_location" class="g_ipt" placeholder="Search"/>
+                                <div id="div_filter_location" class="f_l_f_sub">
                                     {% for location in locations|slice:":10" %}
-                                        <input type="checkbox" id="flfc_location_{{ forloop.counter0 }}"/><label for="flfc_location_{{ forloop.counter0 }}">{{ location.location }} ({{ location.count }})</label> <br>
+                                        <input type="checkbox" id="id_location_{{ location.location }}" class="checkbox_location"{% if location.location in applied_filter_locations %} checked{% endif %}/>
+                                        <label for="id_location_{{ location.location }}">{{ location.location }} ({{ location.count }})</label> <br>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -115,14 +125,40 @@
                         <div class="f_l_c_filter_applied">
                             Filters Applied:
                             <div id="id_filters_applied">
+                                {% if applied_filter_features %}
+                                    {% for applied_filter_feature in applied_filter_features %}
+                                        <div id="id_filter_featured_{{ applied_filter_feature }}" class="f_l_f_a_item filter_featured">{{ applied_filter_feature }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                                {% endif %}
                                 {% if applied_filter_makes %}
                                     {% for applied_filter_make in applied_filter_makes %}
                                         <div id="id_filter_make_{{ applied_filter_make }}" class="f_l_f_a_item filter_make">{{ applied_filter_make }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
                                     {% endfor %}
+                                {% endif %}
+                                {% if applied_filter_models %}
+                                    {% for applied_filter in applied_filter_models %}
+                                        <div id="id_filter_model_{{ applied_filter }}" class="f_l_f_a_item filter_model">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if applied_filter_years %}
+                                    {% for applied_filter in applied_filter_years %}
+                                        <div id="id_filter_year_{{ applied_filter }}" class="f_l_f_a_item filter_year">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if applied_filter_odometers %}
+                                    {% for applied_filter in applied_filter_odometers %}
+                                        <div id="id_filter_odometer_{{ applied_filter }}" class="f_l_f_a_item filter_odometer">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if applied_filter_locations %}
+                                    {% for applied_filter in applied_filter_locations %}
+                                        <div id="id_filter_location_{{ applied_filter }}" class="f_l_f_a_item filter_location">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if applied_filter_features or applied_filter_makes or applied_filter_models or applied_filter_years or applied_filter_odometers or applied_filter_locations %}
                                 {% else %}
                                     No Filters Applied
                                 {% endif %}
-
                             </div>
                         </div>
                         <div class="f_search_result_tb_top">

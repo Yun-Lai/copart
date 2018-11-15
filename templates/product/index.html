@@ -67,7 +67,7 @@
                                     {% for _ in 'xxx' %}
                                         <div class="col-md-4 col-xs-12">
                                             {% for vehicle_type in vehicle_types %}
-                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}{% url 'list_page_by_type' vehicle_type.name %}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
+                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}/lots_by_search/?type={{ vehicle_type.name }}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
                                             {% endfor %}
                                         </div>
                                     {% endfor %}
@@ -76,7 +76,7 @@
                                     {% for _ in 'xxxx' %}
                                         <div class="col-md-3 col-xs-12">
                                             {% for vehicle_type in vehicle_types %}
-                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}{% url 'list_page_by_type' vehicle_type.name %}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
+                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}/lots_by_search/?type={{ vehicle_type.name }}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
                                             {% endfor %}
                                     </div>
                                     {% endfor %}
@@ -86,17 +86,17 @@
                                 <div class="f_max_1280">
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":14" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"14:28" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"28:41" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                         <a href="#">More...</a>
                                     </div>
@@ -104,22 +104,22 @@
                                 <div class="f_min_1280">
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":14" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"14:28" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"28:42" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"42:55" %}
-                                            <a href="{% url 'list_page_by_make' vehicle_make.id %}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                         <a href="#">More...</a>
                                     </div>

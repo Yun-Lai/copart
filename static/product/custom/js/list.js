@@ -156,11 +156,11 @@ function front_list_event_proc_funcs() {
             }
             else if ("flfc11" === id && "copart" !== filter_source) {
                 // copart, add or change 'source' in url
-                location.href = encodeURI(location.pathname + '?params={"source": "copart"}');
+                location.href = encodeURI(location.pathname + '?params={"source":"copart"}');
             }
             else if ("flfc12" === id && "iaai" !== filter_source) {
                 // iaai, add or change 'source' in url
-                location.href = encodeURI(location.pathname + '?params={"source": "iaai"}');
+                location.href = encodeURI(location.pathname + '?params={"source":"iaai"}');
             }
         }
         else {
@@ -180,6 +180,7 @@ function front_list_event_proc_funcs() {
                     }
                     filters[i] = 'params=' + JSON.stringify(param);
                     exists = true;
+                    break;
                 }
             }
 
@@ -189,11 +190,11 @@ function front_list_event_proc_funcs() {
                 }
                 else if ("flfc11" === id && "copart" !== filter_source) {
                     // copart, add or change 'source' in url
-                    filters.push('params={"source": "copart"}');
+                    filters.push('params={"source":"copart"}');
                 }
                 else if ("flfc12" === id && "iaai" !== filter_source) {
                     // iaai, add or change 'source' in url
-                    filters.push('params={"source": "iaai"}');
+                    filters.push('params={"source":"iaai"}');
                 }
             }
 
@@ -211,21 +212,195 @@ function front_list_event_proc_funcs() {
     });
 
     // Already Sold
-    // Featured Items
-    // Make
-    // Model
-    // Year
-    // Odometer
-    // Location
-    // ------------Left Filters End------------
+    $("#flfc100").on('click', function () {
+        let filters = location.search;
+        let checked = $(this).prop('checked');
 
+        if ("" === filters) {
+            if (checked)
+                location.href = encodeURI(location.pathname + '?params={"sold":"yes"}');
+        }
+        else {
+            let exists = false;
+            filters = decodeURI(location.search).slice(1).split('&');
+            for (let i = 0; i < filters.length; i++) {
+                if (filters[i].startsWith('params=')) {
+                    let param = JSON.parse(filters[i].split('=')[1]);
+                    if (checked)
+                        param.sold = "yes";
+                    else
+                        delete param['sold'];
+                    filters[i] = 'params=' + JSON.stringify(param);
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) {
+                if (checked)
+                    filters.push('params={"sold":"yes"}');
+            }
+
+            for (let i = 0; i < filters.length; i++) {
+                if (filters[i].startsWith('params=') && "params={}" === filters[i]) {
+                    filters = filters.filter(item => "params={}" !== item);
+                }
+            }
+
+            if (filters.length > 0)
+                location.href = encodeURI(location.pathname + '?' + filters.join('&'));
+            else
+                location.href = location.pathname;
+        }
+    });
+
+    // Featured Items
+    change_featured_filter_input();
+    on_click_featured_checkboxes("featured");
+    on_click_applied_featured("featured");
+    // Make
     change_make_filter_input();
+    on_click_make_checkboxes("make");
+    on_click_applied_make("make");
+    // Model
+    change_model_filter_input("model");
+    on_click_model_checkboxes("model");
+    on_click_applied_model("model");
+    // Year
+    change_year_filter_input("year");
+    on_click_year_checkboxes("year");
+    on_click_applied_year("year");
+    // Odometer
+    // change_odometer_filter_input("odometer");
+    // on_click_odometer_checkboxes("odometer");
+    // on_click_applied_odometer("odometer");
+    // Location
+    change_location_filter_input("location");
+    on_click_location_checkboxes("location");
+    on_click_applied_location("location");
+    // ------------Left Filters End------------
+}
+
+function make_url(initial, name, filter_list) {
+    let url = "";
+    let filters = location.search;
+    if ("" === filters) {
+        url = encodeURI(location.pathname + '?params={"' + initial + '":["' + name + '"]}');
+    }
+    else {
+        let exists = false;
+        filters = decodeURI(location.search).slice(1).split('&');
+        for (let i = 0; i < filters.length; i++) {
+            if (filters[i].startsWith('params=')) {
+                let param = JSON.parse(filters[i].split('=')[1]);
+                if (initial in param && 0 === filter_list.length)
+                    delete param[initial];
+                else
+                    param[initial] = filter_list;
+                filters[i] = 'params=' + JSON.stringify(param);
+                exists = true;
+                break;
+            }
+        }
+
+        let exists_initial_filter = false;
+        for (let i = 0; i < filters.length; i++) {
+            if (filters[i].startsWith(initial.substring(0, initial.length - 1) + '=')) {
+                exists_initial_filter = true;
+                exists = true;
+                break;
+            }
+        }
+        if (exists_initial_filter)
+            filters = filters.filter(item => !item.startsWith(initial.substring(0, initial.length - 1) + '='));
+
+        if (!exists) {
+            filters.push('params={"' + initial + '":["' + name + '"]}');
+        }
+
+        for (let i = 0; i < filters.length; i++) {
+            if (filters[i].startsWith('params=') && "params={}" === filters[i]) {
+                filters = filters.filter(item => "params={}" !== item);
+            }
+        }
+
+        if (filters.length > 0)
+            url = encodeURI(location.pathname + '?' + filters.join('&'));
+        else
+            url = location.pathname;
+    }
+    return url;
+}
+
+let clicked_features = applied_filter_features;
+function change_featured_filter_input() {
+    console.log('input', 'featured', 'function', clicked_features);
+    $("#input_filter_featured").on('input', function () {
+        console.log('input', 'featured', 'event', clicked_features);
+        let html = "";
+        let features = all_features_for_filter;
+        if ($(this).val().length !== 0)
+            features = features.filter(item => item.feature.toLowerCase().includes($(this).val().toLowerCase()));
+        for (let i = 0; i < features.length; i++)
+            html += '<input type="checkbox" id="id_featured_' + features[i].feature + '" class="checkbox_featured"' + (clicked_features.includes(features[i].feature) ? ' checked' : '') + '/><label for="id_featured_' + features[i].feature + '">' + features[i].feature + ' (' + features[i].count + ')</label> <br>';
+        $("#div_filter_featured").html(html);
+        on_click_featured_checkboxes("featured");
+    });
+}
+
+function on_click_featured_checkboxes(initial) {
+    console.log('checkbox', initial, 'function', clicked_features);
+    $(".checkbox_" + initial).on('click', function () {
+        console.log('checkbox', initial, 'event', clicked_features);
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+        let checked = $(this).prop('checked');
+
+        if (checked) {
+            clicked_features.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_features = clicked_features.filter(item => item !== name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+        }
+
+        on_click_applied_featured("featured");
+
+        location.href = make_url("featured", name, clicked_features);
+    });
+}
+
+function on_click_applied_featured(initial) {
+    console.log('applied', initial, 'function', clicked_features);
+    $(".filter_" + initial).on('click', function () {
+        console.log('applied', initial, 'event', clicked_features);
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_features = clicked_features.filter(item => item !== name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        location.href = make_url("featured", name, clicked_features);
+    });
 }
 
 let clicked_makes = applied_filter_makes;
-
 function change_make_filter_input() {
+    console.log('input', 'make', 'function', clicked_makes);
     $("#input_filter_make").on('input', function () {
+        console.log('input', 'make', 'event', clicked_makes);
         if ($(this).val().length === 1)
             return;
 
@@ -241,83 +416,303 @@ function change_make_filter_input() {
                 html += '<input type="checkbox" id="id_make_' + makes[i].make + '" class="checkbox_make"' + (clicked_makes.includes(makes[i].make) ? ' checked' : '') + '/><label for="id_make_' + makes[i].make + '">' + makes[i].make + ' (' + makes[i].count + ')</label> <br>';
         }
         $("#div_filter_make").html(html);
-        click_make_checkbox();
-    });
-
-    click_make_checkbox();
-    click_make_filter();
-}
-
-function click_make_checkbox() {
-    $(".checkbox_make").on('click', function () {
-        let make_name = $(this).prop('id').substring(8);
-        if ($(this).prop('checked'))
-            clicked_makes.push(make_name);
-        else
-            clicked_makes = clicked_makes.filter(item => item !== make_name);
-        let html = "";
-        if ($("#id_filters_applied").html().includes("No Filters Applied")) {
-            html = '<div id="id_filter_make_' + make_name + '" class="f_l_f_a_item filter_make">' + make_name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
-        }
-        else if (clicked_makes.length > 0) {
-            for (let i = 0; i < clicked_makes.length; i++)
-                html += '<div id="id_filter_make_' + clicked_makes[i] + '" class="f_l_f_a_item filter_make">' + clicked_makes[i] + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
-        }
-        else {
-            html = 'No Filters Applied';
-        }
-        $("#id_filters_applied").html(html);
-        click_make_filter();
-
-        let current_url = decodeURI(location.href);
-        if (current_url.endsWith('/')) {
-            location.href = encodeURI(current_url + '?makes=[' + clicked_makes[0] + ']');
-        }
-        else {
-            let params = location.search.slice(1).split('&');
-            params = params.filter(item => !item.startsWith('makes='));
-            if (clicked_makes.length > 0)
-                params.push('makes=[' + clicked_makes.join(',') + ']');
-            params = params.join('&');
-            location.href = encodeURI(location.pathname + '?' + params);
-        }
+        on_click_make_checkboxes("make");
     });
 }
+function on_click_make_checkboxes(initial) {
+    console.log('checkbox', initial, 'function', clicked_makes);
+    $(".checkbox_" + initial).on('click', function () {
+        console.log('checkbox', initial, 'event', clicked_makes);
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
 
-function click_make_filter() {
-    $(".filter_make").on('click', function () {
-        let make_name = $(this).prop('id').substring(15);
-        if (make_name.includes(' ')) {
-            let start_make = make_name.split(' ')[0];
-            $("[id^=id_make_" + start_make + "]").prop('checked', false);
+        if ($(this).prop('checked')) {
+            clicked_makes.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
         }
         else {
-            $("#id_make_" + make_name).prop('checked', false);
+            clicked_makes = clicked_makes.filter(item => item !== name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
         }
 
-        clicked_makes = clicked_makes.filter(item => item !== make_name);
+        on_click_applied_make("make");
+
+        location.href = make_url("makes", name, clicked_makes);
+    });
+}
+function on_click_applied_make(initial) {
+    console.log('applied', initial, 'function', clicked_makes);
+    $(".filter_" + initial).on('click', function () {
+        console.log('applied', initial, 'event', clicked_makes);
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_makes = clicked_makes.filter(item => item !== name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        location.href = make_url("makes", name, clicked_makes);
+    });
+}
+
+let clicked_models = applied_filter_models;
+function change_model_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
         let html = "";
-        if (clicked_makes.length > 0) {
-            for (let i = 0; i < clicked_makes.length; i++)
-                html += '<div id="id_filter_make_' + clicked_makes[i] + '" class="f_l_f_a_item filter_make">' + clicked_makes[i] + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+        let models = all_models_for_filter;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < 10; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + models[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_models.includes(models[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + models[i][initial] + '">' + models[i][initial] + ' (' + models[i]['count'] + ')</label> <br>';
         }
         else {
-            html = 'No Filters Applied';
+            models = models.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < models.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + models[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_models.includes(models[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + models[i][initial] + '">' + models[i][initial] + ' (' + models[i]['count'] + ')</label> <br>';
         }
-        $("#id_filters_applied").html(html);
-        click_make_filter();
+        $("#div_filter_" + initial).html(html);
+        on_click_model_checkboxes("model");
+    });
+}
+function on_click_model_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
 
-        let current_url = decodeURI(location.href);
-        if (current_url.endsWith('/')) {
-            location.href = encodeURI(current_url + '?makes=[' + clicked_makes[0] + ']');
+        if ($(this).prop('checked')) {
+            clicked_models.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
         }
         else {
-            let params = location.search.slice(1).split('&');
-            params = params.filter(item => !item.startsWith('makes='));
-            if (clicked_makes.length > 0)
-                params.push('makes=[' + clicked_makes.join(',') + ']');
-            params = params.join('&');
-            location.href = encodeURI(location.pathname + '?' + params);
+            clicked_models = clicked_models.filter(item => item !== name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
         }
+
+        on_click_applied_model("model");
+
+        location.href = make_url("models", name, clicked_models);
+    });
+}
+function on_click_applied_model(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_models = clicked_models.filter(item => item !== name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        location.href = make_url("models", name, clicked_models);
+    });
+}
+
+let clicked_years = applied_filter_years;
+function change_year_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let years = all_years_for_filter;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < 10; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + years[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_years.includes(years[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + years[i][initial] + '">' + years[i][initial] + ' (' + years[i]['count'] + ')</label> <br>';
+        }
+        else {
+            years = years.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < years.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + years[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_years.includes(years[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + years[i][initial] + '">' + years[i][initial] + ' (' + years[i]['count'] + ')</label> <br>';
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_year_checkboxes("year");
+    });
+}
+function on_click_year_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        if ($(this).prop('checked')) {
+            clicked_years.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_years = clicked_years.filter(item => item !== name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+        }
+
+        on_click_applied_year("year");
+
+        location.href = make_url("years", name, clicked_years);
+    });
+}
+function on_click_applied_year(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_years = clicked_years.filter(item => item !== name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        location.href = make_url("years", name, clicked_years);
+    });
+}
+
+let clicked_odometers = applied_filter_odometers;
+function change_odometer_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let odometers = all_odometers_for_filter;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < 10; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + odometers[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_odometers.includes(odometers[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + odometers[i][initial] + '">' + odometers[i][initial] + ' (' + odometers[i]['count'] + ')</label> <br>';
+        }
+        else {
+            odometers = odometers.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < odometers.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + odometers[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_odometers.includes(odometers[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + odometers[i][initial] + '">' + odometers[i][initial] + ' (' + odometers[i]['count'] + ')</label> <br>';
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_odometer_checkboxes("odometer");
+    });
+}
+function on_click_odometer_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        if ($(this).prop('checked')) {
+            clicked_odometers.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_odometers = clicked_odometers.filter(item => item !== name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+        }
+
+        on_click_applied_odometer("odometer");
+
+        location.href = make_url("odometers", name, clicked_odometers);
+    });
+}
+function on_click_applied_odometer(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_odometers = clicked_odometers.filter(item => item !== name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        location.href = make_url("odometers", name, clicked_odometers);
+    });
+}
+
+let clicked_locations = applied_filter_locations;
+function change_location_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let locations = all_locations_for_filter;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < 10; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + locations[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_locations.includes(locations[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + locations[i][initial] + '">' + locations[i][initial] + ' (' + locations[i]['count'] + ')</label> <br>';
+        }
+        else {
+            locations = locations.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < locations.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + locations[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_locations.includes(locations[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + locations[i][initial] + '">' + locations[i][initial] + ' (' + locations[i]['count'] + ')</label> <br>';
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_location_checkboxes("location");
+    });
+}
+function on_click_location_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        if ($(this).prop('checked')) {
+            clicked_locations.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_locations = clicked_locations.filter(item => item !== name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+        }
+
+        on_click_applied_location("location");
+
+        location.href = make_url("locations", name, clicked_locations);
+    });
+}
+function on_click_applied_location(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_locations = clicked_locations.filter(item => item !== name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        location.href = make_url("locations", name, clicked_locations);
     });
 }
