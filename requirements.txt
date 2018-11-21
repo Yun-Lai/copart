@@ -21,13 +21,13 @@ pytz==2018.3
 Unipath==1.1
 selenium
 django-celery-beat
-websockets
+websockets==5.0
 requests
 lxml
 #mysql-connector-python
 #mysqlclient
 psycopg2
 psycopg2-binary
-redis
+redis==2.10.6
 whitenoise
 pillow
