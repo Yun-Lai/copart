@@ -208,99 +208,116 @@ def scrap_copart_lots(make_ids, account):
                 if "Sold" == lot['dynamicLotDetails']['saleStatus']:
                     continue
 
-                db_item, created = Vehicle.objects.get_or_create(lot=lot['ln'])
-                db_item.type = vtype
-                db_item.make = lot['mkn']
-                db_item.model = lot['lm']
-                db_item.year = lot['lcy']
-                db_item.vin = vin
-                db_item.retail_value = lot['la']
-                # rc
-                # obc
-                db_item.odometer_orr = lot['orr']   # 0 mi (NOT ACTUAL), 0 km (EXEMPT), 76,848 mi (ACTUAL)
-                db_item.odometer_ord = lot['ord']   # NOT ACTUAL
-                db_item.engine_type = lot.get('egn', '')
-                db_item.cylinders = lot.get('cy', '')
-                db_item.name = lot['ld']
-                db_item.location = lot['yn'] if lot['yn'] != 'ABBOTSFORD' else 'BC - ABBOTSFORD'
-                # db_item.location = lot['locState'] + ' - ' + lot['locCity']
-                db_item.currency = lot['cuc']
-                # tz
-                if 'ad' in lot:
-                    db_item.sale_date = timezone.make_aware(datetime.fromtimestamp(lot['ad'] / 1000),
-                                                            timezone.get_current_timezone())
-                if 'lu' in lot:
-                    db_item.last_updated = timezone.make_aware(datetime.fromtimestamp(lot['lu'] / 1000),
-                                                               timezone.get_current_timezone())
-                # at
-                db_item.item = str(lot['aan'])
-                # ahb
-                # ss
-                # bndc  BUY IT NOW
-                # bnp   buyTodayBid 3000
-                # sbf
-                db_item.doc_type_ts = lot.get('ts', '')
-                db_item.doc_type_stt = lot.get('stt', '')
-                db_item.doc_type_td = lot.get('td', '')    # TN - SALVAGE CERTIFICATE, QC - GRAVEMENT ACCIDENTE
-                # tgc
-                db_item.lot_1st_damage = lot['dd']
-                db_item.avatar = lot.get('tims', None)
-                # lic[2]
-                db_item.grid = lot['gr']
-                # dtc
-                db_item.lane = lot.get('al', '')
-                # adt
-                # ynumb
-                # phynumb
-                # bf
-                # ymin
-                # offFlg    condition
-                # htsmn
-                db_item.transmission = lot.get('tmtp', '')
-                # myb
-                # lmc - same with makecode
-                # lcc
-                db_item.lot_2nd_damage = lot.get('sdd', '')
-                db_item.body_style = lot.get('bstl', '')
+                if Vehicle.objects.filter(lot=lot['ln']).exists():
+                    db_item = Vehicle.objects.get(lot=lot['ln'])
+                    if 'ad' in lot:
+                        db_item.sale_date = timezone.make_aware(datetime.fromtimestamp(lot['ad'] / 1000),
+                                                                timezone.get_current_timezone())
+                    if 'lu' in lot:
+                        db_item.last_updated = timezone.make_aware(datetime.fromtimestamp(lot['lu'] / 1000),
+                                                                   timezone.get_current_timezone())
+                    db_item.item = str(lot['aan'])
+                    db_item.grid = lot['gr']
+                    db_item.lane = lot.get('al', '')
 
-                highlights = []
-                lics = lot.get('lic', [])
-                for lic in lics:
-                    if lic in ICONS_DICT.keys():
-                        highlights.append(ICONS_DICT[lic])
-                lcd = lot.get('lcd', '')
-                if lcd in ICONS_DICT.keys():
-                    highlights.append(ICONS_DICT[lcd])
-                db_item.lot_highlights = ''.join(highlights)
-
-                db_item.fuel = lot.get('ft', '')
-                db_item.keys = lot.get('hk', '')
-                db_item.drive = lot.get('drv', '')
-                # showSeller
-                # sstpflg
-                # syn same with yn
-                # ifs
-                # pbf
-                # crg
-                # brand
-                db_item.notes = lot.get('ltnte', '').strip()
-                db_item.color = lot.get('clr')
-                db_item.lot_seller = lot.get('scn', '')
-
-                db_item.current_bid = lot['dynamicLotDetails']['currentBid']
-                db_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
-                db_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
-                db_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
-
-                db_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
-                db_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
-                # db_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
-
-                db_item.save()
-                if created:
-                    print('copart - ' + description + ' - ' + str(lot['ln']) + ', Insert')
-                else:
+                    db_item.current_bid = lot['dynamicLotDetails']['currentBid']
+                    db_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+                    db_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                    db_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+                    db_item.save()
                     print('copart - ' + description + ' - ' + str(lot['ln']) + ', Update')
+                else:
+                    db_item = Vehicle()
+                    db_item.lot = lot['ln']
+                    db_item.type = vtype
+                    db_item.make = lot['mkn']
+                    db_item.model = lot['lm']
+                    db_item.year = lot['lcy']
+                    db_item.vin = vin
+                    db_item.retail_value = lot['la']
+                    # rc
+                    # obc
+                    db_item.odometer_orr = lot['orr']   # 0 mi (NOT ACTUAL), 0 km (EXEMPT), 76,848 mi (ACTUAL)
+                    db_item.odometer_ord = lot['ord']   # NOT ACTUAL
+                    db_item.engine_type = lot.get('egn', '')
+                    db_item.cylinders = lot.get('cy', '')
+                    db_item.name = lot['ld']
+                    db_item.location = lot['yn'] if lot['yn'] != 'ABBOTSFORD' else 'BC - ABBOTSFORD'
+                    # db_item.location = lot['locState'] + ' - ' + lot['locCity']
+                    db_item.currency = lot['cuc']
+                    # tz
+                    if 'ad' in lot:
+                        db_item.sale_date = timezone.make_aware(datetime.fromtimestamp(lot['ad'] / 1000),
+                                                                timezone.get_current_timezone())
+                    if 'lu' in lot:
+                        db_item.last_updated = timezone.make_aware(datetime.fromtimestamp(lot['lu'] / 1000),
+                                                                   timezone.get_current_timezone())
+                    # at
+                    db_item.item = str(lot['aan'])
+                    # ahb
+                    # ss
+                    # bndc  BUY IT NOW
+                    # bnp   buyTodayBid 3000
+                    # sbf
+                    db_item.doc_type_ts = lot.get('ts', '')
+                    db_item.doc_type_stt = lot.get('stt', '')
+                    db_item.doc_type_td = lot.get('td', '')    # TN - SALVAGE CERTIFICATE, QC - GRAVEMENT ACCIDENTE
+                    # tgc
+                    db_item.lot_1st_damage = lot['dd']
+                    db_item.avatar = lot.get('tims', None)
+                    # lic[2]
+                    db_item.grid = lot['gr']
+                    # dtc
+                    db_item.lane = lot.get('al', '')
+                    # adt
+                    # ynumb
+                    # phynumb
+                    # bf
+                    # ymin
+                    # offFlg    condition
+                    # htsmn
+                    db_item.transmission = lot.get('tmtp', '')
+                    # myb
+                    # lmc - same with makecode
+                    # lcc
+                    db_item.lot_2nd_damage = lot.get('sdd', '')
+                    db_item.body_style = lot.get('bstl', '')
+
+                    highlights = []
+                    lics = lot.get('lic', [])
+                    for lic in lics:
+                        if lic in ICONS_DICT.keys():
+                            highlights.append(ICONS_DICT[lic])
+                    lcd = lot.get('lcd', '')
+                    if lcd in ICONS_DICT.keys():
+                        highlights.append(ICONS_DICT[lcd])
+                    db_item.lot_highlights = ''.join(highlights)
+
+                    db_item.fuel = lot.get('ft', '')
+                    db_item.keys = lot.get('hk', '')
+                    db_item.drive = lot.get('drv', '')
+                    # showSeller
+                    # sstpflg
+                    # syn same with yn
+                    # ifs
+                    # pbf
+                    # crg
+                    # brand
+                    db_item.notes = lot.get('ltnte', '').strip()
+                    db_item.color = lot.get('clr')
+                    db_item.lot_seller = lot.get('scn', '')
+
+                    db_item.current_bid = lot['dynamicLotDetails']['currentBid']
+                    db_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+                    db_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                    db_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+
+                    db_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
+                    db_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
+                    # db_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
+
+                    db_item.save()
+                    print('copart - ' + description + ' - ' + str(lot['ln']) + ', Insert')
 
             if page == pages_num:
                 break
