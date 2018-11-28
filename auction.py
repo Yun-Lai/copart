@@ -39,12 +39,14 @@ async def copart(param):
                     # auction_file.write(','.join([param, data['LOTNO'], data['BID'], '\n']))
                     # auction_file.close()
 
-                    try:
+                    query = "select exists(select 1 from product_vehicle where lot = {})".format
+                    cursor.execute(query(data['LOTNO']))
+                    if cursor.fetchone()[0]:
                         query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE lot = {}".format
                         cursor.execute(query(data['BID'], data['LOTNO']))
                         conn.commit()
                         print(','.join([param, data['LOTNO'], data['BID'], 'updated']))
-                    except:
+                    else:
                         # query = "INSERT INTO product_vehicle(lot, sold_price, sale_status) VALUES ({}, {}, 'SOLD')".format
                         # cursor.execute(query(data['LOTNO'], data['BID']))
                         # conn.commit()
