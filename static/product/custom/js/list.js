@@ -3,6 +3,12 @@ jQuery(function () {
 		$(".se-pre-con").fadeOut("slow");
 	});
 
+    $(document).ajaxStart(function () {
+        $("body").addClass("loading");
+    }).ajaxStop(function () {
+        $("body").removeClass("loading");
+    });
+
     // global event function
     front_global_event_proc_funcs();
     // list page event proc functions
@@ -30,6 +36,52 @@ function front_global_event_proc_funcs() {
                 }
             }
         });
+    });
+}
+
+function intcomma(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function ajax_get_vehicles() {
+    $.ajax({
+        type: 'GET',
+        url: '/ajax_get_vehicles/',
+        data: JSON.parse($("#params").html()),
+        success: function (response) {
+            let vehicles = response['lots'];
+            let html = '';
+            for (let i = 0; i < vehicles.length; i++) {
+                let lot = vehicles[i];
+
+                html += "<tr>";
+                html += '<td><a href="{% url ' + "'detail_page' " + lot['lot'] + ' %}" target="_blank">';
+                html += '<img src="' + lot['avatar'] + '" class="f_l_f_product_img"/>';
+                html += '<div class="f_lr_td_img_dv">View All Photos</div></a></td>';
+                html += '<td>' + lot['year'] + '<br>';
+                let highlights = lot['lot_highlights'];
+                if (highlights === highlights.toUpperCase() && /^[a-zA-Z()]+$/.test(highlights)) {
+                    for (let j = 0; j < highlights.length; j++) {
+                        html += '<div class="f_l_y_s f_l_s' + highlights[j].toLowerCase() + '">' + highlights[j] + '</div>';
+                    }
+                }
+                html += '</td>';
+                html += '<td>' + lot['make'] + '</td>';
+                html += '<td>' + lot['model'] + '</td>';
+                html += '<td>' + lot['location'] + '</td>';
+                html += '<td>' + lot['sale_date'] + '</td>';
+                html += '<td>' + intcomma(lot['odometer_orr']) + '</td>';
+                html += '<td>' + lot['doc_type_ts'] + ' - ' + lot['doc_type_stt'] + '</td>';
+                html += '<td>' + lot['lot_1st_damage'] + '</td>';
+                html += '<td>$' + intcomma(lot['retail_value']) + ' ' + lot['currency'] + '</td>';
+                html += '<td>$' + intcomma(lot['current_bid']) + ' ' + lot['currency'] + '</td>';
+                html += '</tr>';
+            }
+            $("#vehicle_tbody").html(html);
+        },
+        error: function (response) {
+
+        }
     });
 }
 
@@ -92,13 +144,17 @@ function front_list_event_proc_funcs() {
 
     // page entry changed
     $(".f_f_r_t_scnt_slt").on('change', function() {
-        let current_url = decodeURI(location.href);
-        if (current_url.endsWith('/')) {
-            location.href = encodeURI(current_url + "?page=1&entry=" + $(this).val());
+        let current_url = $("#params").html();
+        if ("" === current_url) {
+            let params = {
+                "page": 1,
+                "entry": parseInt($(this).val()),
+            };
+            $("#params").html(JSON.stringify(params));
         }
         else {
             let exists = false;
-            let params = decodeURI(location.search).slice(1).split('&');
+            let params = current_url.split('&');
             for (let i = 0; i < params.length; i++) {
                 if (params[i].startsWith('entry=')) {
                     params[i] = 'entry=' + $(this).val();
@@ -111,8 +167,9 @@ function front_list_event_proc_funcs() {
                 params.push('entry=' + $(this).val());
             }
             params = params.join('&');
-            location.href = encodeURI(location.pathname + '?' + params);
+            $("#params").html(params);
         }
+        ajax_get_vehicles();
     });
 
     // Go To Page clicked

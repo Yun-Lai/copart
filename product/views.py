@@ -140,6 +140,171 @@ def lots_by_search(request):
     make = request.GET.get('make', '')
     model = request.GET.get('model', '')
     location = request.GET.get('location', '')
+
+    # check important params
+    if not vehicle_type or not year_range:
+        vehicle_type = 'V'
+        year_range = '[2008,2019]'
+
+    filter_word = dict(TYPES)[vehicle_type]
+
+    # extract from_year and to_year from year_range
+    year_range = year_range.replace('%2C', ',')[1:-1].split(',')
+    from_year = year_range[0]
+    to_year = year_range[1]
+
+    filter_source = ''
+    filter_featured = []
+    filter_makes = []
+    filter_models = []
+    filter_years = []
+    filter_odometers = []
+    filter_locations = []
+
+    lots = Vehicle.objects
+    lots = lots.filter(type=vehicle_type).filter(year__range=(from_year, to_year))
+    if make:
+        lots = lots.filter(make__icontains=make)
+        filter_word += ', ' + make
+        filter_makes.append(make.upper())
+    if model:
+        lots = lots.filter(model=model)
+        filter_word += ', ' + model
+        filter_models.append(model)
+    if location:
+        lots = lots.filter(location=location)
+        filter_word += ', ' + location
+        filter_locations.append(location)
+    filter_word += ', ' + '[' + str(from_year) + ' TO ' + str(to_year) + ']'
+
+    # get filters count
+    copart_count = lots.filter(source=True).count()
+    iaai_count = lots.filter(source=False).count()
+    sold_count = VehicleSold.objects.count()
+
+    flfc21_count = lots.filter(~Q(buy_today_bid=0)).count()
+    flfc22_count = lots.filter(lot_highlights__contains='R').count()
+    flfc23_count = lots.filter(~Q(bid_status='PURE SALE')).count()
+    cur_date = datetime.datetime.now().date()
+    from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
+    to_date = from_date + datetime.timedelta(days=6)
+    flfc24_count = lots.filter(created_at__range=(from_date, to_date)).count()
+    # flfc25_count = 0  # No License Required
+    # flfc26_count = 0  # Hot Items
+    # flfc27_count = 0  # Engine Start Program
+    # flfc28_count = 0  # Enhanced Vehicles
+    # flfc29_count = 0  # Classics
+    # flfc30_count = 0  # Exotics
+
+    count_makes = list(lots.values('make').annotate(count=Count('make')))
+    count_models = list(lots.values('model').annotate(count=Count('model')))
+    count_years = list(lots.values('year').annotate(count=Count('year'))[::-1])
+
+    odometers = lots.raw(
+        'SELECT ROW_NUMBER() OVER (ORDER BY 1) AS id,'
+        'SUM(CASE WHEN odometer_orr < 25000 THEN 1 ELSE 0 END) AS count_0,'
+        'SUM(CASE WHEN odometer_orr >= 25000 AND odometer_orr <= 50000 THEN 1 ELSE 0 END) AS count_1,'
+        'SUM(CASE WHEN odometer_orr > 50000 AND odometer_orr <= 75000 THEN 1 ELSE 0 END) AS count_2,'
+        'SUM(CASE WHEN odometer_orr > 75000 AND odometer_orr <= 100000 THEN 1 ELSE 0 END) AS count_3,'
+        'SUM(CASE WHEN odometer_orr > 100000 AND odometer_orr <= 150000 THEN 1 ELSE 0 END) AS count_4,'
+        'SUM(CASE WHEN odometer_orr > 150000 AND odometer_orr <= 200000 THEN 1 ELSE 0 END) AS count_5,'
+        'SUM(CASE WHEN odometer_orr > 200000 THEN 1 ELSE 0 END) AS count_6 '
+        'FROM product_vehicle')
+    count_odometers = [
+        {'odometer': '< 25,000', 'count': odometers[0].count_0},
+        {'odometer': '25,000 to 50,000', 'count': odometers[0].count_1},
+        {'odometer': '50,001 to 75,000', 'count': odometers[0].count_2},
+        {'odometer': '75,001 to 100,000', 'count': odometers[0].count_3},
+        {'odometer': '100,001 to 150,000', 'count': odometers[0].count_4},
+        {'odometer': '150,001 to 200,000', 'count': odometers[0].count_5},
+        {'odometer': '> 200,000', 'count': odometers[0].count_6},
+    ]
+
+    count_locations = list(lots.values('location').annotate(count=Count('location')))
+
+    page = int(request.GET.get('page', 1))
+    entry = int(request.GET.get('entry', 20))
+
+    paginator = Paginator(lots, entry)
+    if page > paginator.num_pages:
+        print(request.get_full_path())
+        redirect_url = request.get_full_path().split('&')
+        for idx, param in enumerate(redirect_url):
+            if param.startswith('page='):
+                redirect_url[idx] = 'page=' + str(paginator.num_pages)
+        return redirect('&'.join(redirect_url))
+    paged_lots = paginator.get_page(page)
+
+    pages = ['First', 'Previous']
+    if paginator.num_pages <= 7:
+        pages += [str(a + 1) for a in range(paginator.num_pages)]
+    else:
+        if page < 5:
+            pages += [str(a + 1) for a in range(5)]
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+        elif page > paginator.num_pages - 4:
+            pages.append('1')
+            pages.append('...')
+            pages += [str(a + 1) for a in range(paginator.num_pages - 5, paginator.num_pages)]
+        else:
+            pages.append('1')
+            pages.append('...')
+            pages.append(str(page - 1))
+            pages.append(str(page))
+            pages.append(str(page + 1))
+            pages.append('...')
+            pages.append(str(paginator.num_pages))
+    pages += ['Next', 'Last']
+
+    context = {
+        'lots': paged_lots,
+        'total_lots': paginator.count,
+        'pages': pages[::-1],
+        'current_page': str(page),
+        'current_entry': entry,
+        'page_start_index': (page - 1) * entry + 1,
+        'page_end_index': page * entry if page != paginator.num_pages else paginator.count,
+        'filter_word': filter_word,
+
+        'copart_count': copart_count,
+        'iaai_count': iaai_count,
+        'sold_count': sold_count,
+
+        'features': [
+            {'feature': 'Buy It Now', 'count': flfc21_count},
+            {'feature': 'Run and Drive', 'count': flfc22_count},
+            {'feature': 'Pure Sale Items', 'count': flfc23_count},
+            {'feature': 'New Items', 'count': flfc24_count}
+        ],
+        'makes': count_makes,
+        'models': count_models,
+        'years': count_years,
+        'odometers': count_odometers,
+        'locations': count_locations,
+
+        'applied_filter_source': filter_source,
+        'applied_sold': '',
+        'applied_filter_features': filter_featured,
+        'applied_filter_makes': filter_makes,
+        'applied_filter_models': filter_models,
+        'applied_filter_years': filter_years,
+        'applied_filter_odometers': filter_odometers,
+        'applied_filter_locations': filter_locations,
+
+        'params': request.GET.urlencode(),
+    }
+
+    return render(request, 'product/list.html', context=context)
+
+
+def ajax_lots_by_search(request):
+    # get params from url
+    vehicle_type = request.GET.get('type', '')
+    year_range = request.GET.get('year', '')
+    make = request.GET.get('make', '')
+    model = request.GET.get('model', '')
+    location = request.GET.get('location', '')
     params = request.GET.get('params', {})
 
     # check important params
@@ -339,8 +504,13 @@ def lots_by_search(request):
             pages.append(str(paginator.num_pages))
     pages += ['Next', 'Last']
 
+    result_lots = []
+    for a in paged_lots:
+        a = a.__dict__
+        del a['_state']
+        result_lots.append(a)
     context = {
-        'lots': paged_lots,
+        'lots': result_lots,
         'total_lots': paginator.count,
         'pages': pages[::-1],
         'current_page': str(page),
@@ -375,7 +545,7 @@ def lots_by_search(request):
         'applied_filter_locations': filter_locations,
     }
 
-    return render(request, 'product/list.html', context=context)
+    return JsonResponse(context)
 
 
 def lots_by_feature(request, feature):

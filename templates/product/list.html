@@ -33,6 +33,7 @@
         let all_locations_for_filter = {{ locations|safe }};
         let applied_filter_locations = {{ applied_filter_locations|safe }};
     </script>
+    <div id="params" style="display: none">{{ params }}</div>
     <div class="main" id="f_lr_main_dv">
         <div class="container">
             <div class="row f_asearch_tdv">
@@ -206,7 +207,7 @@
                                     <th class="h">Current Bid</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="vehicle_tbody">
                                 {% for lot in lots %}
                                     <tr>
                                         <td>
