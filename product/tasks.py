@@ -575,9 +575,12 @@ def scrap_live_auctions():
 
         params = []
         for url in auction_urls:
-            param = url.split('=')[-1]
-            num = '%03d' % int(param.split('-')[0])
-            params.append(num + param.split('-')[1])
+            try:
+                param = url.split('=')[-1]
+                num = '%03d' % int(param.split('-')[0])
+                params.append(num + param.split('-')[1])
+            except:
+                pass
 
         for param in params:
             if param in GLOBAL['live_auctions']:
