@@ -1,8 +1,4 @@
 jQuery(function () {
-    $(window).load(function() {
-		$(".se-pre-con").fadeOut("slow");
-	});
-
     $(document).ajaxStart(function () {
         $("body").addClass("loading");
     }).ajaxStop(function () {
@@ -30,7 +26,7 @@ function front_global_event_proc_funcs() {
             data: {vin_or_lot: vin_lot},
             success: function (response) {
                 if (response.result)
-                    location.href = "/lot/" + response.lot;
+                    location.href = "/lot/" + response['lot'];
                 else {
                     // raise 404 page
                 }
@@ -39,45 +35,21 @@ function front_global_event_proc_funcs() {
     });
 }
 
-function intcomma(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 function ajax_get_vehicles() {
+    let initial_params = $("#initial").attr('initial');
+    let params = $("#params").attr('url');
+    let shows_status = $("#shows").attr('status');
+    if (params)
+        params = '&' + params;
+    let path = encodeURI('/lots_by_search/?' + initial_params + params + '&status=' + shows_status);
     $.ajax({
         type: 'GET',
-        url: '/ajax_get_vehicles/',
-        data: JSON.parse($("#params").html()),
+        url: '/ajax_get_vehicles/?' + initial_params + params,
+        data: {'status': shows_status},
         success: function (response) {
-            let vehicles = response['lots'];
-            let html = '';
-            for (let i = 0; i < vehicles.length; i++) {
-                let lot = vehicles[i];
-
-                html += "<tr>";
-                html += '<td><a href="{% url ' + "'detail_page' " + lot['lot'] + ' %}" target="_blank">';
-                html += '<img src="' + lot['avatar'] + '" class="f_l_f_product_img"/>';
-                html += '<div class="f_lr_td_img_dv">View All Photos</div></a></td>';
-                html += '<td>' + lot['year'] + '<br>';
-                let highlights = lot['lot_highlights'];
-                if (highlights === highlights.toUpperCase() && /^[a-zA-Z()]+$/.test(highlights)) {
-                    for (let j = 0; j < highlights.length; j++) {
-                        html += '<div class="f_l_y_s f_l_s' + highlights[j].toLowerCase() + '">' + highlights[j] + '</div>';
-                    }
-                }
-                html += '</td>';
-                html += '<td>' + lot['make'] + '</td>';
-                html += '<td>' + lot['model'] + '</td>';
-                html += '<td>' + lot['location'] + '</td>';
-                html += '<td>' + lot['sale_date'] + '</td>';
-                html += '<td>' + intcomma(lot['odometer_orr']) + '</td>';
-                html += '<td>' + lot['doc_type_ts'] + ' - ' + lot['doc_type_stt'] + '</td>';
-                html += '<td>' + lot['lot_1st_damage'] + '</td>';
-                html += '<td>$' + intcomma(lot['retail_value']) + ' ' + lot['currency'] + '</td>';
-                html += '<td>$' + intcomma(lot['current_bid']) + ' ' + lot['currency'] + '</td>';
-                html += '</tr>';
-            }
-            $("#vehicle_tbody").html(html);
+            $("#list_content").html(response);
+            front_list_event_proc_funcs();
+            window.history.pushState({route: path}, "EVILEG", path);
         },
         error: function (response) {
 
@@ -103,10 +75,21 @@ function front_list_event_proc_funcs() {
             jQuery(this).children("i").removeClass("fa-minus-square");
             jQuery(this).children("i").addClass("fa-plus-square");
             jQuery(this).next(".f_l_f_cnt").addClass("g_none_dis");
+
+            let status = eval($("#shows").attr('status'));
+            let selected_filter = $(this).html().split('</i>')[1];
+            status = status.filter(item => item !== selected_filter);
+            $('#shows').attr('status', "['" + status.join("','") + "']");
+
         } else {
             jQuery(this).children("i").removeClass("fa-plus-square");
             jQuery(this).children("i").addClass("fa-minus-square");
             jQuery(this).next(".f_l_f_cnt").removeClass("g_none_dis");
+
+            let status = eval($("#shows").attr('status'));
+            let selected_filter = $(this).html().split('</i>')[1];
+            status.push(selected_filter);
+            $('#shows').attr('status', "['" + status.join("','") + "']");
         }
     });
 
@@ -144,13 +127,9 @@ function front_list_event_proc_funcs() {
 
     // page entry changed
     $(".f_f_r_t_scnt_slt").on('change', function() {
-        let current_url = $("#params").html();
-        if ("" === current_url) {
-            let params = {
-                "page": 1,
-                "entry": parseInt($(this).val()),
-            };
-            $("#params").html(JSON.stringify(params));
+        let current_url = $("#params").attr('url');
+        if ('' === current_url) {
+            $("#params").attr('url', "page=1&entry=" + $(this).val());
         }
         else {
             let exists = false;
@@ -167,22 +146,22 @@ function front_list_event_proc_funcs() {
                 params.push('entry=' + $(this).val());
             }
             params = params.join('&');
-            $("#params").html(params);
+            $("#params").attr('url', params);
         }
         ajax_get_vehicles();
     });
 
     // Go To Page clicked
     $(".f_lr_goto_page_img").on('click', function() {
-        let current_url = decodeURI(location.href);
+        let current_url = $("#params").attr('url');
         let page = $(".f_f_r_t_goto_ipt").val();
         let entry = $(".f_f_r_t_scnt_slt").val();
-        if (current_url.endsWith('/')) {
-            location.href = encodeURI(current_url + "?page=" + page + "&entry=" + entry);
+        if ('' === current_url) {
+            $("#params").attr('url', "page=" + page + "&entry=" + entry);
         }
         else {
             let exists = false;
-            let params = decodeURI(location.search).slice(1).split('&');
+            let params = current_url.split('&');
             for (let i = 0; i < params.length; i++) {
                 if (params[i].startsWith('page=')) {
                     params[i] = 'page=' + page;
@@ -195,15 +174,43 @@ function front_list_event_proc_funcs() {
                 params.push('entry=' + entry);
             }
             params = params.join('&');
-            location.href = encodeURI(location.pathname + '?' + params);
+            $("#params").attr('url', params);
         }
+        ajax_get_vehicles();
+    });
+
+    $(".f_list_page_num a").on('click', function() {
+        let current_url = $("#params").attr('url');
+        let page = $(this).attr('page');
+        let entry = $(".f_f_r_t_scnt_slt").val();
+        if ('' === current_url) {
+            $("#params").attr('url', "page=" + page + "&entry=" + entry);
+        }
+        else {
+            let exists = false;
+            let params = current_url.split('&');
+            for (let i = 0; i < params.length; i++) {
+                if (params[i].startsWith('page=')) {
+                    params[i] = 'page=' + page;
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                params.push('page=' + page);
+                params.push('entry=' + entry);
+            }
+            params = params.join('&');
+            $("#params").attr('url', params);
+        }
+        ajax_get_vehicles();
     });
 
     // ------------Left Filters Start------------
 
     // Sites
     $(".f_list_filter_site").on('click', function () {
-        let filters = location.search;
+        let filters = $("#params").attr('url');
         let filter_source = applied_filter_source;
         let id = $(this).prop('id');
 
@@ -213,27 +220,27 @@ function front_list_event_proc_funcs() {
             }
             else if ("flfc11" === id && "copart" !== filter_source) {
                 // copart, add or change 'source' in url
-                location.href = encodeURI(location.pathname + '?params={"source":"copart"}');
+                $("#params").attr('url', 'params={"source":"copart"}');
             }
             else if ("flfc12" === id && "iaai" !== filter_source) {
                 // iaai, add or change 'source' in url
-                location.href = encodeURI(location.pathname + '?params={"source":"iaai"}');
+                $("#params").attr('url', 'params={"source":"iaai"}');
             }
         }
         else {
             let exists = false;
-            filters = decodeURI(location.search).slice(1).split('&');
+            filters = filters.split('&');
             for (let i = 0; i < filters.length; i++) {
                 if (filters[i].startsWith('params=')) {
                     let param = JSON.parse(filters[i].split('=')[1]);
                     if ("flfc10" === id && "" !== filter_source) {
-                        delete param.source;
+                        delete param['source'];
                     }
                     else if ("flfc11" === id && "copart" !== filter_source) {
-                        param.source = "copart";
+                        param['source'] = "copart";
                     }
                     else if ("flfc12" === id && "iaai" !== filter_source) {
-                        param.source = "iaai";
+                        param['source'] = "iaai";
                     }
                     filters[i] = 'params=' + JSON.stringify(param);
                     exists = true;
@@ -262,24 +269,25 @@ function front_list_event_proc_funcs() {
             }
 
             if (filters.length > 0)
-                location.href = encodeURI(location.pathname + '?' + filters.join('&'));
+                $("#params").attr('url', filters.join('&'));
             else
-                location.href = location.pathname;
+                $("#params").attr('url', "");
         }
+        ajax_get_vehicles();
     });
 
     // Already Sold
     $("#flfc100").on('click', function () {
-        let filters = location.search;
+        let filters = $("#params").attr('url');
         let checked = $(this).prop('checked');
 
         if ("" === filters) {
             if (checked)
-                location.href = encodeURI(location.pathname + '?params={"sold":"yes"}');
+                $("#params").attr('url', 'params={"sold":"yes"}');
         }
         else {
             let exists = false;
-            filters = decodeURI(location.search).slice(1).split('&');
+            filters = filters.split('&');
             for (let i = 0; i < filters.length; i++) {
                 if (filters[i].startsWith('params=')) {
                     let param = JSON.parse(filters[i].split('=')[1]);
@@ -305,10 +313,11 @@ function front_list_event_proc_funcs() {
             }
 
             if (filters.length > 0)
-                location.href = encodeURI(location.pathname + '?' + filters.join('&'));
+                $("#params").attr('url', filters.join('&'));
             else
-                location.href = location.pathname;
+                $("#params").attr('url', "");
         }
+        ajax_get_vehicles();
     });
 
     // Featured Items
@@ -340,13 +349,13 @@ function front_list_event_proc_funcs() {
 
 function make_url(initial, name, filter_list) {
     let url = "";
-    let filters = location.search;
+    let filters = $("#params").attr('url');
     if ("" === filters) {
-        url = encodeURI(location.pathname + '?params={"' + initial + '":["' + name + '"]}');
+        url = 'params={"' + initial + '":["' + name + '"]}';
     }
     else {
         let exists = false;
-        filters = decodeURI(location.search).slice(1).split('&');
+        filters = filters.split('&');
         for (let i = 0; i < filters.length; i++) {
             if (filters[i].startsWith('params=')) {
                 let param = JSON.parse(filters[i].split('=')[1]);
@@ -382,18 +391,18 @@ function make_url(initial, name, filter_list) {
         }
 
         if (filters.length > 0)
-            url = encodeURI(location.pathname + '?' + filters.join('&'));
+            url = filters.join('&');
         else
-            url = location.pathname;
+            url = '';
     }
     return url;
 }
 
 let clicked_features = applied_filter_features;
 function change_featured_filter_input() {
-    console.log('input', 'featured', 'function', clicked_features);
+    // console.log('input', 'featured', 'function', clicked_features);
     $("#input_filter_featured").on('input', function () {
-        console.log('input', 'featured', 'event', clicked_features);
+        // console.log('input', 'featured', 'event', clicked_features);
         let html = "";
         let features = all_features_for_filter;
         if ($(this).val().length !== 0)
@@ -406,9 +415,9 @@ function change_featured_filter_input() {
 }
 
 function on_click_featured_checkboxes(initial) {
-    console.log('checkbox', initial, 'function', clicked_features);
+    // console.log('checkbox', initial, 'function', clicked_features);
     $(".checkbox_" + initial).on('click', function () {
-        console.log('checkbox', initial, 'event', clicked_features);
+        // console.log('checkbox', initial, 'event', clicked_features);
         let name = $(this).prop('id').substring(4 + initial.length);
         let filters_applied = $("#id_filters_applied");
         let checked = $(this).prop('checked');
@@ -433,14 +442,15 @@ function on_click_featured_checkboxes(initial) {
 
         on_click_applied_featured("featured");
 
-        location.href = make_url("featured", name, clicked_features);
+        $("#params").attr('url', make_url("featured", name, clicked_features));
+        ajax_get_vehicles();
     });
 }
 
 function on_click_applied_featured(initial) {
-    console.log('applied', initial, 'function', clicked_features);
+    // console.log('applied', initial, 'function', clicked_features);
     $(".filter_" + initial).on('click', function () {
-        console.log('applied', initial, 'event', clicked_features);
+        // console.log('applied', initial, 'event', clicked_features);
         let name = $(this).prop('id').substring(11 + initial.length);
         let start = name.split(' ')[0];
         $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
@@ -449,15 +459,16 @@ function on_click_applied_featured(initial) {
 
         $("[id^=id_filter_" + initial + "_" + start + "]").remove();
 
-        location.href = make_url("featured", name, clicked_features);
+        $("#params").attr('url', make_url("featured", name, clicked_features));
+        ajax_get_vehicles();
     });
 }
 
 let clicked_makes = applied_filter_makes;
 function change_make_filter_input() {
-    console.log('input', 'make', 'function', clicked_makes);
+    // console.log('input', 'make', 'function', clicked_makes);
     $("#input_filter_make").on('input', function () {
-        console.log('input', 'make', 'event', clicked_makes);
+        // console.log('input', 'make', 'event', clicked_makes);
         if ($(this).val().length === 1)
             return;
 
@@ -477,9 +488,9 @@ function change_make_filter_input() {
     });
 }
 function on_click_make_checkboxes(initial) {
-    console.log('checkbox', initial, 'function', clicked_makes);
+    // console.log('checkbox', initial, 'function', clicked_makes);
     $(".checkbox_" + initial).on('click', function () {
-        console.log('checkbox', initial, 'event', clicked_makes);
+        // console.log('checkbox', initial, 'event', clicked_makes);
         let name = $(this).prop('id').substring(4 + initial.length);
         let filters_applied = $("#id_filters_applied");
 
@@ -503,13 +514,14 @@ function on_click_make_checkboxes(initial) {
 
         on_click_applied_make("make");
 
-        location.href = make_url("makes", name, clicked_makes);
+        $("#params").attr('url', make_url("makes", name, clicked_makes));
+        ajax_get_vehicles();
     });
 }
 function on_click_applied_make(initial) {
-    console.log('applied', initial, 'function', clicked_makes);
+    // console.log('applied', initial, 'function', clicked_makes);
     $(".filter_" + initial).on('click', function () {
-        console.log('applied', initial, 'event', clicked_makes);
+        // console.log('applied', initial, 'event', clicked_makes);
         let name = $(this).prop('id').substring(11 + initial.length);
         let start = name.split(' ')[0];
         $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
@@ -518,7 +530,8 @@ function on_click_applied_make(initial) {
 
         $("[id^=id_filter_" + initial + "_" + start + "]").remove();
 
-        location.href = make_url("makes", name, clicked_makes);
+        $("#params").attr('url', make_url("makes", name, clicked_makes));
+        ajax_get_vehicles();
     });
 }
 
@@ -568,7 +581,8 @@ function on_click_model_checkboxes(initial) {
 
         on_click_applied_model("model");
 
-        location.href = make_url("models", name, clicked_models);
+        $("#params").attr('url', make_url("models", name, clicked_models));
+        ajax_get_vehicles();
     });
 }
 function on_click_applied_model(initial) {
@@ -581,7 +595,8 @@ function on_click_applied_model(initial) {
 
         $("[id^=id_filter_" + initial + "_" + start + "]").remove();
 
-        location.href = make_url("models", name, clicked_models);
+        $("#params").attr('url', make_url("models", name, clicked_models));
+        ajax_get_vehicles();
     });
 }
 
@@ -631,7 +646,8 @@ function on_click_year_checkboxes(initial) {
 
         on_click_applied_year("year");
 
-        location.href = make_url("years", name, clicked_years);
+        $("#params").attr('url', make_url("years", name, clicked_years));
+        ajax_get_vehicles();
     });
 }
 function on_click_applied_year(initial) {
@@ -644,7 +660,8 @@ function on_click_applied_year(initial) {
 
         $("[id^=id_filter_" + initial + "_" + start + "]").remove();
 
-        location.href = make_url("years", name, clicked_years);
+        $("#params").attr('url', make_url("years", name, clicked_years));
+        ajax_get_vehicles();
     });
 }
 
@@ -694,7 +711,8 @@ function on_click_odometer_checkboxes(initial) {
 
         on_click_applied_odometer("odometer");
 
-        location.href = make_url("odometers", name, clicked_odometers);
+        $("#params").attr('url', make_url("odometers", name, clicked_odometers));
+        ajax_get_vehicles();
     });
 }
 function on_click_applied_odometer(initial) {
@@ -707,7 +725,8 @@ function on_click_applied_odometer(initial) {
 
         $("[id^=id_filter_" + initial + "_" + start + "]").remove();
 
-        location.href = make_url("odometers", name, clicked_odometers);
+        $("#params").attr('url', make_url("odometers", name, clicked_odometers));
+        ajax_get_vehicles();
     });
 }
 
@@ -757,7 +776,8 @@ function on_click_location_checkboxes(initial) {
 
         on_click_applied_location("location");
 
-        location.href = make_url("locations", name, clicked_locations);
+        $("#params").attr('url', make_url("locations", name, clicked_locations));
+        ajax_get_vehicles();
     });
 }
 function on_click_applied_location(initial) {
@@ -770,6 +790,7 @@ function on_click_applied_location(initial) {
 
         $("[id^=id_filter_" + initial + "_" + start + "]").remove();
 
-        location.href = make_url("locations", name, clicked_locations);
+        $("#params").attr('url', make_url("locations", name, clicked_locations));
+        ajax_get_vehicles();
     });
 }

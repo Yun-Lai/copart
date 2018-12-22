@@ -222,20 +222,57 @@
                 </div>
             </div>
             <div class="f_new_arrivals">
-                <div class="f_asearch_tlt_dv">Similar Vehicles</div>
+                <div class="f_asearch_tlt_dv">{% if is_similar %}Similar Vehicles{% else %}New Arrivals{% endif %}</div>
                 <div class="row f_new_arrival_cnts">
-                    {% for similar_lot in similar %}
+                    {% for similar_lot in similar|slice:":4" %}
                         <div class="col-lg-3 col-md-6 col-xs-12">
                             <div class="product-item">
                                 <div class="pi-img-wrapper">
                                     <img src="{{ similar_lot|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.name }}">
                                 </div>
-                                <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
-                                <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
-                                <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View</a>
+                                <div class="f_pi_detail">
+                                    <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
+                                    <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
+                                    <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View Details</a>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
+                </div>
+                <div class="row f_new_arrival_cnts f_land_hide_arrival g_none_dis">
+                    {% for similar_lot in similar|slice:"4:8" %}
+                        <div class="col-lg-3 col-md-6 col-xs-12">
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="{{ similar_lot|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.name }}">
+                                </div>
+                                <div class="f_pi_detail">
+                                    <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
+                                    <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
+                                    <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row f_new_arrival_cnts f_land_hide_arrival g_none_dis">
+                    {% for similar_lot in similar|slice:"8:" %}
+                        <div class="col-lg-3 col-md-6 col-xs-12">
+                            <div class="product-item">
+                                <div class="pi-img-wrapper">
+                                    <img src="{{ similar_lot|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.name }}">
+                                </div>
+                                <div class="f_pi_detail">
+                                    <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
+                                    <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
+                                    <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="f_arrival_extend_div">
+                    <img src="{% static 'product/custom/imgs/down.png' %}" state="0" class="f_arrival_extend_img"/>
                 </div>
             </div>
         </div>

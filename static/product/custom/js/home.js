@@ -1,8 +1,4 @@
 jQuery(function () {
-    $(window).load(function() {
-		$(".se-pre-con").fadeOut("slow");
-	});
-
     // global event function
     front_global_event_proc_funcs();
     // landing page event functions
@@ -15,7 +11,7 @@ jQuery(function () {
 function front_global_event_proc_funcs() {
     // Header Search Button
     jQuery("#f_global_search_btn").click(function () {
-        var vin_lot = $(".f_search_ipt").val();
+        let vin_lot = $(".f_search_ipt").val();
         if ('' === vin_lot)
             return;
         $.ajax({
@@ -72,6 +68,8 @@ function front_landing_event_proc_funcs() {
         if ('0' !== locations)
             params.push('location=' + locations);
 
+        params.push("status=['Sites', 'Already Sold', 'Featured Items', 'Make']");
+
         location.href = encodeURI("/lots_by_search/?" + params.join('&'));
     });
 
@@ -121,8 +119,8 @@ function front_landing_event_proc_funcs() {
         });
     }
     $("#finder_makes").on('change', function() {
-        var finder_type = $("#finder_types").val();
-        var finder_make = $(this).val();
+        let finder_type = $("#finder_types").val();
+        let finder_make = $(this).val();
         ajax_get_models(finder_type, finder_make);
     });
     $("#finder_models").html('<option value="0">All Models</option>');

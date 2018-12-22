@@ -24,79 +24,79 @@
                             <div class="row f_asearch_tab1">
                                 <div class="f_max_1280">
                                     <div class="col-md-4 col-sd-4 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:":5" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters|slice:":10" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-sd-4 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"5:11" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters|slice:"10:20" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-sd-4 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"11:18" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters|slice:"20:" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
                                         {% endfor %}
                                     </div>
                                 </div>
                                 <div class="f_min_1280">
                                     <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:":5" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters|slice:":7" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"5:11" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters|slice:"7:14" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"11:18" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters|slice:"14:21" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"18:" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}{% url 'list_page_by_feature' featured_filter.id %}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters|slice:"21:" %}
+                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
                                         {% endfor %}
                                     </div>
                                 </div>
                             </div>
                             <div class="row f_asearch_tab2 g_none_dis">
                                 <div class="f_max_1280">
-                                    {% for _ in 'xxx' %}
+{#                                    {% for _ in 'xxx' %}#}
                                         <div class="col-md-4 col-xs-12">
                                             {% for vehicle_type in vehicle_types %}
-                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}/lots_by_search/?type={{ vehicle_type.name }}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
+                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}/lots_by_search/?type={{ vehicle_type.name }}{{ status }}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
                                             {% endfor %}
                                         </div>
-                                    {% endfor %}
+{#                                    {% endfor %}#}
                                 </div>
                                 <div class="f_min_1280">
-                                    {% for _ in 'xxxx' %}
+{#                                    {% for _ in 'xxxx' %}#}
                                         <div class="col-md-3 col-xs-12">
                                             {% for vehicle_type in vehicle_types %}
-                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}/lots_by_search/?type={{ vehicle_type.name }}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
+                                                <a href="{% if 0 == vehicle_type.count %}#{% else %}/lots_by_search/?type={{ vehicle_type.name }}{{ status }}{% endif %}">{{ vehicle_type.name|get_type_description }} ({{ vehicle_type.count }})</a>
                                             {% endfor %}
-                                    </div>
-                                    {% endfor %}
+                                        </div>
+{#                                    {% endfor %}#}
                                 </div>
                             </div>
                             <div class="row f_asearch_tab3 g_none_dis">
                                 <div class="f_max_1280">
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":14" %}
-                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}{{ status }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"14:28" %}
-                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}{{ status }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-4 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"28:41" %}
-                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}{{ status }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                         <a href="#">More...</a>
                                     </div>
@@ -104,22 +104,22 @@
                                 <div class="f_min_1280">
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:":14" %}
-                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}{{ status }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"14:28" %}
-                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}{{ status }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"28:42" %}
-                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}{{ status }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-3 col-xs-12">
                                         {% for vehicle_make in vehicle_makes|slice:"42:55" %}
-                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
+                                            <a href="/lots_by_search/?make={{ vehicle_make.name }}{{ status }}">{{ vehicle_make.name }} ({{ vehicle_make.count }})</a>
                                         {% endfor %}
                                         <a href="#">More...</a>
                                     </div>
@@ -237,7 +237,7 @@
                                     <img src="{{ lot|get_lot_image:0 }}" class="img-responsive" alt="{{ lot.name }}">
                                 </div>
                                 <div class="f_pi_detail">
-                                    <h3><a href="{% url 'detail_page' lot.lot %}">{{ lot.name }}</a></h3>
+                                    <h3><a href="{% url 'detail_page' lot.lot %}" class="g_txt_bold">{{ lot.name }}</a></h3>
                                     <div class="pi-price">${{ lot.retail_value|intcomma }} {{ lot.currency }}</div>
                                     <a href="{% url 'detail_page' lot.lot %}" class="btn btn-default add2cart">View Details</a>
                                 </div>
@@ -253,7 +253,7 @@
                                     <img src="{{ lot|get_lot_image:0 }}" class="img-responsive" alt="{{ lot.name }}">
                                 </div>
                                 <div class="f_pi_detail">
-                                    <h3><a href="{% url 'detail_page' lot.lot %}">{{ lot.name }}</a></h3>
+                                    <h3><a href="{% url 'detail_page' lot.lot %}" class="g_txt_bold">{{ lot.name }}</a></h3>
                                     <div class="pi-price">${{ lot.retail_value|intcomma }} {{ lot.currency }}</div>
                                     <a href="{% url 'detail_page' lot.lot %}" class="btn btn-default add2cart">View Details</a>
                                 </div>
@@ -269,7 +269,7 @@
                                     <img src="{{ lot|get_lot_image:0 }}" class="img-responsive" alt="{{ lot.name }}">
                                 </div>
                                 <div class="f_pi_detail">
-                                    <h3><a href="{% url 'detail_page' lot.lot %}">{{ lot.name }}</a></h3>
+                                    <h3><a href="{% url 'detail_page' lot.lot %}" class="g_txt_bold">{{ lot.name }}</a></h3>
                                     <div class="pi-price">${{ lot.retail_value|intcomma }} {{ lot.currency }}</div>
                                     <a href="{% url 'detail_page' lot.lot %}" class="btn btn-default add2cart">View Details</a>
                                 </div>

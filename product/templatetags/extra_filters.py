@@ -54,7 +54,6 @@ def get_type_description(vehicle_type):
         ('J', 'Jet Ski'),
         ('K', 'Medium Duty/Box Trucks'),
         ('C', 'Motorcycle'),
-        ('H', 'Other Goods'),
         ('R', 'Recreational Vehicle (RV)'),
         ('S', 'Snowmobile'),
         ('L', 'Trailers'),
@@ -90,13 +89,13 @@ def get_highlights(highlights):
     return dict(icons)[highlights]
 
 
-@register.simple_tag(takes_context=True)
-def get_page_url(context, page, entry, current_page, pages):
+@register.simple_tag
+def get_page_url(page, current_page, pages):
     last_page = pages[2]
     if ('1' == current_page and ('First' == page or 'Previous' == page)) or\
             (last_page == current_page and ('Last' == page or 'Next' == page)) or\
             '...' == page:
-        return '#'
+        return ''
 
     if 'First' == page:
         page = '1'
@@ -107,21 +106,7 @@ def get_page_url(context, page, entry, current_page, pages):
     elif 'Last' == page:
         page = last_page
 
-    url = {}
-    params = context.request.GET
-    for key, value in params.items():
-        if 'page' == key:
-            url['page'] = page
-        elif 'entry' == key:
-            url['entry'] = entry
-        else:
-            url[key] = value
-    if 'page' not in params:
-        url['page'] = page
-    if 'entry' not in params:
-        url['entry'] = entry
-
-    return '?' + urllib.parse.urlencode(url, safe="~@#$&()*!+=:;,.?/'").replace('+', '%20')
+    return page
 
 
 @register.simple_tag

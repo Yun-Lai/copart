@@ -8,8 +8,7 @@ from multiprocessing.pool import ThreadPool
 
 from django.db.models import Q
 from lxml.html import fromstring
-from datetime import datetime
-import datetime as dt
+import datetime
 from django.utils import timezone
 
 from celery.schedules import crontab
@@ -211,10 +210,10 @@ def scrap_copart_lots(make_ids, account):
                 if Vehicle.objects.filter(lot=lot['ln']).exists():
                     db_item = Vehicle.objects.get(lot=lot['ln'])
                     if 'ad' in lot:
-                        db_item.sale_date = timezone.make_aware(datetime.fromtimestamp(lot['ad'] / 1000),
+                        db_item.sale_date = timezone.make_aware(datetime.datetime.fromtimestamp(lot['ad'] / 1000),
                                                                 timezone.get_current_timezone())
                     if 'lu' in lot:
-                        db_item.last_updated = timezone.make_aware(datetime.fromtimestamp(lot['lu'] / 1000),
+                        db_item.last_updated = timezone.make_aware(datetime.datetime.fromtimestamp(lot['lu'] / 1000),
                                                                    timezone.get_current_timezone())
                     db_item.item = str(lot['aan'])
                     db_item.grid = lot['gr']
@@ -247,10 +246,10 @@ def scrap_copart_lots(make_ids, account):
                     db_item.currency = lot['cuc']
                     # tz
                     if 'ad' in lot:
-                        db_item.sale_date = timezone.make_aware(datetime.fromtimestamp(lot['ad'] / 1000),
+                        db_item.sale_date = timezone.make_aware(datetime.datetime.fromtimestamp(lot['ad'] / 1000),
                                                                 timezone.get_current_timezone())
                     if 'lu' in lot:
-                        db_item.last_updated = timezone.make_aware(datetime.fromtimestamp(lot['lu'] / 1000),
+                        db_item.last_updated = timezone.make_aware(datetime.datetime.fromtimestamp(lot['lu'] / 1000),
                                                                    timezone.get_current_timezone())
                     # at
                     db_item.item = str(lot['aan'])
@@ -449,8 +448,8 @@ def scrap_iaai_lots():
             db_item.lane = lot['AuctionLane'] if lot['AuctionLane'] else '-'
             db_item.item = lot['Slot']
             # db_item.grid = models.CharField(_('Grid/Row'), max_length=5, default='')
-            db_item.sale_date = timezone.make_aware(datetime.strptime(lot['LiveDate'], '%m/%d/%Y %I:%M:%S %p'), timezone.get_current_timezone())
-            db_item.last_updated = timezone.make_aware(datetime.strptime(str(datetime.now().year) + '-' + lot['SaleInfo']['ModifiedDate'], '%Y-%b-%d %I:%M%p (CDT)'), timezone.get_current_timezone())
+            db_item.sale_date = timezone.make_aware(datetime.datetime.strptime(lot['LiveDate'], '%m/%d/%Y %I:%M:%S %p'), timezone.get_current_timezone())
+            db_item.last_updated = timezone.make_aware(datetime.datetime.strptime(str(datetime.datetime.now().year) + '-' + lot['SaleInfo']['ModifiedDate'], '%Y-%b-%d %I:%M%p (CDT)'), timezone.get_current_timezone())
 
             db_item.source = False
 
@@ -509,7 +508,7 @@ def scrap_iaai_lots():
         stock_nums = t.xpath('//div[@id="dvSearchList"]/div/div/table/tbody/tr/td[3]/p/text/text()')
         return [url.split('?')[1].split('&')[0].split('=')[1] for url in urls], stock_nums
 
-    start = datetime.now()
+    start = datetime.datetime.now()
 
     print('page - 1')
     response = requests.get('https://www.iaai.com/' + first_url)
@@ -527,7 +526,7 @@ def scrap_iaai_lots():
         lots += a
         stock_numbers += b
 
-    end = datetime.now()
+    end = datetime.datetime.now()
     print(len(lots), len(stock_numbers), (end - start).total_seconds())
 
     lots = [[item, stock_numbers[item_id]] for item_id, item in enumerate(lots)]
@@ -628,9 +627,9 @@ def scrap_filters_count():
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
-    cur_date = datetime.now().date()
-    from_date = cur_date - dt.timedelta(days=cur_date.weekday() + 7)
-    to_date = from_date + dt.timedelta(days=6)
+    cur_date = datetime.datetime.now().date()
+    from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
+    to_date = from_date + datetime.timedelta(days=6)
     featured_filter, created = Filter.objects.get_or_create(name='New Items', type='F')
     featured_filter.count = Vehicle.objects.filter(created_at__range=(from_date, to_date)).count()
     featured_filter.save()
@@ -804,3 +803,29 @@ def find_correct_vin():
 
     driver.close()
     driver.quit()
+
+
+@periodic_task(
+    run_every=(crontab(minute='0', hour='5')),
+    name="product.tasks.remove_unavailable_lots",
+    ignore_result=True,
+    queue='high',
+    options={'queue': 'high'}
+)
+def remove_unavailable_lots():
+    detail_url = 'https://www.copart.com/public/data/lotdetails/solr/{}'.format
+
+    driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
+                              desired_capabilities=DesiredCapabilities.CHROME)
+
+    for lot in Vehicle.objects.all():
+        driver.get(detail_url(lot.lot))
+        response = json.loads(driver.page_source[121:-20])
+        return_code_desc = response['returnCodeDesc']
+        data = response['data']
+        lot_detail = data['lotDetails']
+        if not lot_detail:
+            print(', '.join([str(lot.lot), return_code_desc, 'not exist on copart now']))
+            lot.delete()
+        else:
+            print(', '.join([str(lot.lot), return_code_desc, 'exist on copart now']))

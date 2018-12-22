@@ -78,7 +78,6 @@ TYPES = (
     ('J', 'Jet Ski'),
     ('K', 'Medium Duty/Box Trucks'),
     ('C', 'Motorcycle'),
-    ('H', 'Other Goods'),
     ('R', 'Recreational Vehicle (RV)'),
     ('S', 'Snowmobile'),
     ('L', 'Trailers'),

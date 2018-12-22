@@ -1,8 +1,4 @@
 jQuery(function () {
-    $(window).load(function() {
-		$(".se-pre-con").fadeOut("slow");
-	});
-
     // global event function
     front_global_event_proc_funcs();
     // detail page event proc functions
@@ -51,6 +47,17 @@ function front_detail_event_proc_funcs() {
         var ih = parseInt(jQuery(".p_a_gallery_sub_img").height());
         var mt = ( ih - 30 ) / 2 - 30;
         jQuery(".f_detail_arrow_a").css("margin-top", mt);
+    });
+
+    // event extend and pull in
+    jQuery(".f_arrival_extend_img").click(function () {
+        if (jQuery(this).attr("state") == "0") {
+            jQuery(this).attr("state", "1").attr("src", "/static/product/custom/imgs/top.png");
+            jQuery(".f_land_hide_arrival").removeClass("g_none_dis");
+        } else {
+            jQuery(this).attr("state", "0").attr("src", "/static/product/custom/imgs/down.png");
+            jQuery(".f_land_hide_arrival").addClass("g_none_dis");
+        }
     });
 
     $("#detail_find_more").on('click', function () {

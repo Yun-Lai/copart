@@ -10,9 +10,9 @@ urlpatterns = [
     url(r'^scrap_auction/', views.view_scrap_auction),
     url(r'^scrap_filters_count/', views.view_scrap_filters_count),
     url(r'^find_correct_vin/', views.view_find_correct_vin),
+    url(r'^remove_unavailable_lots/', views.view_remove_unavailable_lots),
 
     url(r'^$', views.index, name='index_page'),
-    url(r'^lots_by_feature/(?P<feature>[\d]+)/', views.lots_by_feature, name='list_page_by_feature'),
     url(r'^lots_by_search/', views.lots_by_search, name='list_page_by_search'),
     url(r'^lot/(?P<lot>[\w-]+)/$', views.detail, name='detail_page'),
 
