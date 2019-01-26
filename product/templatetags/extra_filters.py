@@ -117,3 +117,10 @@ def check_page_url(page, current_page, pages):
             '...' == page:
         return 'f_paging_disabled'
     return ''
+
+
+@register.simple_tag
+def replace_str(_str, old_str, new_str):
+    return _str.replace(old_str, new_str)
+
+

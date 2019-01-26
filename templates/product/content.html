@@ -15,8 +15,30 @@
     let applied_filter_years = {{ applied_filter_years|safe }};
     let all_odometers_for_filter = {{ odometers|safe }};
     let applied_filter_odometers = {{ applied_filter_odometers|safe }};
+
     let all_locations_for_filter = {{ locations|safe }};
     let applied_filter_locations = {{ applied_filter_locations|safe }};
+    let all_sale_dates_for_filter = {{ sale_dates_for_tag|safe }};
+    let applied_filter_sale_dates = {{ applied_filter_sale_dates|safe }};
+    let all_engine_types_for_filter = {{ engine_types|safe }};
+    let applied_filter_engin_tyes = {{ applied_filter_engine_types|safe }};
+    let all_transmissions_for_filter = {{ transmissions|safe }};
+    let applied_filter_transmissions = {{ applied_filter_transmissions|safe }};
+    let all_drive_trains_for_filter = {{ drive_trains|safe }};
+    let applied_filter_drive_trains = {{ applied_filter_drive_trains|safe }};
+    let all_cylinders_for_filter = {{ cylinders|safe }};
+    let applied_filter_cylinders = {{ applied_filter_cylinders|safe }};
+    let all_fuels_for_filter = {{ fuels|safe }};
+    let applied_filter_fuels = {{ applied_filter_fuels|safe }};
+    let all_body_styles_for_filter = {{ body_styles|safe }};
+    let applied_filter_body_styles = {{ applied_filter_body_styles|safe }};
+    let all_vehicle_types_for_filter = {{ vehicle_types|safe }};
+    let applied_filter_vehicle_types = {{ applied_filter_vehicle_types|safe }};
+    let all_damages_for_filter = {{ damages|safe }};
+    let applied_filter_damages = {{ applied_filter_damages|safe }};
+    let all_doctyps_for_filter = {{ doctypes|safe }};
+    let applied_filter_doctypes = {{ applied_filter_doctypes|safe }};
+
 </script>
 <div class="main" id="f_lr_main_dv">
     <div class="container">
@@ -101,6 +123,117 @@
                                 {% endfor %}
                             </div>
                         </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Sale Date' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Sale Date</div>
+                        <div class="f_l_f_cnt{% if 'Sale Date' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_sale_date" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_sale_date" class="f_l_f_sub">
+                                {% for sale_date in sale_dates|slice:":10" %}
+                                    <input type="checkbox" id="id_sale_date_{{ sale_date.sale_day|date:"m_d_Y" }}" class="checkbox_sale_date"{% if sale_date.sale_day|date:"m/d/Y" in applied_filter_sale_dates %} checked{% endif %}/>
+                                    <label for="id_sale_date_{{ sale_date.sale_day|date:"m_d_Y" }}">{{ sale_date.sale_day|date:"m/d/Y"}} ({{ sale_date.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Ownership Doc Type' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Ownership Doc Type</div>
+                        <div class="f_l_f_cnt{% if 'Ownership Doc Type' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_doctype" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_doctype" class="f_l_f_sub">
+                                {% for doctype in doctypes|slice:":10" %}
+                                    <input type="checkbox" id="id_doctype_{{ doctype.doc_type_td }}" class="checkbox_doctype"{% if doctype.doc_type_td in applied_filter_doctypes %} checked{% endif %}/>
+                                    <label for="id_doctype_{{ doctype.doc_type_td }}">{{ doctype.doc_type_td }} ({{ doctype.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Vehicle Type' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Vehicle Type</div>
+                        <div class="f_l_f_cnt{% if 'Vehicle Type' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_vehicle_type" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_vehicle_type" class="f_l_f_sub">
+                                {% for vehicle_type in vehicle_types|slice:":10" %}
+                                    <input type="checkbox" id="id_vehicle_type_{{ vehicle_type.type }}" class="checkbox_vehicle_type" {% if vehicle_type.type in applied_filter_vehicle_types %} checked{% endif %}/>
+                                    <label for="id_vehicle_type_{{ vehicle_type.type }}">{{ vehicle_type.type }} ({{ vehicle_type.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Damage' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Damage</div>
+                        <div class="f_l_f_cnt{% if 'Damage' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_damage" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_damage" class="f_l_f_sub">
+                                {% for damage in damages|slice:":10" %}
+                                    <input type="checkbox" id="id_damage_{{ damage.lot_1st_damage }}" class="checkbox_damage"{% if damage.lot_1st_damage in applied_filter_damages %} checked{% endif %}/>
+                                    <label for="id_damage_{{ damage.lot_1st_damage }}">{{ damage.lot_1st_damage }} ({{ damage.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Body Style' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Body Style</div>
+                        <div class="f_l_f_cnt{% if 'Body Style' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_body_style" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_body_style" class="f_l_f_sub">
+                                {% for body_style in body_styles|slice:":10" %}
+                                    <input type="checkbox" id="id_body_style_{{ body_style.body_style }}" class="checkbox_body_style"{% if body_style.body_style in applied_filter_body_styles %} checked{% endif %}/>
+                                    <label for="id_body_style_{{ body_style.body_style }}">{{ body_style.body_style|lower|capfirst }} ({{ body_style.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Fuel Type' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Fuel Type</div>
+                        <div class="f_l_f_cnt{% if 'Fuel Type' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_fuel" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_fuel" class="f_l_f_sub">
+                                {% for fuel in fuels|slice:":10" %}
+                                    <input type="checkbox" id="id_fuel_{{ fuel.fuel }}" class="checkbox_fuel"{% if fuel.fuel in applied_filter_fuels %} checked{% endif %}/>
+                                    <label for="id_fuel_{{ fuel.fuel }}">{{ fuel.fuel|lower|capfirst }} ({{ fuel.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Engine Type' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Engine Type</div>
+                        <div class="f_l_f_cnt{% if 'Engine Type' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_engine_type" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_engine_type" class="f_l_f_sub">
+                                {% for engine_type in engine_types|slice:":10" %}
+                                    <input type="checkbox" id="id_engine_type_{% replace_str engine_type.engine_type "." "-" %}" class="checkbox_engine_type"{% if engine_type.engine_type in applied_filter_engine_types %} checked{% endif %}/>
+                                    <label for="id_engine_type_{% replace_str engine_type.engine_type "." "-" %}">{{ engine_type.engine_type }} ({{ engine_type.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Transmission' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Transmission</div>
+                        <div class="f_l_f_cnt{% if 'Transmission' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_transmission" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_transmission" class="f_l_f_sub">
+                                {% for transmission in transmissions|slice:":10" %}
+                                    <input type="checkbox" id="id_transmission_{{ transmission.transmission }}" class="checkbox_transmission"{% if transmission.transmission in applied_filter_transmissions %} checked{% endif %}/>
+                                    <label for="id_transmission_{{ transmission.transmission }}">{{ transmission.transmission }} ({{ transmission.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Drive Train' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Drive Train</div>
+                        <div class="f_l_f_cnt{% if 'Drive Train' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_drive_train" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_drive_train" class="f_l_f_sub">
+                                {% for drive_train in drive_trains|slice:":10" %}
+                                    <input type="checkbox" id="id_drive_train_{% replace_str drive_train.drive "/" "_" %}" class="checkbox_drive_train"{% if drive_train.drive in applied_filter_drive_trains %} checked{% endif %}/>
+                                    <label for="id_drive_train_{% replace_str drive_train.drive "/" "_" %}">{{ drive_train.drive }} ({{ drive_train.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Cylinder' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Cylinder</div>
+                        <div class="f_l_f_cnt{% if 'Cylinder' not in status %} g_none_dis{% endif %}">
+                            <input id="input_filter_cylinder" class="g_ipt" placeholder="Search"/>
+                            <div id="div_filter_cylinder" class="f_l_f_sub">
+                                {% for cylinder in cylinders|slice:":10" %}
+                                    <input type="checkbox" id="id_cylinder_{{ cylinder.cylinders }}" class="checkbox_cylinder"{% if cylinder.cylinders in applied_filter_cylinders %} checked{% endif %}/>
+                                    <label for="id_cylinder_{{ cylinder.cylinders }}">{{ cylinder.cylinders }} ({{ cylinder.count }})</label> <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -140,7 +273,67 @@
                                     <div id="id_filter_location_{{ applied_filter }}" class="f_l_f_a_item filter_location">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
                                 {% endfor %}
                             {% endif %}
-                            {% if applied_filter_features or applied_filter_makes or applied_filter_models or applied_filter_years or applied_filter_odometers or applied_filter_locations %}
+                            {% if applied_filter_sale_dates %}
+                                {% for applied_filter in applied_filter_sale_dates %}
+                                    <div id="id_filter_sale_date_{% replace_str applied_filter "/" "_" %}" class="f_l_f_a_item filter_sale_date">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_doctypes %}
+                                {% for applied_filter in applied_filter_doctypes %}
+                                    <div id="id_filter_doctype_{{ applied_filter }}" class="f_l_f_a_item filter_doctype">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_vehicle_types %}
+                                {% for applied_filter in applied_filter_vehicle_types %}
+                                    <div id="id_filter_vehicle_type_{{ applied_filter }}" class="f_l_f_a_item filter_vehicle_type">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_damages %}
+                                {% for applied_filter in applied_filter_damages %}
+                                    <div id="id_filter_damage_{{ applied_filter }}" class="f_l_f_a_item filter_damage">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_body_styles %}
+                                {% for applied_filter in applied_filter_body_styles %}
+                                    <div id="id_filter_body_style_{{ applied_filter }}" class="f_l_f_a_item filter_body_style">{{ applied_filter|lower|capfirst }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_fuels %}
+                                {% for applied_filter in applied_filter_fuels %}
+                                    <div id="id_filter_fuel_{{ applied_filter }}" class="f_l_f_a_item filter_fuel">{{ applied_filter|lower|capfirst }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_engine_types %}
+                                    {% for applied_filter in applied_filter_engine_types %}
+                                        <div id="id_filter_engine_type_{% replace_str applied_filter "." "-" %}" class="f_l_f_a_item filter_engine_type">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_transmissions %}
+                                    {% for applied_filter in applied_filter_transmissions %}
+                                        <div id="id_filter_transmission_{{ applied_filter }}" class="f_l_f_a_item filter_transmission">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_drive_trains %}
+                                    {% for applied_filter in applied_filter_drive_trains %}
+                                        <div id="id_filter_drive_train_{% replace_str applied_filter "/" "_" %}" class="f_l_f_a_item filter_drive_train">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_cylinders %}
+                                {% for applied_filter in applied_filter_cylinders%}
+                                    <div id="id_filter_cylinder_{{ applied_filter }}" class="f_l_f_a_item filter_cylinder">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if applied_filter_features or applied_filter_makes or applied_filter_models or applied_filter_years or applied_filter_odometers or applied_filter_locations or applied_filter_sale_dates or applied_filter_engine_types or applied_filter_transmissions or applied_filter_drive_trains or applied_filter_cylinders or applied_filter_fuels or applied_filter_body_styles or applied_filter_doctypes %}
                             {% else %}
                                 No Filters Applied
                             {% endif %}

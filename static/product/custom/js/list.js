@@ -344,6 +344,44 @@ function front_list_event_proc_funcs() {
     change_location_filter_input("location");
     on_click_location_checkboxes("location");
     on_click_applied_location("location");
+
+    change_sales_date_filter_input("sale_date");
+    on_click_sale_date_checkboxes("sale_date");
+    on_click_applied_sale_date("sale_date");
+    change_engine_type_filter_input("engine_type");
+    on_click_engine_type_checkboxes("engine_type");
+    on_click_applied_engine_type("engine_type");
+    change_transmission_filter_input("transmission");
+    on_click_transmission_checkboxes("transmission");
+    on_click_applied_transmission("transmission");
+    change_drive_train_filter_input("drive_train");
+    on_click_drive_train_checkboxes("drive_train");
+    on_click_applied_drive_train("drive_train");
+    change_cylinder_filter_input("cylinder");
+    on_click_cylinder_checkboxes("cylinder");
+    on_click_applied_cylinder("cylinder");
+
+    change_fuel_filter_input("fuel");
+    on_click_fuel_checkboxes("fuel");
+    on_click_applied_fuel("fuel");
+
+    change_body_style_filter_input("body_style");
+    on_click_body_style_checkboxes("body_style");
+    on_click_applied_body_style("body_style");
+
+    change_vehicle_type_filter_input("vehicle");
+    on_click_vehicle_type_checkboxes("vehicle");
+    on_click_applied_vehicle_type("vehicle");
+
+    change_damage_filter_input("damage");
+    on_click_damage_checkboxes("damage");
+    on_click_applied_damage("damage");
+
+    change_doctype_filter_input("doctype");
+    on_click_doctype_checkboxes("doctype");
+    on_click_applied_doctype("doctype");
+
+
     // ------------Left Filters End------------
 }
 
@@ -791,6 +829,766 @@ function on_click_applied_location(initial) {
         $("[id^=id_filter_" + initial + "_" + start + "]").remove();
 
         $("#params").attr('url', make_url("locations", name, clicked_locations));
+        ajax_get_vehicles();
+    });
+}
+
+// ////////////////////////
+
+let clicked_sale_dates = applied_filter_sale_dates;
+function change_sales_date_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let sale_dates = all_sale_dates_for_filter;
+        let to = sale_dates.length >10 ? 10 : sale_dates.length;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < to; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + sale_dates[i]['sale_day'] + '" class="checkbox_' + initial + '"' + (clicked_sale_dates.includes(sale_dates[i]['sale_day']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + sale_dates[i]['sale_day'] + '">' + sale_dates[i]['sale_day'] + ' (' + sale_dates[i]['count'] + ')</label> <br>';
+        }
+        else {
+            sale_dates = sale_dates.filter(item => item['sale_day'].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < sale_dates.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + sale_dates[i]['sale_day'] + '" class="checkbox_' + initial + '"' + (clicked_sale_dates.includes(sale_dates[i]['sale_day']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + sale_dates[i]['sale_day'] + '">' + sale_dates[i]['sale_day'] + ' (' + sale_dates[i]['count'] + ')</label> <br>';
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_sale_date_checkboxes("sale_date");
+    });
+}
+function on_click_sale_date_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        console.log('2th name: ' + name);
+        let filters_applied = $("#id_filters_applied");
+
+        let tab_name = name.replace(/_/g, '/');
+
+        if ($(this).prop('checked')) {
+            clicked_sale_dates.push(tab_name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + tab_name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_sale_dates = clicked_sale_dates.filter(item => item !== tab_name);
+            // let start = name.split(' ')[0];
+            $("[id=id_filter_" + initial + "_" + name + "]").remove();
+        }
+
+        on_click_applied_sale_date("sale_date");
+
+        $("#params").attr('url', make_url("sale_dates", name, clicked_sale_dates));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_sale_date(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        console.log('3th name: ' + name);
+        let tab_name = name.replace(/_/g, '/');
+        // let start = name.split(' ')[0];
+        $("[id=id_" + initial + "_" + name + "]").prop('checked', false);
+
+        clicked_sale_dates = clicked_sale_dates.filter(item => item !== tab_name);
+
+        $("[id=id_filter_" + initial + "_" + name + "]").remove();
+
+        $("#params").attr('url', make_url("sale_dates", name, clicked_sale_dates));
+        ajax_get_vehicles();
+    });
+}
+
+
+let clicked_engine_types = applied_filter_engine_types;
+function change_engine_type_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        // if ($(this).val().length === 1)
+        //     return;
+
+        let html = "";
+        let filters = all_engine_types_for_filter;
+        let to = filters.length > 10 ? 10: filters.length;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < to; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_engine_types.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + filters[i][initial] + ' (' + filters[i]['count'] + ')</label> <br>';
+        }
+        else {
+            filters = filters.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_engine_types.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + filters[i][initial] + ' (' + filters[i]['count'] + ')</label> <br>';
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_engine_type_checkboxes("engine_type");
+    });
+}
+function on_click_engine_type_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        let tab_name = name.replace(/-/g, '.');
+
+        if ($(this).prop('checked')) {
+            clicked_engine_types.push(tab_name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + tab_name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_engine_types = clicked_engine_types.filter(item => item !== tab_name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+        }
+
+        on_click_applied_engine_type("engine_type");
+
+        $("#params").attr('url', make_url("engine_types", name, clicked_engine_types));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_engine_type(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+
+        let tab_name = name.replace(/-/g, '.');
+
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_engine_types = clicked_engine_types.filter(item => item !== tab_name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        $("#params").attr('url', make_url("engine_types", name, clicked_engine_types));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_transmissions = applied_filter_transmissions;
+function change_transmission_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let filters = all_transmissions_for_filter;
+        let to = filters.length > 10 ? 10 : filters.length;
+        if ($(this).val().length === 0) {
+            for (let i = 0; i < to; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_transmissions.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + filters[i][initial] + ' (' + filters[i]['count'] + ')</label> <br>';
+        }
+        else {
+            filters = filters.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_transmissions.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + filters[i][initial] + ' (' + filters[i]['count'] + ')</label> <br>';
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_transmission_checkboxes("transmission");
+    });
+}
+function on_click_transmission_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        console.log('2th name: ' + name);
+
+        if ($(this).prop('checked')) {
+            clicked_transmissions.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_transmissions = clicked_transmissions.filter(item => item !== name);
+            let start = name.split(' ')[0];
+            $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+        }
+
+        on_click_applied_transmission("transmission");
+
+        $("#params").attr('url', make_url("transmissions", name, clicked_transmissions));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_transmission(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        let start = name.split(' ')[0];
+
+        console.log('3th name: ' + name);
+
+        $("[id^=id_" + initial + "_" + start + "]").prop('checked', false);
+
+        clicked_transmissions = clicked_transmissions.filter(item => item !== name);
+
+        $("[id^=id_filter_" + initial + "_" + start + "]").remove();
+
+        $("#params").attr('url', make_url("transmissions", name, clicked_transmissions));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_drive_trains = applied_filter_drive_trains;
+function change_drive_train_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let filters = all_drive_trains_for_filter;
+        var to = filters.length >10 ? 10 : filters.length;
+        console.log(filters);
+        if ($(this).val().length === 0) {
+            console.log('back presss....');
+            for (let i = 0; i < to; i++){
+
+                let search_name = filters[i]['drive'].replace('_', '/');
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]['drive'] + '" class="checkbox_' + initial + '"' + (clicked_drive_trains.includes(filters[i]['drive']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]['drive'] + '">' + search_name + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+
+        }
+        else {
+            console.log('key presss....');
+            filters = filters.filter(item => item['drive'].replace('_', '/').toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++){
+                let search_name = filters[i]['drive'].replace('_', '/');
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]['drive'] + '" class="checkbox_' + initial + '"' + (clicked_drive_trains.includes(filters[i]['drive']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]['drive'] + '">' + search_name + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_drive_train_checkboxes("drive_train");
+    });
+}
+function on_click_drive_train_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        let tab_name = name.replace('_', '/');
+
+        console.log('2th name: ' + name);
+
+        if ($(this).prop('checked')) {
+            clicked_drive_trains.push(tab_name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + tab_name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_drive_trains = clicked_drive_trains.filter(item => item !== tab_name);
+            // let start = name.split(' ')[0];
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+        }
+
+        on_click_applied_drive_train("drive_train");
+
+        $("#params").attr('url', make_url("drive_trains", name, clicked_drive_trains));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_drive_train(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        // let start = name.split(' ')[0];
+
+        let tab_name = name.replace('_', '/');
+        console.log('3th name: ' + name);
+
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
+
+        clicked_drive_trains = clicked_drive_trains.filter(item => item !== tab_name);
+
+        $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+
+        $("#params").attr('url', make_url("drive_trains", name, clicked_drive_trains));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_cylinders = applied_filter_cylinders;
+function change_cylinder_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        // if ($(this).val().length === 1)
+        //     return;
+
+        let html = "";
+        let filters = all_cylinders_for_filter;
+        if ($(this).val().length === 0) {
+            console.log(filters);
+            var to = filters.length > 10 ? 10 : filters.length;
+            for (let i = 0; i < to; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]['cylinders'] + '" class="checkbox_' + initial + '"' + (clicked_cylinders.includes(filters[i]['cylinders']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]['cylinders'] + '">' + filters[i]['cylinders'] + ' (' + filters[i]['count'] + ')</label> <br>';
+        }
+        else {
+            filters = filters.filter(item => String(item['cylinders']).toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++)
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]['cylinders'] + '" class="checkbox_' + initial + '"' + (clicked_cylinders.includes(filters[i]['cylinders']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]['cylinders'] + '">' + filters[i]['cylinders'] + ' (' + filters[i]['count'] + ')</label> <br>';
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_cylinder_checkboxes("cylinder");
+    });
+}
+function on_click_cylinder_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        console.log('2th name: ' + name);
+
+        if ($(this).prop('checked')) {
+            clicked_cylinders.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_cylinders = clicked_cylinders.filter(item => item !== name);
+            // let start = name.split(' ')[0];
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+        }
+
+        on_click_applied_cylinder("cylinder");
+
+        $("#params").attr('url', make_url("cylinderss", name, clicked_cylinders));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_cylinder(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        // let start = name.split(' ')[0];
+        console.log('3th name: ' + name);
+
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
+
+        clicked_cylinders = clicked_cylinders.filter(item => item !== name);
+
+        $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+
+        $("#params").attr('url', make_url("cylinderss", name, clicked_cylinders));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_fuels = applied_filter_fuels;
+function change_fuel_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let search_res = "";
+        let filters = all_fuels_for_filter;
+        if ($(this).val().length === 0) {
+            console.log(filters);
+            filters = all_fuels_for_filter;
+            var to = filters.length > 10 ? 10 : filters.length;
+            for (let i = 0; i < to; i++){
+                search_res = filters[i].fuel.charAt(0) + filters[i].fuel.slice(1).toLowerCase();
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_fuels.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i].fuel + '">' + search_res + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        else {
+
+            filters = filters.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++){
+                search_res = filters[i][initial].charAt(0) + filters[i][initial].slice(1).toLowerCase();
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_fuels.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + search_res + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_fuel_checkboxes("fuel");
+    });
+}
+function on_click_fuel_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        console.log('2th name: ' + name);
+        let tab_name = name.toLowerCase();
+        tab_name = tab_name.charAt(0).toUpperCase() + tab_name.slice(1);
+        console.log('2th tab_name: ' + tab_name);
+        if ($(this).prop('checked')) {
+            clicked_fuels.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + tab_name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_fuels = clicked_fuels.filter(item => item !== name);
+            // let start = name.split(' ')[0];
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+        }
+
+        on_click_applied_fuel("fuel");
+
+        $("#params").attr('url', make_url("fuels", name, clicked_fuels));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_fuel(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        // let start = name.split(' ')[0];
+        let tab_name = name.toLowerCase();
+        tab_name = tab_name.charAt(0).toUpperCase() + tab_name.slice(1);
+        console.log('3th name: ' + name);
+        console.log('3th tab_name: ' + tab_name);
+
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
+
+        clicked_fuels = clicked_fuels.filter(item => item !== name);
+
+        $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+
+        $("#params").attr('url', make_url("fuels", name, clicked_fuels));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_body_styles = applied_filter_body_styles;
+function change_body_style_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let search_res = "";
+        let filters = all_body_styles_for_filter;
+        if ($(this).val().length === 0) {
+            console.log(filters);
+            filters = all_body_styles_for_filter;
+            var to = filters.length > 10 ? 10 : filters.length;
+            for (let i = 0; i < to; i++){
+                search_res = filters[i].body_style.charAt(0) + filters[i].body_style.slice(1).toLowerCase();
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_body_styles.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i].body_style + '">' + search_res + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        else {
+
+            filters = filters.filter(item => item[initial].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++){
+                search_res = filters[i][initial].charAt(0) + filters[i][initial].slice(1).toLowerCase();
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_body_styles.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + search_res + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_body_style_checkboxes("body_style");
+    });
+}
+function on_click_body_style_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        console.log('2th name: ' + name);
+        let tab_name = name.toLowerCase();
+        tab_name = tab_name.charAt(0).toUpperCase() + tab_name.slice(1);
+        console.log('2th tab_name: ' + tab_name);
+        if ($(this).prop('checked')) {
+            clicked_body_styles.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + tab_name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_body_styles = clicked_body_styles.filter(item => item !== name);
+            // let start = name.split(' ')[0];
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+        }
+
+        on_click_applied_body_style("body_style");
+
+        $("#params").attr('url', make_url("body_styles", name, clicked_body_styles));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_body_style(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        // let start = name.split(' ')[0];
+        let tab_name = name.toLowerCase();
+        tab_name = tab_name.charAt(0).toUpperCase() + tab_name.slice(1);
+        console.log('3th name: ' + name);
+        console.log('3th tab_name: ' + tab_name);
+
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
+
+        clicked_body_styles = clicked_body_styles.filter(item => item !== name);
+
+        $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+
+        $("#params").attr('url', make_url("body_styles", name, clicked_body_styles));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_vehicle_types = applied_filter_vehicle_types;
+function change_vehicle_type_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let search_res = "";
+        let filters = all_vehicle_types_for_filter;
+        if ($(this).val().length === 0) {
+            console.log(filters);
+            filters = all_vehicle_types_for_filter;
+            var to = filters.length > 10 ? 10 : filters.length;
+            for (let i = 0; i < to; i++){
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["type"] + '" class="checkbox_' + initial + '"' + (clicked_vehicle_types.includes(filters[i]["type"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["type"] + '">' + filters[i]["type"] + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        else {
+
+            filters = filters.filter(item => item["type"].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++){
+                search_res = filters[i]["type"].charAt(0) + filters[i]["type"].slice(1).toLowerCase();
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["type"] + '" class="checkbox_' + initial + '"' + (clicked_vehicle_types.includes(filters[i]["type"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["type"] + '">' + filters[i]["type"] + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_vehicle_type_checkboxes("vehicle_type");
+    });
+}
+function on_click_vehicle_type_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        console.log('2th name: ' + name);
+        if ($(this).prop('checked')) {
+            clicked_vehicle_types.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_vehicle_types = clicked_vehicle_types.filter(item => item !== name);
+            // let start = name.split(' ')[0];
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+        }
+
+        on_click_applied_vehicle_type("vehicle_type");
+
+        $("#params").attr('url', make_url("vehicle_types", name, clicked_vehicle_types));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_vehicle_type(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        console.log('3th name: ' + name);
+
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
+
+        clicked_vehicle_types = clicked_vehicle_types.filter(item => item !== name);
+
+        $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+
+        $("#params").attr('url', make_url("vehicle_types", name, clicked_vehicle_types));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_damages = applied_filter_damages;
+function change_damage_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let search_res = "";
+        let filters = all_damages_for_filter;
+        if ($(this).val().length === 0) {
+            filters = all_damages_for_filter;
+            var to = filters.length > 10 ? 10 : filters.length;
+            for (let i = 0; i < to; i++){
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["lot_1st_damage"] + '" class="checkbox_' + initial + '"' + (clicked_damages.includes(filters[i]["lot_1st_damage"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["lot_1st_damage"] + '">' + filters[i]["lot_1st_damage"] + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        else {
+
+            filters = filters.filter(item => item["lot_1st_damage"].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++){
+                search_res = filters[i]["lot_1st_damage"].charAt(0) + filters[i]["lot_1st_damage"].slice(1).toLowerCase();
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["lot_1st_damage"] + '" class="checkbox_' + initial + '"' + (clicked_damages.includes(filters[i]["lot_1st_damage"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["lot_1st_damage"] + '">' + filters[i]["lot_1st_damage"] + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_damage_checkboxes("damage");
+    });
+}
+function on_click_damage_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        console.log('2th name: ' + name);
+        if ($(this).prop('checked')) {
+            clicked_damages.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_damages = clicked_damages.filter(item => item !== name);
+            // let start = name.split(' ')[0];
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+        }
+
+        on_click_applied_damage("damage");
+
+        $("#params").attr('url', make_url("damages", name, clicked_damages));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_damage(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        console.log('3th name: ' + name);
+
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
+
+        clicked_damages = clicked_damages.filter(item => item !== name);
+
+        $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+
+        $("#params").attr('url', make_url("damages", name, clicked_damages));
+        ajax_get_vehicles();
+    });
+}
+
+let clicked_doctypes = applied_filter_doctypes;
+function change_doctype_filter_input(initial) {
+    $("#input_filter_" + initial).on('input', function () {
+        if ($(this).val().length === 1)
+            return;
+
+        let html = "";
+        let search_res = "";
+        let filters = all_doctypes_for_filter;
+        if ($(this).val().length === 0) {
+            filters = all_doctypes_for_filter;
+            var to = filters.length > 10 ? 10 : filters.length;
+            for (let i = 0; i < to; i++){
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["doc_type_td"] + '" class="checkbox_' + initial + '"' + (clicked_doctypes.includes(filters[i]["doc_type_td"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["doc_type_td"] + '">' + filters[i]["doc_type_td"] + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        else {
+
+            filters = filters.filter(item => item["doc_type_td"].toLowerCase().includes($(this).val().toLowerCase()));
+            for (let i = 0; i < filters.length; i++){
+                search_res = filters[i]["doc_type_td"].charAt(0) + filters[i]["doc_type_td"].slice(1).toLowerCase();
+                html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["doc_type_td"] + '" class="checkbox_' + initial + '"' + (clicked_doctypes.includes(filters[i]["doc_type_td"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["doc_type_td"] + '">' + filters[i]["doc_type_td"] + ' (' + filters[i]['count'] + ')</label> <br>';
+            }
+        }
+        $("#div_filter_" + initial).html(html);
+        on_click_doctype_checkboxes("doctype");
+    });
+}
+function on_click_doctype_checkboxes(initial) {
+    $(".checkbox_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(4 + initial.length);
+        let filters_applied = $("#id_filters_applied");
+
+        console.log('2th name: ' + name);
+        if ($(this).prop('checked')) {
+            clicked_doctypes.push(name);
+            let html = '<div id="id_filter_' + initial + '_' + name + '" class="f_l_f_a_item filter_' + initial + '">' + name + '<img class="f_list_fr_close" src="/static/product/custom/imgs/close.png"/></div>';
+            if (filters_applied.html().includes("No Filters Applied")) {
+                filters_applied.html(html);
+            }
+            else {
+                let new_feature = document.createElement('div');
+                new_feature.innerHTML = html;
+                document.getElementById('id_filters_applied').appendChild(new_feature);
+            }
+        }
+        else {
+            clicked_doctypes = clicked_doctypes.filter(item => item !== name);
+            // let start = name.split(' ')[0];
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+        }
+
+        on_click_applied_doctype("doctype");
+
+        $("#params").attr('url', make_url("doctypes", name, clicked_doctypes));
+        ajax_get_vehicles();
+    });
+}
+function on_click_applied_doctype(initial) {
+    $(".filter_" + initial).on('click', function () {
+        let name = $(this).prop('id').substring(11 + initial.length);
+        console.log('3th name: ' + name);
+
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
+
+        clicked_doctypes = clicked_doctypes.filter(item => item !== name);
+
+        $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
+
+        $("#params").attr('url', make_url("doctypes", name, clicked_doctypes));
         ajax_get_vehicles();
     });
 }

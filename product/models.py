@@ -82,6 +82,8 @@ TYPES = (
     ('S', 'Snowmobile'),
     ('L', 'Trailers'),
 )
+
+
 class VehicleMakes(models.Model):
     type = models.CharField(_('Type'), choices=TYPES, max_length=1, default='V')
     code = models.CharField(_('Code'), max_length=4)
@@ -105,6 +107,8 @@ FILTER_TYPES = (
     ('T', 'Vehicle Types'),
     ('M', 'Makes'),
 )
+
+
 class Filter(models.Model):
     name = models.CharField(_('Filter Name'), max_length=50)
     count = models.IntegerField(_('Lots Number'), default=0)
@@ -120,6 +124,8 @@ SOURCE = (
     ('C', 'Copart'),
     ('I', 'IAAI'),
 )
+
+
 class VehicleBase(models.Model):
     lot = models.IntegerField(_('Lot'))
     vin = models.CharField(_('VIN'), max_length=17, default='')
