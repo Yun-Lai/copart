@@ -77,7 +77,7 @@
                         <div class="f_l_f_cnt{% if 'Make' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_make" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_make" class="f_l_f_sub">
-                                {% for make in makes|slice:":10" %}
+                                {% for make in makes %}
                                     <input type="checkbox" id="id_make_{{ make.make }}" class="checkbox_make"{% if make.make in applied_filter_makes %} checked{% endif %}/>
                                     <label for="id_make_{{ make.make }}">{{ make.make }} ({{ make.count }})</label> <br>
                                 {% endfor %}
@@ -87,7 +87,7 @@
                         <div class="f_l_f_cnt{% if 'Model' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_model" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_model" class="f_l_f_sub">
-                                {% for model in models|slice:":10" %}
+                                {% for model in models %}
                                     <input type="checkbox" id="id_model_{{ model.model }}" class="checkbox_model"{% if model.model in applied_filter_models %} checked{% endif %}/>
                                     <label for="id_model_{{ model.model }}">{{ model.model }} ({{ model.count }})</label> <br>
                                 {% endfor %}
@@ -97,7 +97,7 @@
                         <div class="f_l_f_cnt{% if 'Year' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_year" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_year" class="f_l_f_sub">
-                                {% for year in years|slice:":10" %}
+                                {% for year in years %}
                                     <input type="checkbox" id="id_year_{{ year.year }}" class="checkbox_year"{% if year.year|stringformat:"i" in applied_filter_years %} checked{% endif %}/>
                                     <label for="id_year_{{ year.year }}">{{ year.year }} ({{ year.count }})</label> <br>
                                 {% endfor %}
@@ -117,7 +117,7 @@
                         <div class="f_l_f_cnt{% if 'Location' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_location" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_location" class="f_l_f_sub">
-                                {% for location in locations|slice:":10" %}
+                                {% for location in locations %}
                                     <input type="checkbox" id="id_location_{{ location.location }}" class="checkbox_location"{% if location.location in applied_filter_locations %} checked{% endif %}/>
                                     <label for="id_location_{{ location.location }}">{{ location.location }} ({{ location.count }})</label> <br>
                                 {% endfor %}
@@ -128,9 +128,9 @@
                         <div class="f_l_f_cnt{% if 'Sale Date' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_sale_date" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_sale_date" class="f_l_f_sub">
-                                {% for sale_date in sale_dates|slice:":10" %}
-                                    <input type="checkbox" id="id_sale_date_{{ sale_date.sale_day|date:"m_d_Y" }}" class="checkbox_sale_date"{% if sale_date.sale_day|date:"m/d/Y" in applied_filter_sale_dates %} checked{% endif %}/>
-                                    <label for="id_sale_date_{{ sale_date.sale_day|date:"m_d_Y" }}">{{ sale_date.sale_day|date:"m/d/Y"}} ({{ sale_date.count }})</label> <br>
+                                {% for sale_date in sale_dates %}
+                                    <input type="checkbox" id="id_sale_date_{{ sale_date.sale_day }}" class="checkbox_sale_date"{% if sale_date.sale_day in applied_filter_sale_dates %} checked{% endif %}/>
+                                    <label for="id_sale_date_{{ sale_date.sale_day }}">{{ sale_date.sale_day}} ({{ sale_date.count }})</label> <br>
                                 {% endfor %}
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                         <div class="f_l_f_cnt{% if 'Ownership Doc Type' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_doctype" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_doctype" class="f_l_f_sub">
-                                {% for doctype in doctypes|slice:":10" %}
+                                {% for doctype in doctypes %}
                                     <input type="checkbox" id="id_doctype_{{ doctype.doc_type_td }}" class="checkbox_doctype"{% if doctype.doc_type_td in applied_filter_doctypes %} checked{% endif %}/>
                                     <label for="id_doctype_{{ doctype.doc_type_td }}">{{ doctype.doc_type_td }} ({{ doctype.count }})</label> <br>
                                 {% endfor %}
@@ -150,7 +150,7 @@
                         <div class="f_l_f_cnt{% if 'Vehicle Type' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_vehicle_type" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_vehicle_type" class="f_l_f_sub">
-                                {% for vehicle_type in vehicle_types|slice:":10" %}
+                                {% for vehicle_type in vehicle_types %}
                                     <input type="checkbox" id="id_vehicle_type_{{ vehicle_type.type }}" class="checkbox_vehicle_type" {% if vehicle_type.type in applied_filter_vehicle_types %} checked{% endif %}/>
                                     <label for="id_vehicle_type_{{ vehicle_type.type }}">{{ vehicle_type.type }} ({{ vehicle_type.count }})</label> <br>
                                 {% endfor %}
@@ -161,7 +161,7 @@
                         <div class="f_l_f_cnt{% if 'Damage' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_damage" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_damage" class="f_l_f_sub">
-                                {% for damage in damages|slice:":10" %}
+                                {% for damage in damages %}
                                     <input type="checkbox" id="id_damage_{{ damage.lot_1st_damage }}" class="checkbox_damage"{% if damage.lot_1st_damage in applied_filter_damages %} checked{% endif %}/>
                                     <label for="id_damage_{{ damage.lot_1st_damage }}">{{ damage.lot_1st_damage }} ({{ damage.count }})</label> <br>
                                 {% endfor %}
@@ -172,7 +172,7 @@
                         <div class="f_l_f_cnt{% if 'Body Style' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_body_style" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_body_style" class="f_l_f_sub">
-                                {% for body_style in body_styles|slice:":10" %}
+                                {% for body_style in body_styles %}
                                     <input type="checkbox" id="id_body_style_{{ body_style.body_style }}" class="checkbox_body_style"{% if body_style.body_style in applied_filter_body_styles %} checked{% endif %}/>
                                     <label for="id_body_style_{{ body_style.body_style }}">{{ body_style.body_style|lower|capfirst }} ({{ body_style.count }})</label> <br>
                                 {% endfor %}
@@ -183,7 +183,7 @@
                         <div class="f_l_f_cnt{% if 'Fuel Type' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_fuel" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_fuel" class="f_l_f_sub">
-                                {% for fuel in fuels|slice:":10" %}
+                                {% for fuel in fuels %}
                                     <input type="checkbox" id="id_fuel_{{ fuel.fuel }}" class="checkbox_fuel"{% if fuel.fuel in applied_filter_fuels %} checked{% endif %}/>
                                     <label for="id_fuel_{{ fuel.fuel }}">{{ fuel.fuel|lower|capfirst }} ({{ fuel.count }})</label> <br>
                                 {% endfor %}
@@ -194,7 +194,7 @@
                         <div class="f_l_f_cnt{% if 'Engine Type' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_engine_type" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_engine_type" class="f_l_f_sub">
-                                {% for engine_type in engine_types|slice:":10" %}
+                                {% for engine_type in engine_types %}
                                     <input type="checkbox" id="id_engine_type_{% replace_str engine_type.engine_type "." "-" %}" class="checkbox_engine_type"{% if engine_type.engine_type in applied_filter_engine_types %} checked{% endif %}/>
                                     <label for="id_engine_type_{% replace_str engine_type.engine_type "." "-" %}">{{ engine_type.engine_type }} ({{ engine_type.count }})</label> <br>
                                 {% endfor %}
@@ -205,7 +205,7 @@
                         <div class="f_l_f_cnt{% if 'Transmission' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_transmission" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_transmission" class="f_l_f_sub">
-                                {% for transmission in transmissions|slice:":10" %}
+                                {% for transmission in transmissions %}
                                     <input type="checkbox" id="id_transmission_{{ transmission.transmission }}" class="checkbox_transmission"{% if transmission.transmission in applied_filter_transmissions %} checked{% endif %}/>
                                     <label for="id_transmission_{{ transmission.transmission }}">{{ transmission.transmission }} ({{ transmission.count }})</label> <br>
                                 {% endfor %}
@@ -216,7 +216,7 @@
                         <div class="f_l_f_cnt{% if 'Drive Train' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_drive_train" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_drive_train" class="f_l_f_sub">
-                                {% for drive_train in drive_trains|slice:":10" %}
+                                {% for drive_train in drive_trains %}
                                     <input type="checkbox" id="id_drive_train_{% replace_str drive_train.drive "/" "_" %}" class="checkbox_drive_train"{% if drive_train.drive in applied_filter_drive_trains %} checked{% endif %}/>
                                     <label for="id_drive_train_{% replace_str drive_train.drive "/" "_" %}">{{ drive_train.drive }} ({{ drive_train.count }})</label> <br>
                                 {% endfor %}
@@ -227,7 +227,7 @@
                         <div class="f_l_f_cnt{% if 'Cylinder' not in status %} g_none_dis{% endif %}">
                             <input id="input_filter_cylinder" class="g_ipt" placeholder="Search"/>
                             <div id="div_filter_cylinder" class="f_l_f_sub">
-                                {% for cylinder in cylinders|slice:":10" %}
+                                {% for cylinder in cylinders %}
                                     <input type="checkbox" id="id_cylinder_{{ cylinder.cylinders }}" class="checkbox_cylinder"{% if cylinder.cylinders in applied_filter_cylinders %} checked{% endif %}/>
                                     <label for="id_cylinder_{{ cylinder.cylinders }}">{{ cylinder.cylinders }} ({{ cylinder.count }})</label> <br>
                                 {% endfor %}
@@ -275,7 +275,7 @@
                             {% endif %}
                             {% if applied_filter_sale_dates %}
                                 {% for applied_filter in applied_filter_sale_dates %}
-                                    <div id="id_filter_sale_date_{% replace_str applied_filter "/" "_" %}" class="f_l_f_a_item filter_sale_date">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                    <div id="id_filter_sale_date_{{ applied_filter }}" class="f_l_f_a_item filter_sale_date">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
                                 {% endfor %}
                             {% endif %}
 
@@ -371,18 +371,18 @@
                                style="width:100%">
                             <thead>
                             <tr class="h">
-                                <th class="h">Images</th>
-                                <th class="h">Year</th>
-                                <th class="h">Make</th>
-                                <th class="h">Model</th>
-                                <th class="h">Location</th>
-                                <th class="h">Sale Date</th>
-                                <th class="h">Odometer</th>
-                                <th class="h">Doc Type</th>
-                                <th class="h">Damage</th>
-                                <th class="h">Retail Value</th>
-                                <th class="h">Current Bid</th>
-                            </tr>
+                                    <th>Images</th>
+                                    <th class="h" id="lots_year" sorting_1="disabled"><span>Year&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_make" sorting_1="disabled"><span>Make&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_model" sorting_1="disabled"><span>Model&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_location" sorting_1="disabled"><span>Location&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_sale_date" sorting_1="disabled"><span>Sale Date&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_odometer_orr" sorting_1="disabled"><span>Odometer&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_doc_type_ts" sorting_1="disabled"><span>Doc Type&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_lot_1st_damage" sorting_1="disabled"><span>Damage&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_retail_value" sorting_1="disabled"><span>Retail Value&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_current_bid" sorting_1="disabled"><span>Current Bid&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                </tr>
                             </thead>
                             <tbody>
                             {% for lot in lots %}

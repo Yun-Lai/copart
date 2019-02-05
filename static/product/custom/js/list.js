@@ -35,10 +35,17 @@ function front_global_event_proc_funcs() {
     });
 }
 
+
+
+
 function ajax_get_vehicles() {
     let initial_params = $("#initial").attr('initial');
     let params = $("#params").attr('url');
     let shows_status = $("#shows").attr('status');
+    if($("#params").attr('url').includes('sort=') === false){
+        console.log('Ajax params: ' + params);
+        params += "&sort={'sort_by':'year','sort_type':'desc'}";
+    }
     if (params)
         params = '&' + params;
     let path = encodeURI('/lots_by_search/?' + initial_params + params + '&status=' + shows_status);
@@ -61,13 +68,129 @@ function ajax_get_vehicles() {
  * list page event proc functions
  * */
 function front_list_event_proc_funcs() {
+    $("th[class='h'] span").attr('style', 'cursor:pointer');
+
+    if($("#params").attr('url').includes('sort=')){
+        console.log('param: ', $("#params").attr('url'));
+        let param = $("#params").attr('url').split('sort=')[1];
+        console.log(param.split('&')[0]);
+        param = JSON.parse(param.split('&')[0]);
+        console.log(param.sort_by);
+        $("th[class='h'][id!='lots_" + param.sort_by + "']").attr('sorting_1', 'disabled');
+        $("th[class='h'][id!='lots_" + param.sort_by + "']").removeAttr('sort_type');
+        $("th[class='h'][id!='lots_" + param.sort_by + "'] span i").attr('class', 'glyphicon glyphicon-sort');
+
+        $("th[class='h'][id='lots_" + param.sort_by + "']").attr({
+                sort_type:param.sort_type,
+                sorting_1: 'enabled'
+            });
+        if(param.sort_type === "desc"){
+            $("th[class='h'][id='lots_" + param.sort_by + "'] span i").attr('class', 'glyphicon glyphicon-sort-by-attributes-alt');
+
+        }
+        else{
+            $("th[class='h'][id='lots_" + param.sort_by + "'] span i").attr('class', 'glyphicon glyphicon-sort-by-attributes');
+        }
+    }
+    else{ // None of Sorting
+        $("th[class='h']").attr('sorting_1', 'disabled');
+        $("th[class='h']").removeAttr('sort_type');
+    }
+
     // data table load
-    if (jQuery("#f_list_page_mark").val() == "1") {
+    if (jQuery("#f_list_page_mark").val() === "1") {
         jQuery('#c_seach_tb').DataTable({
             "lengthMenu": [[100], [100]],
-            pagerPosition: 'both'
+            pagerPosition: 'both',
+            "ordering": false
+            // "order": [[1, "desc"]],
         });
     }
+
+    jQuery(".h span").on('click', function (e) {
+        // if(e.target !==this){
+        //     return;
+        // }
+        console.log('Theader Click event OK! --' + $(this).parent().attr('id'));
+        let status;
+        if($(this).parent().attr('sort_type')){
+            if('asc' === $(this).parent().attr('sort_type')){
+                console.log('Descending');
+                status = 'desc';
+            }
+            else if('desc' === $(this).parent().attr('sort_type')){
+                console.log('Ascending');
+                status = 'asc'
+            }
+            // $(this).attr('sort_type', status)
+        }
+        //initial status
+        else{
+            status = 'desc';
+            // $(this).attr('sort_type', 'desc')
+        }
+
+        /// back end
+        var sort_by = $(this).parent().attr('id').split('lots_')[1];
+        let current_url = $("#params").attr('url');
+        console.log('aaaaaaaaaa', current_url);
+        let params = current_url.split('&');
+        for (let i = 0; i < params.length; i++) {
+            if (params[i].startsWith('sort=') || params[i] === "" ) {
+                console.log('delete ---', params);
+                params.splice(i, 1);
+            }
+        }
+        console.log(params);
+        params.push('sort={\"sort_by\":\"'+sort_by +'\", \"sort_type\":\"'+ status + '\"}');
+        console.log('param2-- ', params);
+        params = params.join('&');
+        console.log('param3-- ', params);
+        $("#params").attr('url', params);
+        // ajax_get_vehicles();
+
+        let initial_params = $("#initial").attr('initial');
+        // let params = $("#params").attr('url');
+        let shows_status = $("#shows").attr('status');
+        if (params)
+            params = '&' + params;
+        let path = encodeURI('/lots_by_search/?' + initial_params + params + '&status=' + shows_status);
+        console.log(path);
+        $.ajax({
+            type: 'GET',
+            url: '/ajax_get_vehicles/?' + initial_params + params,
+            data: {'status': shows_status},
+            success: function (response) {
+                $("#list_content").html(response);
+                front_list_event_proc_funcs();
+                window.history.pushState({route: path}, "EVILEG", path);
+            },
+            error: function (response) {
+
+            }
+        });
+
+
+
+    });
+    // var sort = $("#sort").val();
+    //  $.ajax({
+    //   url:'fetch_details.php',
+    //   type:'post',
+    //   data:{columnName:columnName,sort:sort},
+    //   success: function(response){
+    //
+    //    $("#empTable tr:not(:first)").remove();
+    //
+    //    $("#empTable").append(response);
+    //    if(sort == "asc"){
+    //      $("#sort").val("desc");
+    //    }else{
+    //      $("#sort").val("asc");
+    //    }
+    //
+    //   }
+    //  });
 
     // left filter function
     jQuery(".f_l_f_tlt").click(function () {
@@ -319,6 +442,11 @@ function front_list_event_proc_funcs() {
         }
         ajax_get_vehicles();
     });
+
+
+
+
+
 
     // Featured Items
     change_featured_filter_input();
@@ -647,7 +775,7 @@ function change_year_filter_input(initial) {
         let html = "";
         let years = all_years_for_filter;
         if ($(this).val().length === 0) {
-            for (let i = 0; i < 10; i++)
+            for (let i = 0; i < all_years_for_filter.length; i++)
                 html += '<input type="checkbox" id="id_' + initial + '_' + years[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_years.includes(years[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + years[i][initial] + '">' + years[i][initial] + ' (' + years[i]['count'] + ')</label> <br>';
         }
         else {
@@ -777,7 +905,7 @@ function change_location_filter_input(initial) {
         let html = "";
         let locations = all_locations_for_filter;
         if ($(this).val().length === 0) {
-            for (let i = 0; i < 10; i++)
+            for (let i = 0; i < locations.length; i++)
                 html += '<input type="checkbox" id="id_' + initial + '_' + locations[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_locations.includes(locations[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + locations[i][initial] + '">' + locations[i][initial] + ' (' + locations[i]['count'] + ')</label> <br>';
         }
         else {
@@ -845,7 +973,7 @@ function change_sales_date_filter_input(initial) {
         let sale_dates = all_sale_dates_for_filter;
         let to = sale_dates.length >10 ? 10 : sale_dates.length;
         if ($(this).val().length === 0) {
-            for (let i = 0; i < to; i++)
+            for (let i = 0; i < sale_dates.length; i++)
                 html += '<input type="checkbox" id="id_' + initial + '_' + sale_dates[i]['sale_day'] + '" class="checkbox_' + initial + '"' + (clicked_sale_dates.includes(sale_dates[i]['sale_day']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + sale_dates[i]['sale_day'] + '">' + sale_dates[i]['sale_day'] + ' (' + sale_dates[i]['count'] + ')</label> <br>';
         }
         else {
@@ -880,7 +1008,7 @@ function on_click_sale_date_checkboxes(initial) {
         else {
             clicked_sale_dates = clicked_sale_dates.filter(item => item !== tab_name);
             // let start = name.split(' ')[0];
-            $("[id=id_filter_" + initial + "_" + name + "]").remove();
+            $("[id=\"id_filter_" + initial + "_" + name + "\"]").remove();
         }
 
         on_click_applied_sale_date("sale_date");
@@ -895,11 +1023,11 @@ function on_click_applied_sale_date(initial) {
         console.log('3th name: ' + name);
         let tab_name = name.replace(/_/g, '/');
         // let start = name.split(' ')[0];
-        $("[id=id_" + initial + "_" + name + "]").prop('checked', false);
+        $("[id=\"id_" + initial + "_" + name + "\"]").prop('checked', false);
 
         clicked_sale_dates = clicked_sale_dates.filter(item => item !== tab_name);
 
-        $("[id=id_filter_" + initial + "_" + name + "]").remove();
+        $("[id=\"id_filter_" + initial + "_" + name + "\"").remove();
 
         $("#params").attr('url', make_url("sale_dates", name, clicked_sale_dates));
         ajax_get_vehicles();
@@ -917,7 +1045,7 @@ function change_engine_type_filter_input(initial) {
         let filters = all_engine_types_for_filter;
         let to = filters.length > 10 ? 10: filters.length;
         if ($(this).val().length === 0) {
-            for (let i = 0; i < to; i++)
+            for (let i = 0; i < filters.length; i++)
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_engine_types.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + filters[i][initial] + ' (' + filters[i]['count'] + ')</label> <br>';
         }
         else {
@@ -988,7 +1116,7 @@ function change_transmission_filter_input(initial) {
         let filters = all_transmissions_for_filter;
         let to = filters.length > 10 ? 10 : filters.length;
         if ($(this).val().length === 0) {
-            for (let i = 0; i < to; i++)
+            for (let i = 0; i < filters.length; i++)
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_transmissions.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i][initial] + '">' + filters[i][initial] + ' (' + filters[i]['count'] + ')</label> <br>';
         }
         else {
@@ -1060,8 +1188,7 @@ function change_drive_train_filter_input(initial) {
         var to = filters.length >10 ? 10 : filters.length;
         console.log(filters);
         if ($(this).val().length === 0) {
-            console.log('back presss....');
-            for (let i = 0; i < to; i++){
+            for (let i = 0; i < filters.length; i++){
 
                 let search_name = filters[i]['drive'].replace('_', '/');
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]['drive'] + '" class="checkbox_' + initial + '"' + (clicked_drive_trains.includes(filters[i]['drive']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]['drive'] + '">' + search_name + ' (' + filters[i]['count'] + ')</label> <br>';
@@ -1144,7 +1271,7 @@ function change_cylinder_filter_input(initial) {
         if ($(this).val().length === 0) {
             console.log(filters);
             var to = filters.length > 10 ? 10 : filters.length;
-            for (let i = 0; i < to; i++)
+            for (let i = 0; i < filters.length; i++)
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]['cylinders'] + '" class="checkbox_' + initial + '"' + (clicked_cylinders.includes(filters[i]['cylinders']) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]['cylinders'] + '">' + filters[i]['cylinders'] + ' (' + filters[i]['count'] + ')</label> <br>';
         }
         else {
@@ -1217,7 +1344,7 @@ function change_fuel_filter_input(initial) {
             console.log(filters);
             filters = all_fuels_for_filter;
             var to = filters.length > 10 ? 10 : filters.length;
-            for (let i = 0; i < to; i++){
+            for (let i = 0; i < filters.length; i++){
                 search_res = filters[i].fuel.charAt(0) + filters[i].fuel.slice(1).toLowerCase();
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_fuels.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i].fuel + '">' + search_res + ' (' + filters[i]['count'] + ')</label> <br>';
             }
@@ -1297,10 +1424,9 @@ function change_body_style_filter_input(initial) {
         let search_res = "";
         let filters = all_body_styles_for_filter;
         if ($(this).val().length === 0) {
-            console.log(filters);
             filters = all_body_styles_for_filter;
             var to = filters.length > 10 ? 10 : filters.length;
-            for (let i = 0; i < to; i++){
+            for (let i = 0; i < filters.length; i++){
                 search_res = filters[i].body_style.charAt(0) + filters[i].body_style.slice(1).toLowerCase();
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i][initial] + '" class="checkbox_' + initial + '"' + (clicked_body_styles.includes(filters[i][initial]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i].body_style + '">' + search_res + ' (' + filters[i]['count'] + ')</label> <br>';
             }
@@ -1383,7 +1509,7 @@ function change_vehicle_type_filter_input(initial) {
             console.log(filters);
             filters = all_vehicle_types_for_filter;
             var to = filters.length > 10 ? 10 : filters.length;
-            for (let i = 0; i < to; i++){
+            for (let i = 0; i < filters.length; i++){
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["type"] + '" class="checkbox_' + initial + '"' + (clicked_vehicle_types.includes(filters[i]["type"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["type"] + '">' + filters[i]["type"] + ' (' + filters[i]['count'] + ')</label> <br>';
             }
         }
@@ -1457,7 +1583,7 @@ function change_damage_filter_input(initial) {
         if ($(this).val().length === 0) {
             filters = all_damages_for_filter;
             var to = filters.length > 10 ? 10 : filters.length;
-            for (let i = 0; i < to; i++){
+            for (let i = 0; i < filters.length; i++){
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["lot_1st_damage"] + '" class="checkbox_' + initial + '"' + (clicked_damages.includes(filters[i]["lot_1st_damage"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["lot_1st_damage"] + '">' + filters[i]["lot_1st_damage"] + ' (' + filters[i]['count'] + ')</label> <br>';
             }
         }
@@ -1531,7 +1657,7 @@ function change_doctype_filter_input(initial) {
         if ($(this).val().length === 0) {
             filters = all_doctypes_for_filter;
             var to = filters.length > 10 ? 10 : filters.length;
-            for (let i = 0; i < to; i++){
+            for (let i = 0; i < filters.length; i++){
                 html += '<input type="checkbox" id="id_' + initial + '_' + filters[i]["doc_type_td"] + '" class="checkbox_' + initial + '"' + (clicked_doctypes.includes(filters[i]["doc_type_td"]) ? ' checked' : '') + '/><label for="id_' + initial + '_' + filters[i]["doc_type_td"] + '">' + filters[i]["doc_type_td"] + ' (' + filters[i]['count'] + ')</label> <br>';
             }
         }
