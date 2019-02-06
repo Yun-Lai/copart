@@ -43,8 +43,13 @@ function ajax_get_vehicles() {
     let params = $("#params").attr('url');
     let shows_status = $("#shows").attr('status');
     if($("#params").attr('url').includes('sort=') === false){
-        console.log('Ajax params: ' + params);
-        params += "&sort={'sort_by':'year','sort_type':'desc'}";
+        if("" === params || null == params){
+            params = "sort={'sort_by':'year','sort_type':'desc'}";
+        }
+        else{
+            console.log('Ajax params: ' + params);
+            params += "&sort={'sort_by':'year','sort_type':'desc'}";
+        }
     }
     if (params)
         params = '&' + params;
@@ -133,7 +138,6 @@ function front_list_event_proc_funcs() {
         /// back end
         var sort_by = $(this).parent().attr('id').split('lots_')[1];
         let current_url = $("#params").attr('url');
-        console.log('aaaaaaaaaa', current_url);
         let params = current_url.split('&');
         for (let i = 0; i < params.length; i++) {
             if (params[i].startsWith('sort=') || params[i] === "" ) {
