@@ -188,6 +188,7 @@ def lots_by_search(request):
             sold = True
 
     lots = VehicleSold.objects if sold else Vehicle.objects
+    lots_sold = VehicleSold.objects
     if feature:
         featured_filter = Filter.objects.get(id=int(feature))
         filter_word.append(featured_filter.name)
@@ -261,31 +262,33 @@ def lots_by_search(request):
 
     if vehicle_type:
         lots = lots.filter(type=vehicle_type)
+        lots_sold = lots_sold.filter(type=vehicle_type)
     if year:
         year_range = year.replace('%2C', ',')[1:-1].split(',')
         from_year = year_range[0]
         to_year = year_range[1]
         lots = lots.filter(year__range=(from_year, to_year))
+        lots_sold = lots_sold.filter(year__range=(from_year, to_year))
+        filter_word.append('[' + str(from_year) + ' TO ' + str(to_year) + ']')
     if make:
         lots = lots.filter(make__icontains=make)
+        lots_sold = lots_sold.filter(make__icontains=make)
         filter_word.append(make)
         initial_status.append('make=' + make)
         filter_makes.append(make.upper())
     if model:
         lots = lots.filter(model=model)
+        lots_sold = lots_sold.filter(model=model)
         filter_word.append(model)
         initial_status.append('model=' + model)
         filter_models.append(model)
     if location:
         lots = lots.filter(location=location)
+        lots_sold = lots_sold.filter(location=location)
         filter_word.append(location)
         initial_status.append('location=' + location)
         filter_locations.append(location)
-    if year:
-        year_range = year.replace('%2C', ',')[1:-1].split(',')
-        from_year = year_range[0]
-        to_year = year_range[1]
-        filter_word.append('[' + str(from_year) + ' TO ' + str(to_year) + ']')
+
     # if sort:
     #     lots = lots.order_by(sort_direction + sort['sort_by'])
         # initial_status.append('sort=' + sort_)
@@ -440,7 +443,8 @@ def lots_by_search(request):
     # get filters count
     copart_count = lots.filter(source=True).count()
     iaai_count = lots.filter(source=False).count()
-    sold_count = VehicleSold.objects.count()
+    # sold_count = VehicleSold.objects.count()
+    sold_count = lots_sold.count()
 
     featured_lots = filter_by_filters(lots).order_by(sort_direction + sort['sort_by'])
 
@@ -500,7 +504,7 @@ def lots_by_search(request):
     count_sale_dates = []
     for i, day in enumerate(temp_day):
         count_sale_dates.append({'sale_day': day, 'count': temp_count[i]})
-    print('res: ', count_sale_dates)
+    # print('res: ', count_sale_dates)
 
     count_sale_dates_for_tag = count_sale_dates.copy()
 
@@ -703,7 +707,6 @@ def lots_by_search(request):
     }
 
     print('filter_featured: ', filter_featured)
-    print('url: ', params_)
     return render(request, 'product/list.html', context=context)
 
 
@@ -719,16 +722,13 @@ def ajax_lots_by_search(request):
     feature = request.GET.get('feature', '')
     sort_ = request.GET.get('sort', '')
 
-    print('Sorting.....', sort_)
     if sort_:
         sort = eval(sort_)
     else:
         sort = dict(sort_by='year', sort_type='desc')
-    print('Sort = ', sort)
     sort_direction = ''
     if 'desc' == sort['sort_type']:
         sort_direction = '-'
-    print('Direction: ', sort_direction)
 
     filter_word = []
     if vehicle_type:
@@ -742,6 +742,7 @@ def ajax_lots_by_search(request):
             sold = True
 
     lots = VehicleSold.objects if sold else Vehicle.objects
+    lots_sold = VehicleSold.objects
     if feature:
         featured_filter = Filter.objects.get(id=int(feature))
         filter_word.append(featured_filter.name)
@@ -815,29 +816,30 @@ def ajax_lots_by_search(request):
 
     if vehicle_type:
         lots = lots.filter(type=vehicle_type)
+        lots_sold = lots_sold.filter(type=vehicle_type)
     if year:
         # extract from_year and to_year from year_range
         year_range = year.replace('%2C', ',')[1:-1].split(',')
         from_year = year_range[0]
         to_year = year_range[1]
+        filter_word.append('[' + str(from_year) + ' TO ' + str(to_year) + ']')
         lots = lots.filter(year__range=(from_year, to_year))
+        lots_sold = lots_sold.filter(year__range=(from_year, to_year))
     if make:
         lots = lots.filter(make__icontains=make)
+        lots_sold = lots_sold.filter(make__icontains=make)
         filter_word.append(make)
         filter_makes.append(make.upper())
     if model:
         lots = lots.filter(model=model)
+        lots_sold = lots_sold.filter(model=model)
         filter_word.append(model)
         filter_models.append(model)
     if location:
         lots = lots.filter(location=location)
+        lots_sold = lots_sold.filter(location=location)
         filter_word.append(location)
         filter_locations.append(location)
-    if year:
-        year_range = year.replace('%2C', ',')[1:-1].split(',')
-        from_year = year_range[0]
-        to_year = year_range[1]
-        filter_word.append('[' + str(from_year) + ' TO ' + str(to_year) + ']')
     # if sort:
     #     lots = lots.order_by(sort_direction + sort['sort_by'])
         # initial_status.append('sort=' + sort_)
@@ -988,11 +990,11 @@ def ajax_lots_by_search(request):
     # get filters count
     copart_count = lots.filter(source=True).count()
     iaai_count = lots.filter(source=False).count()
-    sold_count = VehicleSold.objects.count()
+    # sold_count = VehicleSold.objects.count()
+    sold_count = lots_sold.objects.count()
 
     # featured_lots = filter_by_filters(lots).order_by(sort_direction + sort['sort_by'])
     featured_lots = filter_by_filters(lots)
-    print("Odering ...........",  sort_direction + sort['sort_by'])
     flfc21_count = featured_lots.filter(~Q(buy_today_bid=0)).count()
     flfc22_count = featured_lots.filter(lot_highlights__contains='R').count()
     flfc23_count = featured_lots.filter(~Q(bid_status='PURE SALE')).count()
@@ -1052,8 +1054,6 @@ def ajax_lots_by_search(request):
     res = test.values('sale_day').annotate(count=Count('sale_day'))
     # count_sale_dates = list(test.values('sale_day').annotate(count=Count('sale_day')))
 
-    # print('test resullt ----> ', test.values('sale_day').distinct())
-
     temp_day = []
     temp_count = []
     for dat in res:
@@ -1065,7 +1065,6 @@ def ajax_lots_by_search(request):
     count_sale_dates = []
     for i, day in enumerate(temp_day):
         count_sale_dates.append({'sale_day': day, 'count': temp_count[i]})
-    print('res: ', count_sale_dates)
 
     count_sale_dates_for_tag = count_sale_dates.copy()
 
