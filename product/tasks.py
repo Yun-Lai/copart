@@ -11,6 +11,8 @@ from lxml.html import fromstring
 import datetime
 from django.utils import timezone
 
+from django.core.mail import mail_managers
+
 from celery.schedules import crontab
 from celery.task import task, periodic_task
 
@@ -204,6 +206,11 @@ def scrap_copart_lots(make_ids, account):
                 vin = lot.get('fv', '')
                 if not vin or len(vin) > 17:
                     continue
+
+                if vin.endswith('*'):
+                    send_vin_error.delay(vin, lot['ln'])
+                    continue
+
                 if "Sold" == lot['dynamicLotDetails']['saleStatus']:
                     continue
 
@@ -829,3 +836,15 @@ def remove_unavailable_lots():
             lot.delete()
         else:
             print(', '.join([str(lot.lot), return_code_desc, 'exist on copart now']))
+
+
+@task(
+    name="product.tasks.send_vin_error",
+    ignore_result=True,
+    time_limit=3600,
+    queue='normal',
+    options={'queue': 'normal'}
+)
+def send_vin_error(vin, lot):
+    message = 'Error happened on ' + str(lot) + ' lot with ' + vin + ' VIN number'
+    mail_managers('VIN error', message)

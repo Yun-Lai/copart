@@ -227,6 +227,21 @@ DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 
+ADMINS = (
+    ("copart", "bernazzyk@gmail.com"),
+)
+
+MANAGERS = ADMINS
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'bernazzyk@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_SUBJECT_PREFIX = '[copart]'
+SERVER_EMAIL = 'bernazzyk@gmail.com'
+DEFAULT_FROM_EMAIL = 'bernazzyk@gmail.com'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
