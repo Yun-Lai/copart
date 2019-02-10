@@ -509,7 +509,7 @@ def lots_by_search(request):
     count_sale_dates_for_tag = count_sale_dates.copy()
 
     for sid, s in enumerate(count_sale_dates):
-        if s['sale_day'] is None or s['sale_day'] == "":
+        if s['sale_day'] is None or s['sale_day'] == "" or s['sale_day'] == "//":
             del count_sale_dates[sid]
         else:
             if len(s['sale_day'].split('/')[0]) == 1:
@@ -740,7 +740,7 @@ def ajax_lots_by_search(request):
         params = eval(params)
         if 'sold' in params and 'yes' == params['sold']:
             sold = True
-
+    print("sold: ", sold)
     lots = VehicleSold.objects if sold else Vehicle.objects
     lots_sold = VehicleSold.objects
     if feature:
@@ -991,7 +991,7 @@ def ajax_lots_by_search(request):
     copart_count = lots.filter(source=True).count()
     iaai_count = lots.filter(source=False).count()
     # sold_count = VehicleSold.objects.count()
-    sold_count = lots_sold.objects.count()
+    sold_count = lots_sold.count()
 
     # featured_lots = filter_by_filters(lots).order_by(sort_direction + sort['sort_by'])
     featured_lots = filter_by_filters(lots)
@@ -1067,6 +1067,16 @@ def ajax_lots_by_search(request):
         count_sale_dates.append({'sale_day': day, 'count': temp_count[i]})
 
     count_sale_dates_for_tag = count_sale_dates.copy()
+
+    for sid, s in enumerate(count_sale_dates):
+        if s['sale_day'] is None or s['sale_day'] == "" or s['sale_day'] == "//":
+            del count_sale_dates[sid]
+        else:
+            if len(s['sale_day'].split('/')[0]) == 1:
+                count_sale_dates[sid]['sale_day'] = "0" + count_sale_dates[sid]['sale_day']
+            if len(s['sale_day'].split('/')[1]) == 1:
+                count_sale_dates[sid]['sale_day'] = count_sale_dates[sid]['sale_day'][:3] \
+                                                    + "0" + count_sale_dates[sid]['sale_day'][3:]
 
     engine_type_lots = filter_by_filters(lots, 'engine_types')
     count_engine_types = list(engine_type_lots.values('engine_type').annotate(count=Count('engine_type')))
