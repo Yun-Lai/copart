@@ -24,9 +24,6 @@ from product.models import Vehicle, VehicleSold, VehicleMakes, Filter, Location,
 #     params = urlencode(kwargs)
 #     return HttpResponseRedirect(url + "?%s" % params)
 
-class SaleDateModel(models.Model):
-    sale_day = models.CharField(null=True, blank=True, max_length=12)
-
 
 def view_scrap_copart_all(request):
     scrap_copart_all.delay()
