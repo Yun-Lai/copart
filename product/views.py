@@ -737,7 +737,7 @@ def ajax_lots_by_search(request):
         params = eval(params)
         if 'sold' in params and 'yes' == params['sold']:
             sold = True
-    print("sold: ", sold)
+
     lots = VehicleSold.objects if sold else Vehicle.objects
     lots_sold = VehicleSold.objects
     if feature:
