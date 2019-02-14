@@ -171,7 +171,6 @@ class VehicleInfo(models.Model):
     class Meta:
         verbose_name = _('Vehicle Information')
         verbose_name_plural = _('Vehicle Information')
-        abstract = True
 
     def __str__(self):
         return self.vin + ' ' + str(self.lot)
@@ -247,8 +246,7 @@ class Vehicle(models.Model):
 
     class Meta:
         verbose_name = _('Vehicle')
-        verbose_name_plural = _('Vehicle')
-        abstract = True
+        verbose_name_plural = _('Vehicles')
 
     def __str__(self):
         return self.info.vin + ' ' + str(self.info.lot)
@@ -338,9 +336,8 @@ class VehicleSold(models.Model):
     updated_at = models.DateTimeField(verbose_name=_('Updated at'), auto_now=True)
 
     class Meta:
-        verbose_name = _('Vehicle')
-        verbose_name_plural = _('Vehicle')
-        abstract = True
+        verbose_name = _('Vehicle Sold')
+        verbose_name_plural = _('Vehicles Sold')
 
     def __str__(self):
         return self.info.vin + ' ' + str(self.info.lot)
