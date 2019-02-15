@@ -127,8 +127,8 @@ SOURCE = (
 
 
 class VehicleInfo(models.Model):
-    lot = models.IntegerField(_('Lot'))
-    vin = models.CharField(_('VIN'), max_length=17, default='')
+    lot = models.IntegerField(_('Lot'), unique=True)
+    vin = models.CharField(_('VIN'), max_length=17, default='', unique=True)
 
     # General Information
     name = models.CharField(_('Name'), max_length=255, default='')

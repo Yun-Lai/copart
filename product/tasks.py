@@ -214,81 +214,73 @@ def scrap_copart_lots(make_ids, account):
                 if "Sold" == lot['dynamicLotDetails']['saleStatus']:
                     continue
 
-                if Vehicle.objects.filter(lot=lot['ln']).exists():
-                    db_item = Vehicle.objects.get(lot=lot['ln'])
-                    if 'ad' in lot:
-                        db_item.sale_date = timezone.make_aware(datetime.datetime.fromtimestamp(lot['ad'] / 1000),
-                                                                timezone.get_current_timezone())
-                    if 'lu' in lot:
-                        db_item.last_updated = timezone.make_aware(datetime.datetime.fromtimestamp(lot['lu'] / 1000),
-                                                                   timezone.get_current_timezone())
-                    db_item.item = str(lot['aan'])
-                    db_item.grid = lot['gr']
-                    db_item.lane = lot.get('al', '')
+                try:
+                    vehicle_info_item = VehicleInfo.objects.get(lot=lot['ln'], vin=vin)
+                except VehicleInfo.DoesNotExist:
+                    vehicle_info_item = None
 
-                    db_item.current_bid = lot['dynamicLotDetails']['currentBid']
-                    db_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
-                    db_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
-                    db_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
-                    db_item.save()
-                    print('copart - ' + description + ' - ' + str(lot['ln']) + ', Update')
+                if vehicle_info_item:
+                    try:
+                        vehicle_item = Vehicle.objects.get(info=vehicle_info_item)
+                        vehicle_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                        vehicle_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+                        vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
+                        vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+
+                        vehicle_item.lane = lot.get('al', '')
+                        vehicle_item.item = str(lot['aan'])
+                        vehicle_item.grid = lot['gr']
+
+                        if 'ad' in lot:
+                            vehicle_item.sale_date = timezone.make_aware(
+                                datetime.datetime.fromtimestamp(lot['ad'] / 1000), timezone.get_current_timezone())
+                        if 'lu' in lot:
+                            vehicle_item.last_updated = timezone.make_aware(
+                                datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
+
+                        vehicle_item.save()
+                        print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update')
+                    except Vehicle.DoesNotExist:
+                        vehicle_sold_item = VehicleSold.objects.filter(info=vehicle_info_item)
+                        if vehicle_sold_item.exists():
+                            vehicle_item = Vehicle()
+                            vehicle_item.info = vehicle_info_item
+                            vehicle_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                            vehicle_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+                            vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
+                            vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+
+                            vehicle_item.lane = lot.get('al', '')
+                            vehicle_item.item = str(lot['aan'])
+                            vehicle_item.grid = lot['gr']
+                            if 'ad' in lot:
+                                vehicle_item.sale_date = timezone.make_aware(
+                                    datetime.datetime.fromtimestamp(lot['ad'] / 1000),
+                                    timezone.get_current_timezone())
+                            if 'lu' in lot:
+                                vehicle_item.last_updated = timezone.make_aware(
+                                    datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
+
+                            print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Insert because of declined')
+                            vehicle_item.save()
                 else:
-                    db_item = Vehicle()
-                    db_item.lot = lot['ln']
-                    db_item.type = vtype
-                    db_item.make = lot['mkn']
-                    db_item.model = lot['lm']
-                    db_item.year = lot['lcy']
-                    db_item.vin = vin
-                    db_item.retail_value = lot['la']
-                    # rc
-                    # obc
-                    db_item.odometer_orr = lot['orr']   # 0 mi (NOT ACTUAL), 0 km (EXEMPT), 76,848 mi (ACTUAL)
-                    db_item.odometer_ord = lot['ord']   # NOT ACTUAL
-                    db_item.engine_type = lot.get('egn', '')
-                    db_item.cylinders = lot.get('cy', '')
-                    db_item.name = lot['ld']
-                    db_item.location = lot['yn'] if lot['yn'] != 'ABBOTSFORD' else 'BC - ABBOTSFORD'
-                    # db_item.location = lot['locState'] + ' - ' + lot['locCity']
-                    db_item.currency = lot['cuc']
-                    # tz
-                    if 'ad' in lot:
-                        db_item.sale_date = timezone.make_aware(datetime.datetime.fromtimestamp(lot['ad'] / 1000),
-                                                                timezone.get_current_timezone())
-                    if 'lu' in lot:
-                        db_item.last_updated = timezone.make_aware(datetime.datetime.fromtimestamp(lot['lu'] / 1000),
-                                                                   timezone.get_current_timezone())
-                    # at
-                    db_item.item = str(lot['aan'])
-                    # ahb
-                    # ss
-                    # bndc  BUY IT NOW
-                    # bnp   buyTodayBid 3000
-                    # sbf
-                    db_item.doc_type_ts = lot.get('ts', '')
-                    db_item.doc_type_stt = lot.get('stt', '')
-                    db_item.doc_type_td = lot.get('td', '')    # TN - SALVAGE CERTIFICATE, QC - GRAVEMENT ACCIDENTE
-                    # tgc
-                    db_item.lot_1st_damage = lot['dd']
-                    db_item.avatar = lot.get('tims', None)
-                    # lic[2]
-                    db_item.grid = lot['gr']
-                    # dtc
-                    db_item.lane = lot.get('al', '')
-                    # adt
-                    # ynumb
-                    # phynumb
-                    # bf
-                    # ymin
-                    # offFlg    condition
-                    # htsmn
-                    db_item.transmission = lot.get('tmtp', '')
-                    # myb
-                    # lmc - same with makecode
-                    # lcc
-                    db_item.lot_2nd_damage = lot.get('sdd', '')
-                    db_item.body_style = lot.get('bstl', '')
+                    vehicle_info_item = VehicleInfo()
+                    vehicle_info_item.lot = lot['ln']
+                    vehicle_info_item.vin = vin
+                    vehicle_info_item.name = lot['ld']
+                    vehicle_info_item.type = vtype
+                    vehicle_info_item.make = lot['mkn']
+                    vehicle_info_item.model = lot['lm']
+                    vehicle_info_item.year = lot['lcy']
+                    vehicle_info_item.location = lot['yn'] if lot['yn'] != 'ABBOTSFORD' else 'BC - ABBOTSFORD'
+                    vehicle_info_item.currency = lot['cuc']
+                    vehicle_info_item.avatar = lot.get('tims', None)
 
+                    vehicle_info_item.doc_type_ts = lot.get('ts', '')
+                    vehicle_info_item.doc_type_stt = lot.get('stt', '')
+                    vehicle_info_item.doc_type_td = lot.get('td', '')  # TN - SALVAGE CERTIFICATE, QC - GRAVEMENT ACCIDENTE
+                    vehicle_info_item.odometer_orr = lot['orr']  # 0 mi (NOT ACTUAL), 0 km (EXEMPT), 76,848 mi (ACTUAL)
+                    vehicle_info_item.odometer_ord = lot['ord']  # NOT ACTUAL
                     highlights = []
                     lics = lot.get('lic', [])
                     for lic in lics:
@@ -297,33 +289,47 @@ def scrap_copart_lots(make_ids, account):
                     lcd = lot.get('lcd', '')
                     if lcd in ICONS_DICT.keys():
                         highlights.append(ICONS_DICT[lcd])
-                    db_item.lot_highlights = ''.join(highlights)
+                    vehicle_info_item.lot_highlights = ''.join(highlights)
 
-                    db_item.fuel = lot.get('ft', '')
-                    db_item.keys = lot.get('hk', '')
-                    db_item.drive = lot.get('drv', '')
-                    # showSeller
-                    # sstpflg
-                    # syn same with yn
-                    # ifs
-                    # pbf
-                    # crg
-                    # brand
-                    db_item.notes = lot.get('ltnte', '').strip()
-                    db_item.color = lot.get('clr')
-                    db_item.lot_seller = lot.get('scn', '')
+                    vehicle_info_item.lot_seller = lot.get('scn', '')
+                    vehicle_info_item.lot_1st_damage = lot['dd']
+                    vehicle_info_item.lot_2nd_damage = lot.get('sdd', '')
+                    vehicle_info_item.retail_value = lot['la']
 
-                    db_item.current_bid = lot['dynamicLotDetails']['currentBid']
-                    db_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
-                    db_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
-                    db_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+                    vehicle_info_item.body_style = lot.get('bstl', '')
+                    vehicle_info_item.color = lot.get('clr')
+                    vehicle_info_item.engine_type = lot.get('egn', '')
+                    vehicle_info_item.cylinders = lot.get('cy', '')
+                    vehicle_info_item.transmission = lot.get('tmtp', '')
+                    vehicle_info_item.drive = lot.get('drv', '')
+                    vehicle_info_item.fuel = lot.get('ft', '')
+                    vehicle_info_item.keys = lot.get('hk', '')
+                    vehicle_info_item.notes = lot.get('ltnte', '').strip()
 
-                    db_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
-                    db_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
-                    # db_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
+                    vehicle_info_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
+                    vehicle_info_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
+                    # vehicle_info_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
+                    vehicle_info_item.save()
 
-                    db_item.save()
-                    print('copart - ' + description + ' - ' + str(lot['ln']) + ', Insert')
+                    vehicle_item = Vehicle()
+                    vehicle_item.info = vehicle_info_item
+                    vehicle_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                    vehicle_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+                    vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
+                    vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+
+                    vehicle_item.lane = lot.get('al', '')
+                    vehicle_item.item = str(lot['aan'])
+                    vehicle_item.grid = lot['gr']
+                    if 'ad' in lot:
+                        vehicle_item.sale_date = timezone.make_aware(datetime.datetime.fromtimestamp(lot['ad'] / 1000),
+                                                                     timezone.get_current_timezone())
+                    if 'lu' in lot:
+                        vehicle_item.last_updated = timezone.make_aware(
+                            datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
+
+                    print('vehicleinfo, vehicle - ' + description + ' - ' + str(lot['ln']) + ', Insert')
+                    vehicle_item.save()
 
             if page == pages_num:
                 break
@@ -610,17 +616,17 @@ def scrap_live_auctions():
 def scrap_filters_count():
     for vehicle_type in dict(TYPES).keys():
         type_filter, created = Filter.objects.get_or_create(name=vehicle_type, type='T')
-        type_filter.count = Vehicle.objects.filter(type=vehicle_type).count()
+        type_filter.count = Vehicle.objects.filter(info__type=vehicle_type).count()
         type_filter.save()
         print(vehicle_type + '-' + dict(TYPES)[vehicle_type] + '-' + str(type_filter.count))
 
-    makes = Vehicle.objects.values_list('make', flat=True)
+    makes = Vehicle.objects.values_list('info__make', flat=True)
     makes = list(set(makes))
     makes = sorted(list(set([a.upper() for a in makes])))
     for make in makes:
         if make:
             make_filter, created = Filter.objects.get_or_create(name=make, type='M')
-            make_filter.count = Vehicle.objects.filter(make__icontains=make).count()
+            make_filter.count = Vehicle.objects.filter(info__make__icontains=make).count()
             make_filter.save()
             print(make + '-' + str(make_filter.count))
 
@@ -653,67 +659,67 @@ def scrap_filters_count():
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Hybrid Vehicles', type='F')
-    featured_filter.count = Vehicle.objects.filter(fuel="HYBRID ENGINE").count()
+    featured_filter.count = Vehicle.objects.filter(info__fuel="HYBRID ENGINE").count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Repossessions', type='F')
-    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='B').count()
+    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='B').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Donations', type='F')
-    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start")).count()
+    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start")).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Featured Vehicles', type='F')
-    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='F').count()
+    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='F').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Offsite Sales', type='F')
-    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='O').count()
+    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='O').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Run and Drive', type='F')
-    featured_filter.count = Vehicle.objects.filter(lot_highlights__contains='R').count()
+    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='R').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Clean Title', type='F')
-    featured_filter.count = Vehicle.objects.filter(~Q(doc_type_td__icontains='salvage')).count()
+    featured_filter.count = Vehicle.objects.filter(~Q(info__doc_type_td__icontains='salvage')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Salvage Title', type='F')
-    featured_filter.count = Vehicle.objects.filter(doc_type_td__icontains='salvage').count()
+    featured_filter.count = Vehicle.objects.filter(info__doc_type_td__icontains='salvage').count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Front End', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Hail Damage', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Normal Wear', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Minor Dents/Scratch', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Water/Flood', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
@@ -750,18 +756,18 @@ def scrap_filters_count():
     featured_filter, created = Filter.objects.get_or_create(name='Rentals', type='F')
     print(featured_filter.name + '-' + str(featured_filter.count))
 
-    locations = Vehicle.objects.filter(source=True).values_list('location', flat=True)
+    locations = Vehicle.objects.filter(info__source=True).values_list('info__location', flat=True)
     locations = sorted(list(set(locations)))
     for location in locations:
         db_location, _ = Location.objects.get_or_create(location=location)
-        db_location.count = Vehicle.objects.filter(location=location).count()
+        db_location.count = Vehicle.objects.filter(info__location=location).count()
         db_location.save()
 
-    locations = Vehicle.objects.filter(source=False).values_list('location', flat=True)
+    locations = Vehicle.objects.filter(info__source=False).values_list('info__location', flat=True)
     locations = sorted(list(set(locations)))
     for location in locations:
         db_location, _ = Location.objects.get_or_create(location=location, source='I')
-        db_location.count = Vehicle.objects.filter(location=location).count()
+        db_location.count = Vehicle.objects.filter(info__location=location).count()
         db_location.save()
 
 
@@ -789,24 +795,24 @@ def find_correct_vin():
         time.sleep(3)
 
     detail_url = 'https://www.copart.com/public/data/lotdetails/solr/lotImages/{}'.format
-    lots = Vehicle.objects.filter(vin__contains="******")
+    lots = Vehicle.objects.filter(info__vin__contains="*")
     print(len(lots))
     for db_item in lots:
-        driver.get(detail_url(db_item.lot))
+        driver.get(detail_url(db_item.info.lot))
         try:
             lot_data = json.loads(driver.page_source[121:-20])['data']
             lot = lot_data['lotDetails']
         except Exception as e:
-            print('find_correct_vin(), 1 - No lotDetails, ' + detail_url(db_item.lot), e)
+            print('find_correct_vin(), 1 - No lotDetails, ' + detail_url(db_item.info.lot), e)
             continue
 
         try:
             vin = lot.get('fv', '')
-            print(db_item.vin + ', ' + vin)
-            db_item.vin = vin
-            db_item.save()
+            print(db_item.info.vin + ', ' + vin)
+            db_item.info.vin = vin
+            db_item.info.save()
         except Exception as e:
-            print(str(db_item.lot) + '- cannot find', e)
+            print(str(db_item.info.lot) + '- cannot find', e)
 
     driver.close()
     driver.quit()
@@ -826,16 +832,16 @@ def remove_unavailable_lots():
                               desired_capabilities=DesiredCapabilities.CHROME)
 
     for lot in Vehicle.objects.all():
-        driver.get(detail_url(lot.lot))
+        driver.get(detail_url(lot.info.lot))
         response = json.loads(driver.page_source[121:-20])
         return_code_desc = response['returnCodeDesc']
         data = response['data']
         lot_detail = data['lotDetails']
         if not lot_detail:
-            print(', '.join([str(lot.lot), return_code_desc, 'not exist on copart now']))
+            print(', '.join([str(lot.info.lot), return_code_desc, 'not exist on copart now']))
             lot.delete()
         else:
-            print(', '.join([str(lot.lot), return_code_desc, 'exist on copart now']))
+            print(', '.join([str(lot.info.lot), return_code_desc, 'exist on copart now']))
 
 
 @task(
