@@ -165,6 +165,11 @@ class VehicleInfo(models.Model):
     keys = models.CharField(_('Keys'), max_length=20, null=True, blank=True)
     notes = models.TextField(_('Notes'), null=True, blank=True)
 
+    # Location
+    lane = models.CharField(_('Lane'), max_length=1, default='')
+    item = models.CharField(_('Item'), max_length=20, default='')
+    grid = models.CharField(_('Grid/Row'), max_length=5, default='')
+
     images = models.TextField(_('Image Urls'), null=True, blank=True)
     thumb_images = models.TextField(_('Thumbnail Image Urls'), null=True, blank=True)
 
@@ -235,9 +240,6 @@ class Vehicle(models.Model):
     sold_price = models.IntegerField(_('Sold Price'), default=0)
 
     # Sale Information
-    lane = models.CharField(_('Lane'), max_length=1, default='')
-    item = models.CharField(_('Item'), max_length=20, default='')
-    grid = models.CharField(_('Grid/Row'), max_length=5, default='')
     sale_date = models.DateTimeField(_('Sale Date'), null=True, blank=True)
     last_updated = models.DateTimeField(_('Last Updated'), null=True, blank=True)
 
@@ -259,13 +261,6 @@ class Vehicle(models.Model):
     def odometer(self):
         return str(self.info.odometer_orr) + ' ' + (self.info.odometer_ord[0] if self.info.odometer_ord else '')
     odometer.admin_order_field = 'odometer_orr'
-
-    def lane_row(self):
-        if self.info.source:
-            return self.lane + ' / ' + self.grid
-        else:
-            return self.lane
-    lane_row.short_description = 'Lane / Row'
 
     def doc_type(self):
         if self.info.source:
@@ -352,14 +347,6 @@ class VehicleSold(models.Model):
         return str(self.info.odometer_orr) + ' ' + (self.info.odometer_ord[0] if self.info.odometer_ord else '')
 
     odometer.admin_order_field = 'odometer_orr'
-
-    def lane_row(self):
-        if self.info.source:
-            return self.lane + ' / ' + self.grid
-        else:
-            return self.lane
-
-    lane_row.short_description = 'Lane / Row'
 
     def doc_type(self):
         if self.info.source:

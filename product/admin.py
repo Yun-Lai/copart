@@ -30,11 +30,12 @@ class VehicleInfoAdmin(admin.ModelAdmin):
     readonly_fields = ['source_', 'images_', 'thumb_images_']
 
     fieldsets = [
-        ('', {'fields': ['vin', 'lot', 'type', 'name', 'make', 'model', 'year', 'location', 'currency', 'source_']}),
+        ('', {'fields': ['vin', 'lot', 'type', 'name', 'make', 'model', 'year', 'currency', 'source_']}),
         ('Lot', {'fields': ['doc_type_ts', 'doc_type_stt', 'doc_type_td', 'odometer_orr', 'odometer_ord',
                             'lot_highlights', 'lot_seller', 'lot_1st_damage', 'lot_2nd_damage', 'retail_value']}),
         ('Features', {'fields': ['body_style', 'color', 'engine_type', 'cylinders', 'transmission',
                                  'drive', 'fuel', 'keys', 'notes']}),
+        ('Location', {'fields': ['location', 'lane', 'item', 'grid']}),
         ('Images', {'fields': ['avatar', 'images_', 'thumb_images_']}),
     ]
 
@@ -46,7 +47,7 @@ class VehicleAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Bid Information', {'fields': ['bid_status', 'sale_status', 'current_bid', 'buy_today_bid', 'sold_price']}),
-        ('Sale Information', {'fields': ['lane', 'item', 'grid', 'sale_date', 'last_updated']}),
+        ('Sale Information', {'fields': ['sale_date', 'last_updated']}),
         ('Dates', {'fields': ['created_at', 'updated_at']}),
     ]
 
