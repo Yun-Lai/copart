@@ -41,7 +41,25 @@ class VehicleInfoAdmin(admin.ModelAdmin):
 
 
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = ['bid_status', 'sale_status', 'current_bid', 'buy_today_bid']
+    list_display = ['avatar_img', 'vin', 'lot', 'year', 'make', 'model_', 'est_retail_value',
+                    'current_bid_', 'sale_date', 'odometer', 'primary_damage', 'source']
+
+    list_display_links = ['vin']
+
+    readonly_fields = ['created_at', 'updated_at']
+
+    fieldsets = [
+        ('Bid Information', {'fields': ['bid_status', 'sale_status', 'current_bid', 'buy_today_bid', 'sold_price']}),
+        ('Sale Information', {'fields': ['sale_date', 'last_updated']}),
+        ('Dates', {'fields': ['created_at', 'updated_at']}),
+    ]
+
+
+class VehicleSoldAdmin(admin.ModelAdmin):
+    list_display = ['avatar_img', 'vin', 'lot', 'year', 'make', 'model_', 'est_retail_value',
+                    'current_bid_', 'sold_price_', 'sale_date', 'odometer', 'primary_damage', 'source']
+
+    list_display_links = ['vin']
 
     readonly_fields = ['created_at', 'updated_at']
 
@@ -65,7 +83,7 @@ class ForegoingAdmin(admin.ModelAdmin):
 
 admin.site.register(VehicleInfo, VehicleInfoAdmin)
 admin.site.register(Vehicle, VehicleAdmin)
-admin.site.register(VehicleSold, VehicleAdmin)
+admin.site.register(VehicleSold, VehicleSoldAdmin)
 admin.site.register(VehicleMakes, VehicleMakesAdmin)
 admin.site.register(Filter, FilterAdmin)
 admin.site.register(Location, LocationAdmin)

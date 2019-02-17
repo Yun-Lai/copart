@@ -253,34 +253,6 @@ class Vehicle(models.Model):
     def __str__(self):
         return self.info.vin + ' ' + str(self.info.lot)
 
-    def lot_(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
-                         str(self.info.lot) + '</a>')
-    lot_.admin_order_field = 'lot'
-
-    def odometer(self):
-        return str(self.info.odometer_orr) + ' ' + (self.info.odometer_ord[0] if self.info.odometer_ord else '')
-    odometer.admin_order_field = 'odometer_orr'
-
-    def doc_type(self):
-        if self.info.source:
-            return self.info.doc_type_stt + ' - ' + self.info.doc_type_ts
-        else:
-            return self.info.doc_type_td
-
-    def est_retail_value(self):
-        return '$' + str(self.info.retail_value) + ' ' + self.info.currency
-    est_retail_value.short_description = 'Est. Retail Value'
-    est_retail_value.admin_order_field = 'retail_value'
-
-    def current_bid_(self):
-        return '$' + str(self.current_bid) + ' ' + self.info.currency
-    current_bid_.admin_order_field = 'current_bid'
-
-    def sold_price_(self):
-        return '$' + str(self.sold_price) + ' ' + self.info.currency
-    sold_price_.admin_order_field = 'sold_price'
-
     def avatar_img(self):
         # return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
         #                  .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
@@ -288,27 +260,47 @@ class Vehicle(models.Model):
                          .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
     avatar_img.short_description = 'Avatar'
 
-    def source_(self):
+    def vin(self):
+        return self.info.vin
+    vin.admin_order_field = 'info__vin'
+
+    def lot(self):
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
+                         str(self.info.lot) + '</a>')
+    lot.admin_order_field = 'info__lot'
+
+    def year(self):
+        return str(self.info.year)
+    year.admin_order_field = 'info__year'
+
+    def make(self):
+        return self.info.make
+    make.admin_order_field = 'info__make'
+
+    def model_(self):
+        return self.info.model
+    model_.admin_order_field = 'info__model'
+
+    def est_retail_value(self):
+        return '$' + str(self.info.retail_value) + ' ' + self.info.currency
+    est_retail_value.short_description = 'Est. Retail Value'
+    est_retail_value.admin_order_field = 'info__retail_value'
+
+    def current_bid_(self):
+        return '$' + str(self.current_bid) + ' ' + self.info.currency
+    current_bid_.admin_order_field = 'current_bid'
+
+    def odometer(self):
+        return str(self.info.odometer_orr) + ' ' + (self.info.odometer_ord[0] if self.info.odometer_ord else '')
+    odometer.admin_order_field = 'info__odometer_orr'
+
+    def primary_damage(self):
+        return self.info.lot_1st_damage
+    primary_damage.admin_order_field = 'info__lot_1st_damage'
+
+    def source(self):
         return 'copart' if self.info.source else 'iaai'
-    source_.admin_order_field = 'source'
-
-    def images_(self):
-        if self.info.source:
-            images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in self.info.images.split('|')]
-        else:
-            images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % a for a in
-                      self.info.images.split('|')]
-        return mark_safe('<br>'.join(['<a href="' + a + '">' + a + '</a>' for a in images]))
-    images_.short_description = 'Image Urls'
-
-    def thumb_images_(self):
-        if self.info.source:
-            images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in self.info.thumb_images.split('|')]
-        else:
-            images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % a for a in
-                      self.info.thumb_images.split('|')]
-        return mark_safe('<br>'.join(['<a href="' + a + '">' + a + '</a>' for a in images]))
-    thumb_images_.short_description = 'Thumbnail Image Urls'
+    source.admin_order_field = 'info__source'
 
 
 class VehicleSold(models.Model):
@@ -334,71 +326,58 @@ class VehicleSold(models.Model):
     def __str__(self):
         return self.info.vin + ' ' + str(self.info.lot)
 
-    def lot_(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' + str(
-            self.info.lot) + '</a>')
-
-    lot_.admin_order_field = 'lot'
-
-    def odometer(self):
-        return str(self.info.odometer_orr) + ' ' + (self.info.odometer_ord[0] if self.info.odometer_ord else '')
-
-    odometer.admin_order_field = 'odometer_orr'
-
-    def doc_type(self):
-        if self.info.source:
-            return self.info.doc_type_stt + ' - ' + self.info.doc_type_ts
-        else:
-            return self.info.doc_type_td
-
-    def est_retail_value(self):
-        return '$' + str(self.info.retail_value) + ' ' + self.info.currency
-
-    est_retail_value.short_description = 'Est. Retail Value'
-    est_retail_value.admin_order_field = 'retail_value'
-
-    def current_bid_(self):
-        return '$' + str(self.current_bid) + ' ' + self.info.currency
-
-    current_bid_.admin_order_field = 'current_bid'
-
-    def sold_price_(self):
-        return '$' + str(self.sold_price) + ' ' + self.info.currency
-
-    sold_price_.admin_order_field = 'sold_price'
-
     def avatar_img(self):
         # return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
         #                  .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
         return mark_safe('<img src="{url}" title="{title}" width="96" height="72">'
                          .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
-
     avatar_img.short_description = 'Avatar'
 
-    def source_(self):
+    def vin(self):
+        return self.info.vin
+    vin.admin_order_field = 'info__vin'
+
+    def lot(self):
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
+                         str(self.info.lot) + '</a>')
+    lot.admin_order_field = 'info__lot'
+
+    def year(self):
+        return str(self.info.year)
+    year.admin_order_field = 'info__year'
+
+    def make(self):
+        return self.info.make
+    make.admin_order_field = 'info__make'
+
+    def model_(self):
+        return self.info.model
+    model_.admin_order_field = 'info__model'
+
+    def est_retail_value(self):
+        return '$' + str(self.info.retail_value) + ' ' + self.info.currency
+    est_retail_value.short_description = 'Est. Retail Value'
+    est_retail_value.admin_order_field = 'info__retail_value'
+
+    def current_bid_(self):
+        return '$' + str(self.current_bid) + ' ' + self.info.currency
+    current_bid_.admin_order_field = 'current_bid'
+
+    def sold_price_(self):
+        return '$' + str(self.sold_price) + ' ' + self.info.currency
+    sold_price_.admin_order_field = 'sold_price'
+
+    def odometer(self):
+        return str(self.info.odometer_orr) + ' ' + (self.info.odometer_ord[0] if self.info.odometer_ord else '')
+    odometer.admin_order_field = 'info__odometer_orr'
+
+    def primary_damage(self):
+        return self.info.lot_1st_damage
+    primary_damage.admin_order_field = 'info__lot_1st_damage'
+
+    def source(self):
         return 'copart' if self.info.source else 'iaai'
-
-    source_.admin_order_field = 'source'
-
-    def images_(self):
-        if self.info.source:
-            images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in self.info.images.split('|')]
-        else:
-            images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % a for a in
-                      self.info.images.split('|')]
-        return mark_safe('<br>'.join(['<a href="' + a + '">' + a + '</a>' for a in images]))
-
-    images_.short_description = 'Image Urls'
-
-    def thumb_images_(self):
-        if self.info.source:
-            images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in self.info.thumb_images.split('|')]
-        else:
-            images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % a for a in
-                      self.info.thumb_images.split('|')]
-        return mark_safe('<br>'.join(['<a href="' + a + '">' + a + '</a>' for a in images]))
-
-    thumb_images_.short_description = 'Thumbnail Image Urls'
+    source.admin_order_field = 'info__source'
 
 
 class Foregoing(models.Model):
