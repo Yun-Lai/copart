@@ -41,7 +41,7 @@ class VehicleInfoAdmin(admin.ModelAdmin):
 
 
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = ['lane', 'item', 'grid', 'bid_status', 'sale_status', 'current_bid', 'buy_today_bid']
+    list_display = ['bid_status', 'sale_status', 'current_bid', 'buy_today_bid']
 
     readonly_fields = ['created_at', 'updated_at']
 

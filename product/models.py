@@ -321,9 +321,6 @@ class VehicleSold(models.Model):
     sold_price = models.IntegerField(_('Sold Price'), default=0)
 
     # Sale Information
-    lane = models.CharField(_('Lane'), max_length=1, default='')
-    item = models.CharField(_('Item'), max_length=20, default='')
-    grid = models.CharField(_('Grid/Row'), max_length=5, default='')
     sale_date = models.DateTimeField(_('Sale Date'), null=True, blank=True)
     last_updated = models.DateTimeField(_('Last Updated'), null=True, blank=True)
 
