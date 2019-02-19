@@ -227,10 +227,6 @@ def scrap_copart_lots(make_ids, account):
                         vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
                         vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
 
-                        vehicle_item.lane = lot.get('al', '')
-                        vehicle_item.item = str(lot['aan'])
-                        vehicle_item.grid = lot['gr']
-
                         if 'ad' in lot:
                             vehicle_item.sale_date = timezone.make_aware(
                                 datetime.datetime.fromtimestamp(lot['ad'] / 1000), timezone.get_current_timezone())
@@ -241,28 +237,23 @@ def scrap_copart_lots(make_ids, account):
                         vehicle_item.save()
                         print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update')
                     except Vehicle.DoesNotExist:
-                        vehicle_sold_item = VehicleSold.objects.filter(info=vehicle_info_item)
-                        if vehicle_sold_item.exists():
-                            vehicle_item = Vehicle()
-                            vehicle_item.info = vehicle_info_item
-                            vehicle_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
-                            vehicle_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
-                            vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
-                            vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+                        vehicle_item = Vehicle()
+                        vehicle_item.info = vehicle_info_item
+                        vehicle_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                        vehicle_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+                        vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
+                        vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
 
-                            vehicle_item.lane = lot.get('al', '')
-                            vehicle_item.item = str(lot['aan'])
-                            vehicle_item.grid = lot['gr']
-                            if 'ad' in lot:
-                                vehicle_item.sale_date = timezone.make_aware(
-                                    datetime.datetime.fromtimestamp(lot['ad'] / 1000),
-                                    timezone.get_current_timezone())
-                            if 'lu' in lot:
-                                vehicle_item.last_updated = timezone.make_aware(
-                                    datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
+                        if 'ad' in lot:
+                            vehicle_item.sale_date = timezone.make_aware(
+                                datetime.datetime.fromtimestamp(lot['ad'] / 1000),
+                                timezone.get_current_timezone())
+                        if 'lu' in lot:
+                            vehicle_item.last_updated = timezone.make_aware(
+                                datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
 
-                            print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Insert because of declined')
-                            vehicle_item.save()
+                        vehicle_item.save()
+                        print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Insert')
                 else:
                     vehicle_info_item = VehicleInfo()
                     vehicle_info_item.lot = lot['ln']
@@ -306,6 +297,10 @@ def scrap_copart_lots(make_ids, account):
                     vehicle_info_item.keys = lot.get('hk', '')
                     vehicle_info_item.notes = lot.get('ltnte', '').strip()
 
+                    vehicle_info_item.lane = lot.get('al', '')
+                    vehicle_info_item.item = str(lot['aan'])
+                    vehicle_info_item.grid = lot['gr']
+
                     vehicle_info_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
                     vehicle_info_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
                     # vehicle_info_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
@@ -318,9 +313,6 @@ def scrap_copart_lots(make_ids, account):
                     vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
                     vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
 
-                    vehicle_item.lane = lot.get('al', '')
-                    vehicle_item.item = str(lot['aan'])
-                    vehicle_item.grid = lot['gr']
                     if 'ad' in lot:
                         vehicle_item.sale_date = timezone.make_aware(datetime.datetime.fromtimestamp(lot['ad'] / 1000),
                                                                      timezone.get_current_timezone())
