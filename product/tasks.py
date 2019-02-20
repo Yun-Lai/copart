@@ -6,6 +6,7 @@ import random
 import subprocess
 from multiprocessing.pool import ThreadPool
 
+from constance import config
 from django.db.models import Q
 from lxml.html import fromstring
 import datetime
@@ -37,6 +38,8 @@ GLOBAL = {'live_auctions': []}
     options={'queue': 'high'}
 )
 def scrap_copart_all():
+    if not config.SCRAP_COPART_LOTS:
+        return
     misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
     payloads = 'draw={draw}&columns[0][data]=0&columns[0][name]=&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]=&columns[1][searchable]=true&columns[1][orderable]=false&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=2&columns[2][name]=&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=3&columns[3][name]=&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=4&columns[4][name]=&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=5&columns[5][name]=&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false&columns[6][data]=6&columns[6][name]=&columns[6][searchable]=true&columns[6][orderable]=true&columns[6][search][value]=&columns[6][search][regex]=false&columns[7][data]=7&columns[7][name]=&columns[7][searchable]=true&columns[7][orderable]=true&columns[7][search][value]=&columns[7][search][regex]=false&columns[8][data]=8&columns[8][name]=&columns[8][searchable]=true&columns[8][orderable]=true&columns[8][search][value]=&columns[8][search][regex]=false&columns[9][data]=9&columns[9][name]=&columns[9][searchable]=true&columns[9][orderable]=true&columns[9][search][value]=&columns[9][search][regex]=false&columns[10][data]=10&columns[10][name]=&columns[10][searchable]=true&columns[10][orderable]=true&columns[10][search][value]=&columns[10][search][regex]=false&columns[11][data]=11&columns[11][name]=&columns[11][searchable]=true&columns[11][orderable]=true&columns[11][search][value]=&columns[11][search][regex]=false&columns[12][data]=12&columns[12][name]=&columns[12][searchable]=true&columns[12][orderable]=true&columns[12][search][value]=&columns[12][search][regex]=false&columns[13][data]=13&columns[13][name]=&columns[13][searchable]=true&columns[13][orderable]=true&columns[13][search][value]=&columns[13][search][regex]=false&columns[14][data]=14&columns[14][name]=&columns[14][searchable]=true&columns[14][orderable]=false&columns[14][search][value]=&columns[14][search][regex]=false&columns[15][data]=15&columns[15][name]=&columns[15][searchable]=true&columns[15][orderable]=false&columns[15][search][value]=&columns[15][search][regex]=false&order[0][column]=1&order[0][dir]=asc&start={start}&length={length}&search[value]=&search[regex]=false&sort=auction_date_type desc,auction_date_utc asc&defaultSort=true&filter[MISC]={misc}&query=*&watchListOnly=false&freeFormSearch=false&page={page}&size={size}'.format
 
@@ -218,21 +221,22 @@ def scrap_copart_lots(make_ids, account):
 
                 if vehicle_info_item:
                     try:
-                        vehicle_item = Vehicle.objects.get(info=vehicle_info_item)
-                        vehicle_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
-                        vehicle_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
-                        vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
-                        vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+                        if not config.SCRAP_COPART_INSERT_ONLY:
+                            vehicle_item = Vehicle.objects.get(info=vehicle_info_item)
+                            vehicle_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+                            vehicle_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+                            vehicle_item.current_bid = lot['dynamicLotDetails']['currentBid']
+                            vehicle_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
 
-                        if 'ad' in lot:
-                            vehicle_item.sale_date = timezone.make_aware(
-                                datetime.datetime.fromtimestamp(lot['ad'] / 1000), timezone.get_current_timezone())
-                        if 'lu' in lot:
-                            vehicle_item.last_updated = timezone.make_aware(
-                                datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
+                            if 'ad' in lot:
+                                vehicle_item.sale_date = timezone.make_aware(
+                                    datetime.datetime.fromtimestamp(lot['ad'] / 1000), timezone.get_current_timezone())
+                            if 'lu' in lot:
+                                vehicle_item.last_updated = timezone.make_aware(
+                                    datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
 
-                        vehicle_item.save()
-                        print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update')
+                            vehicle_item.save()
+                            print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update')
                     except Vehicle.DoesNotExist:
                         vehicle_item = Vehicle()
                         vehicle_item.info = vehicle_info_item
@@ -351,6 +355,8 @@ def scrap_copart_lots(make_ids, account):
     options={'queue': 'high'}
 )
 def scrap_not_exist_lots():
+    if not config.SCRAP_COPART_NOT_EXIST_LOTS:
+        return
     driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
                               desired_capabilities=DesiredCapabilities.CHROME)
 
@@ -473,6 +479,9 @@ def scrap_not_exist_lots():
     options={'queue': 'normal'}
 )
 def scrap_iaai_lots():
+    if not config.SCRAP_IAAI_LOTS:
+        return
+
     first_url = 'Search?url=pd6JWbJ9kRzcBdFK3vKeyjpx+85A4wDWncLLWXG+ICNJ+99sqMaoisYKWs6Cr9ehv9+/+aONWE6H6WT3ZwrT5WJbMzhonrNwbBqJ1gz8MLhEGYLSkxHCvDCjFfWbo0PvmwHJtE0eSnJvuIuIOW9/5g==&crefiners=&keyword='
     item_url = 'https://www.iaai.com/Vehicle?itemID={item_id}'.format
 
@@ -663,6 +672,9 @@ def scrap_iaai_lots():
     options={'queue': 'low'}
 )
 def scrap_live_auctions():
+    if not config.SCRAP_COPART_AUCTIONS:
+        return
+
     try:
         while True:
             try:
@@ -922,13 +934,16 @@ def find_correct_vin():
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='5')),
+    run_every=(crontab(minute='0', hour='12')),
     name="product.tasks.remove_unavailable_lots",
     ignore_result=True,
     queue='high',
     options={'queue': 'high'}
 )
 def remove_unavailable_lots():
+    if not config.REMOVE_NOT_EXIST_LOTS:
+        return
+
     detail_url = 'https://www.copart.com/public/data/lotdetails/solr/{}'.format
 
     driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',

@@ -185,22 +185,22 @@ MODELTRANSLATION_TRANSLATION_FILES = ('product.translation',)
 MODELTRANSLATION_TRANSLATION_REGISTRY = 'matau.translation'
 
 CONSTANCE_CONFIG = OrderedDict([
-    ('Scrap Copart Lots', (True, '', bool)),
-    ('Scrap Copart INSERT', (True, '', bool)),
-    ('Scrap Copart Auctions', (True, '', bool)),
-    ('Scrap Copart Existing Lots', (True, '', bool)),
-    ('Scrap Copart Not Exist Lots', (True, '', bool)),
-    ('Scrap IAAI Lots', (False, '', bool)),
+    ('SCRAP_COPART_LOTS', (True, 'Scrap Copart Lots', bool)),
+    ('SCRAP_COPART_INSERT_ONLY', (True, 'Scrap Copart INSERT', bool)),
+    ('SCRAP_COPART_AUCTIONS', (True, 'Scrap Copart Auctions', bool)),
+    ('REMOVE_NOT_EXIST_LOTS', (True, 'Remove not exist lots on copart', bool)),
+    ('SCRAP_COPART_NOT_EXIST_LOTS', (True, 'Scrap Copart Not Exist Lots', bool)),
+    ('SCRAP_IAAI_LOTS', (False, 'Scrap IAAI Lots', bool)),
 
 ])
 
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Scrap Settings': ('Scrap Copart Lots',
-                       'Scrap Copart INSERT',
-                       'Scrap Copart Auctions',
-                       'Scrap Copart Existing Lots',
-                       'Scrap Copart Not Exist Lots',
-                       'Scrap IAAI Lots',
+    'Scrap Settings': ('SCRAP_COPART_LOTS',
+                       'SCRAP_COPART_INSERT_ONLY',
+                       'SCRAP_COPART_AUCTIONS',
+                       'REMOVE_NOT_EXIST_LOTS',
+                       'SCRAP_COPART_NOT_EXIST_LOTS',
+                       'SCRAP_IAAI_LOTS',
                        ),
 }
 
