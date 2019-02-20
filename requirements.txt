@@ -5,7 +5,7 @@ Django==2.0.2
 #django-blog-zinnia==0.19
 #git+https://github.com/Wtower/django-blog-zinnia.git
 #django-ckeditor==5.4.0
-#django-constance==2.1.0
+django-constance==2.1.0
 #django-debug-toolbar==1.9.1
 django-imagekit==4.0.2
 django-jet==1.0.7

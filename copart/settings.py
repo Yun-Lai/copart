@@ -56,8 +56,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     # 'ckeditor',
     # 'rosetta',
-    # 'constance',
-    # 'constance.backends.database',
+    'constance',
+    'constance.backends.database',
     # 'debug_toolbar',
     'imagekit',
     # 'silk',
@@ -97,7 +97,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                # 'constance.context_processors.config',
+                'constance.context_processors.config',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -185,15 +185,23 @@ MODELTRANSLATION_TRANSLATION_FILES = ('product.translation',)
 MODELTRANSLATION_TRANSLATION_REGISTRY = 'matau.translation'
 
 CONSTANCE_CONFIG = OrderedDict([
-    ('Telephone', ('', '')),
-    ('Fax', ('', '')),
-    ('Email', ('', '')),
-    ('Address', ('', '')),
+    ('Scrap Copart Lots', (True, '', bool)),
+    ('Scrap Copart INSERT', (True, '', bool)),
+    ('Scrap Copart Auctions', (True, '', bool)),
+    ('Scrap Copart Existing Lots', (True, '', bool)),
+    ('Scrap Copart Not Exist Lots', (True, '', bool)),
+    ('Scrap IAAI Lots', (False, '', bool)),
 
 ])
 
 CONSTANCE_CONFIG_FIELDSETS = {
-    'General Settings': ('Telephone', 'Fax', 'Email', 'Address'),
+    'Scrap Settings': ('Scrap Copart Lots',
+                       'Scrap Copart INSERT',
+                       'Scrap Copart Auctions',
+                       'Scrap Copart Existing Lots',
+                       'Scrap Copart Not Exist Lots',
+                       'Scrap IAAI Lots',
+                       ),
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
