@@ -380,6 +380,12 @@ class VehicleSold(models.Model):
     source.admin_order_field = 'info__source'
 
 
+class VehicleNotExist(models.Model):
+    lot = models.IntegerField(_('Lot'), unique=True)
+    sold_price = models.IntegerField(_('Sold Price'))
+    sale_date = models.DateTimeField(_('Sale Date'), auto_now_add=True)
+
+
 class Foregoing(models.Model):
     parent_lot = models.IntegerField(_('Parent Lot'))
     foregoing_lot = models.IntegerField(_('Foregoing Lot'))

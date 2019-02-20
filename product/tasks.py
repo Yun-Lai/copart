@@ -204,10 +204,7 @@ def scrap_copart_lots(make_ids, account):
                     continue
 
                 vin = lot.get('fv', '')
-                if not vin or len(vin) > 17:
-                    continue
-
-                if vin.endswith('*'):
+                if not vin or len(vin) != 17 or vin.endswith('*'):
                     send_vin_error.delay(vin, lot['ln'])
                     continue
 
@@ -339,11 +336,99 @@ def scrap_copart_lots(make_ids, account):
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))
 
+    if [553] == make_ids:
+        notexist_lots = VehicleNotExist.objects.all()
+        for notexist_lot in notexist_lots:
+            driver.get(detail_url(notexist_lot.lot))
+            try:
+                lot_data = json.loads(driver.page_source[121:-20])['data']
+                images = lot_data.get('imagesList', {'FULL_IMAGE': [], 'THUMBNAIL_IMAGE': []})
+                lot = lot_data['lotDetails']
+            except Exception as e:
+                print('not exist lot, 6 - No lotDetails, ' + detail_url(notexist_lot.lot), e)
+                continue
+
+            vin = lot.get('fv', '')
+            if not vin or len(vin) != 17 or vin.endswith('*'):
+                send_vin_error.delay(vin, lot['ln'])
+                continue
+
+            vehicle_info_item = VehicleInfo()
+            vehicle_info_item.lot = lot['ln']
+            vehicle_info_item.vin = vin
+            vehicle_info_item.name = lot['ld']
+            vehicle_info_item.type = lot['vehicleTypeCode'].split('_')[1] if 'vehicleTypeCode' in lot else 'V'
+            vehicle_info_item.make = lot['mkn']
+            vehicle_info_item.model = lot['lm']
+            vehicle_info_item.year = lot['lcy']
+            vehicle_info_item.location = lot['yn'] if lot['yn'] != 'ABBOTSFORD' else 'BC - ABBOTSFORD'
+            vehicle_info_item.currency = lot['cuc']
+            vehicle_info_item.avatar = lot.get('tims', None)
+
+            vehicle_info_item.doc_type_ts = lot.get('ts', '')
+            vehicle_info_item.doc_type_stt = lot.get('stt', '')
+            vehicle_info_item.doc_type_td = lot.get('td', '')  # TN - SALVAGE CERTIFICATE, QC - GRAVEMENT ACCIDENTE
+            vehicle_info_item.odometer_orr = lot['orr']  # 0 mi (NOT ACTUAL), 0 km (EXEMPT), 76,848 mi (ACTUAL)
+            vehicle_info_item.odometer_ord = lot['ord']  # NOT ACTUAL
+            highlights = []
+            lics = lot.get('lic', [])
+            for lic in lics:
+                if lic in ICONS_DICT.keys():
+                    highlights.append(ICONS_DICT[lic])
+            lcd = lot.get('lcd', '')
+            if lcd in ICONS_DICT.keys():
+                highlights.append(ICONS_DICT[lcd])
+            vehicle_info_item.lot_highlights = ''.join(highlights)
+
+            vehicle_info_item.lot_seller = lot.get('scn', '')
+            vehicle_info_item.lot_1st_damage = lot['dd']
+            vehicle_info_item.lot_2nd_damage = lot.get('sdd', '')
+            vehicle_info_item.retail_value = lot['la']
+
+            vehicle_info_item.body_style = lot.get('bstl', '')
+            vehicle_info_item.color = lot.get('clr')
+            vehicle_info_item.engine_type = lot.get('egn', '')
+            vehicle_info_item.cylinders = lot.get('cy', '')
+            vehicle_info_item.transmission = lot.get('tmtp', '')
+            vehicle_info_item.drive = lot.get('drv', '')
+            vehicle_info_item.fuel = lot.get('ft', '')
+            vehicle_info_item.keys = lot.get('hk', '')
+            vehicle_info_item.notes = lot.get('ltnte', '').strip()
+
+            vehicle_info_item.lane = lot.get('al', '')
+            vehicle_info_item.item = str(lot['aan'])
+            vehicle_info_item.grid = lot['gr']
+
+            vehicle_info_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
+            vehicle_info_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
+            # vehicle_info_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
+            vehicle_info_item.save()
+
+            vehiclesold_item = VehicleSold()
+            vehiclesold_item.info = vehicle_info_item
+            vehiclesold_item.bid_status = lot['dynamicLotDetails']['bidStatus'].replace('_', ' ')
+            vehiclesold_item.sale_status = lot['dynamicLotDetails']['saleStatus'].replace('_', ' ')
+            vehiclesold_item.current_bid = lot['dynamicLotDetails']['currentBid']
+            vehiclesold_item.buy_today_bid = lot['dynamicLotDetails'].get('buyTodayBid', 0)
+            vehiclesold_item.sold_price = notexist_lot.sold_price
+
+            if 'ad' in lot:
+                vehiclesold_item.sale_date = timezone.make_aware(datetime.datetime.fromtimestamp(lot['ad'] / 1000),
+                                                                 timezone.get_current_timezone())
+            else:
+                vehiclesold_item.sale_date = notexist_lot.sale_date
+            if 'lu' in lot:
+                vehiclesold_item.last_updated = timezone.make_aware(
+                    datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
+
+            vehiclesold_item.save()
+            print('vehicleinfo, vehiclesold - ' + str(lot['ln']) + ', Insert')
+
+        VehicleNotExist.objects.all().delete()
+        scrap_filters_count.delay()
+
     driver.close()
     driver.quit()
-
-    if [553] == make_ids:
-        scrap_filters_count.delay()
 
 
 # @periodic_task(
