@@ -56,6 +56,18 @@ def view_scrap_filters_count(request):
     return redirect('/admin/')
 
 
+def view_scrap_not_exist(request):
+    scrap_not_exist_lots.delay()
+
+    return redirect('/admin/')
+
+
+def view_send_vin_error(request):
+    send_vin_error.delay('4T1FA38P56U******', 24095729)
+
+    return redirect('/admin/')
+
+
 def view_find_correct_vin(request):
     find_correct_vin.delay()
 
@@ -74,20 +86,20 @@ def ajax_getimages(request):
     if not lot_id:
         return JsonResponse({'result': False})
 
-    lot = Vehicle.objects.get(lot=int(lot_id))
-    if lot.source:
-        images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.images.split('|')]
-        thumb_images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.thumb_images.split('|')]
+    lot = Vehicle.objects.get(info__lot=int(lot_id))
+    if lot.info.source:
+        images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.info.images.split('|')]
+        thumb_images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.info.thumb_images.split('|')]
     else:
         images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % a for a in
-                  lot.images.split('|')]
+                  lot.info.images.split('|')]
         thumb_images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % a for a in
-                        lot.images.split('|')]
+                        lot.info.images.split('|')]
 
     return JsonResponse({
         'result': True,
-        'lot_name': lot.name,
-        'lot': lot.lot,
+        'lot_name': lot.info.name,
+        'lot': lot.info.lot,
         'images': images,
         'thumb_images': thumb_images,
     })
@@ -97,11 +109,13 @@ def view_ajax_get_lot(request):
     vin_or_lot = request.GET.get('vin_or_lot', '')
     vin_or_lot = vin_or_lot.strip()
     if 8 == len(vin_or_lot) and vin_or_lot.isnumeric():
-        if Vehicle.objects.filter(lot=int(vin_or_lot)).exists():
+        if Vehicle.objects.filter(info__lot=int(vin_or_lot)).exists():
             return JsonResponse({'result': True, 'lot': vin_or_lot})
-    lot = Vehicle.objects.filter(vin=vin_or_lot).order_by('-id')
+        else:
+            return JsonResponse({'result': False})
+    lot = Vehicle.objects.filter(info__vin=vin_or_lot).order_by('-id')
     if len(lot):
-        return JsonResponse({'result': True, 'lot': lot[0].lot})
+        return JsonResponse({'result': True, 'lot': lot[0].info.lot})
     return JsonResponse({'result': False})
 
 
@@ -117,8 +131,8 @@ def view_ajax_get_makes_of_type(request):
 def view_ajax_get_models_of_make(request):
     finder_type = request.GET.get('finder_type', '')
     finder_make = request.GET.get('finder_make', '')
-    vehicle_makes = Vehicle.objects.filter(type=finder_type).filter(make__icontains=finder_make).values_list('model',
-                                                                                                             flat=True)
+    vehicle_makes = Vehicle.objects.filter(info__type=finder_type).filter(
+        info__make__icontains=finder_make).values_list('info__model', flat=True)
     vehicle_makes = sorted(list(set(vehicle_makes)))
     return JsonResponse({
         'result': True,
@@ -127,7 +141,7 @@ def view_ajax_get_models_of_make(request):
 
 
 def index(request):
-    new_arrivals = Vehicle.objects.filter(~Q(retail_value=0)).order_by('-id')[:12]
+    new_arrivals = Vehicle.objects.filter(~Q(info__retail_value=0)).order_by('-id')[:12]
     featured_filters = Filter.objects.filter(type='F')
     vehicle_types = Filter.objects.filter(type='T')
     vehicle_makes = Filter.objects.filter(type='M').order_by('-count')[:55]

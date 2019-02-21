@@ -192,6 +192,8 @@ CONSTANCE_CONFIG = OrderedDict([
     ('SCRAP_COPART_NOT_EXIST_LOTS', (True, 'Scrap Copart Not Exist Lots', bool)),
     ('SCRAP_IAAI_LOTS', (False, 'Scrap IAAI Lots', bool)),
 
+    ('SHOW_SITES', (True, 'Show/Hide Sites', bool)),
+    ('SHOW_SOLD', (True, 'Show/Hide Already Sold', bool)),
 ])
 
 CONSTANCE_CONFIG_FIELDSETS = {
@@ -202,6 +204,10 @@ CONSTANCE_CONFIG_FIELDSETS = {
                        'SCRAP_COPART_NOT_EXIST_LOTS',
                        'SCRAP_IAAI_LOTS',
                        ),
+
+    'Filter Settings': ('SHOW_SITES',
+                        'SHOW_SOLD',
+                        ),
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'

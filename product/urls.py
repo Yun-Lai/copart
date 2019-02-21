@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^scrap_auction/', views.view_scrap_auction),
     url(r'^scrap_filters_count/', views.view_scrap_filters_count),
     url(r'^scrap_not_exist/', views.view_scrap_not_exist),
+    url(r'^email_test/', views.view_send_vin_error),
     url(r'^find_correct_vin/', views.view_find_correct_vin),
     url(r'^remove_unavailable_lots/', views.view_remove_unavailable_lots),
 
