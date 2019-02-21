@@ -18,10 +18,10 @@ class FilterAdmin(admin.ModelAdmin):
 
 
 class VehicleInfoAdmin(admin.ModelAdmin):
-    list_display = ['avatar_img', 'vin', 'lot_', 'year', 'make', 'model', 'est_retail_value',
+    list_display = ['avatar_img', 'vin_', 'lot', 'year', 'make', 'model', 'est_retail_value',
                     'odometer', 'lot_1st_damage', 'source_']
 
-    list_display_links = ['vin']
+    list_display_links = ['lot']
 
     list_filter = [SourceFilter, 'make']
 
@@ -44,7 +44,7 @@ class VehicleAdmin(admin.ModelAdmin):
     list_display = ['avatar_img', 'vin', 'lot', 'year', 'make', 'model_', 'est_retail_value',
                     'current_bid_', 'sale_date', 'odometer', 'primary_damage', 'source']
 
-    list_display_links = ['vin']
+    list_display_links = ['lot']
 
     readonly_fields = ['created_at', 'updated_at']
 
@@ -59,7 +59,7 @@ class VehicleSoldAdmin(admin.ModelAdmin):
     list_display = ['avatar_img', 'vin', 'lot', 'year', 'make', 'model_', 'est_retail_value',
                     'current_bid_', 'sold_price_', 'sale_date', 'odometer', 'primary_damage', 'source']
 
-    list_display_links = ['vin']
+    list_display_links = ['lot']
 
     readonly_fields = ['created_at', 'updated_at']
 

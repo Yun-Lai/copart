@@ -180,10 +180,10 @@ class VehicleInfo(models.Model):
     def __str__(self):
         return self.vin + ' ' + str(self.lot)
 
-    def lot_(self):
+    def vin_(self):
         return mark_safe(
-            '<a href="https://www.copart.com/lot/' + str(self.lot) + '" target="_blank">' + str(self.lot) + '</a>')
-    lot_.admin_order_field = 'lot'
+            '<a href="https://www.copart.com/lot/' + str(self.lot) + '" target="_blank">' + self.vin + '</a>')
+    vin_.admin_order_field = 'vin'
 
     def odometer(self):
         return str(self.odometer_orr) + ' ' + (self.odometer_ord[0] if self.odometer_ord else '')
@@ -201,10 +201,9 @@ class VehicleInfo(models.Model):
     est_retail_value.admin_order_field = 'retail_value'
 
     def avatar_img(self):
-        # return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
-        #                  .format(lot=self.lot, url=self.avatar, title=self.name))
-        return mark_safe('<img src="{url}" title="{title}" width="96" height="72">'
-                         .format(lot=self.lot, url=self.avatar, title=self.name))
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(
+            self.lot) + '" target="_blank"><img src="{url}" title="{title}" width="96" height="72"></a>'.format(
+            lot=self.lot, url=self.avatar, title=self.name))
     avatar_img.short_description = 'Avatar'
 
     def source_(self):
@@ -254,19 +253,18 @@ class Vehicle(models.Model):
         return self.info.vin + ' ' + str(self.info.lot)
 
     def avatar_img(self):
-        # return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
-        #                  .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
-        return mark_safe('<img src="{url}" title="{title}" width="96" height="72">'
-                         .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(
+            self.info.lot) + '" target="_blank"><img src="{url}" title="{title}" width="96" height="72"></a>'.format(
+            lot=self.lot, url=self.info.avatar, title=self.info.name))
     avatar_img.short_description = 'Avatar'
 
     def vin(self):
-        return self.info.vin
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
+                         str(self.info.vin) + '</a>')
     vin.admin_order_field = 'info__vin'
 
     def lot(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
-                         str(self.info.lot) + '</a>')
+        return self.info.lot
     lot.admin_order_field = 'info__lot'
 
     def year(self):
@@ -327,19 +325,18 @@ class VehicleSold(models.Model):
         return self.info.vin + ' ' + str(self.info.lot)
 
     def avatar_img(self):
-        # return mark_safe('<a id="lot-images_{lot}"><img src="{url}" title="{title}" width="96" height="72"></a>'
-        #                  .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
-        return mark_safe('<img src="{url}" title="{title}" width="96" height="72">'
-                         .format(lot=self.info.lot, url=self.info.avatar, title=self.info.name))
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(
+            self.info.lot) + '" target="_blank"><img src="{url}" title="{title}" width="96" height="72"></a>'.format(
+            lot=self.lot, url=self.info.avatar, title=self.info.name))
     avatar_img.short_description = 'Avatar'
 
     def vin(self):
-        return self.info.vin
+        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
+                         str(self.info.vin) + '</a>')
     vin.admin_order_field = 'info__vin'
 
     def lot(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
-                         str(self.info.lot) + '</a>')
+        return self.info.lot
     lot.admin_order_field = 'info__lot'
 
     def year(self):

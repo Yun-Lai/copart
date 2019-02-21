@@ -207,7 +207,7 @@ def scrap_copart_lots(make_ids, account):
                     continue
 
                 vin = lot.get('fv', '')
-                if not vin or len(vin) != 17 or vin.endswith('*'):
+                if not vin or vin.endswith('*'):
                     send_vin_error.delay(vin, lot['ln'])
                     continue
 
@@ -382,7 +382,7 @@ def scrap_not_exist_lots():
             continue
 
         vin = lot.get('fv', '')
-        if not vin or len(vin) != 17 or vin.endswith('*'):
+        if not vin or vin.endswith('*'):
             send_vin_error.delay(vin, lot['ln'])
             continue
 
@@ -505,7 +505,8 @@ def scrap_iaai_lots():
 
             try:
                 vin = bytearray.fromhex(lot['VIN']).decode()
-                if not vin or len(vin) != 17:
+                if not vin or vin.endswith('*'):
+                    # send_vin_error.delay(vin, )
                     raise Exception
             except:     # Unknown, BILL OF SALE, N/A, NONE
                 print(item_url(item_id=item_id) + ' - vin not correct ' + lot['VIN'])
