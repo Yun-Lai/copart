@@ -326,6 +326,7 @@
 
 .f_detail_main_img_a,
 .f_detail_main_img_a:hover {
+    width: 100% !important;
     color: white;
     background: none;
     border-color: white;
@@ -1011,6 +1012,19 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
                 url(../imgs/loading.gif)
                 50% 50%
                 no-repeat;
+}
+
+.col-5-columns {
+    width: 20% !important;
+    float: left;
+}
+
+.active {
+    border: blue 4px solid;
+}
+
+.active > img {
+    max-width: 98% !important;
 }
 
 /* When the body has the loading class, we turn

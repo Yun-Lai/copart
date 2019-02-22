@@ -390,46 +390,43 @@
                                 <thead>
                                 <tr class="h">
                                     <th>Images</th>
-                                    <th class="h" id="lots_year" sorting_1="disabled"><span>Year&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_make" sorting_1="disabled"><span>Make&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_model" sorting_1="disabled"><span>Model&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_location" sorting_1="disabled"><span>Location&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_sale_date" sorting_1="disabled"><span>Sale Date&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_odometer_orr" sorting_1="disabled"><span>Odometer&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_doc_type_ts" sorting_1="disabled"><span>Doc Type&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_lot_1st_damage" sorting_1="disabled"><span>Damage&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_retail_value" sorting_1="disabled"><span>Retail Value&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_current_bid" sorting_1="disabled"><span>Current Bid&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
+                                    <th class="h" id="lots_year" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Year</span></th>
+                                    <th class="h" id="lots_make" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Make</span></th>
+                                    <th class="h" id="lots_model" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Model</span></th>
+                                    <th class="h" id="lots_location" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Location</span></th>
+                                    <th class="h" id="lots_sale_date" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Sale Date</span></th>
+                                    <th class="h" id="lots_odometer_orr" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Odometer</span></th>
+                                    <th class="h" id="lots_doc_type_ts" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Doc Type</span></th>
+                                    <th class="h" id="lots_lot_1st_damage" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Damage</span></th>
+                                    <th class="h" id="lots_retail_value" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Retail Value</span></th>
+                                    <th class="h" id="lots_current_bid" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Current Bid</span></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for lot in lots %}
                                     <tr>
                                         <td>
-                                            <a href="{% url 'detail_page' lot.lot %}" target="_blank">
-                                                <img src="{{ lot.avatar }}" class="f_l_f_product_img"/>
+                                            <a href="{% url 'detail_page' lot.info.lot %}" target="_blank">
+                                                <img src="{{ lot.info.avatar }}" class="f_l_f_product_img"/>
                                                 <div class="f_lr_td_img_dv">View All Photos</div>
                                             </a>
                                         </td>
-                                        <td>{{ lot.year }}<br>
-                                            {% if lot.lot_highlights|is_icon %}
-                                                {% for icon in lot.lot_highlights %}
+                                        <td>{{ lot.info.year }}<br>
+                                            {% if lot.info.lot_highlights|is_icon %}
+                                                {% for icon in lot.info.lot_highlights %}
                                                     <div class="f_l_y_s f_l_s{{ icon|lower }}">{{ icon }}</div>
                                                 {% endfor %}
                                             {% endif %}
                                         </td>
-                                        <td>{{ lot.make|safe }}</td>
-                                        <td>{{ lot.model }}</td>
-{#                                        <td>NY-LNG ISLAND <br> SF002</td>#}
-                                        <td>{{ lot.location }}</td>
-{#                                        <td>09/12/2018<br>08:00pm OMST</td>#}
+                                        <td>{{ lot.info.make|safe }}</td>
+                                        <td>{{ lot.info.model }}</td>
+                                        <td>{{ lot.info.location }}</td>
                                         <td>{{ lot.sale_date }}</td>
-{#                                        <td>260, 216 E</td>#}
-                                        <td>{{ lot.odometer_orr|intcomma }}</td>
-                                        <td>{{ lot.doc_type_ts }} - {{ lot.doc_type_stt }}</td>
-                                        <td>{{ lot.lot_1st_damage }}</td>
-                                        <td>${{ lot.retail_value|intcomma }} {{ lot.currency }}</td>
-                                        <td>${{ lot.current_bid|intcomma }} {{ lot.currency }}</td>
+                                        <td>{{ lot.info.odometer_orr|intcomma }}</td>
+                                        <td>{{ lot.info.doc_type_ts }} - {{ lot.info.doc_type_stt }}</td>
+                                        <td>{{ lot.info.lot_1st_damage }}</td>
+                                        <td>${{ lot.info.retail_value|intcomma }} {{ lot.info.currency }}</td>
+                                        <td>${{ lot.current_bid|intcomma }} {{ lot.info.currency }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -439,9 +436,9 @@
                             <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing {{ page_start_index }} to {{ page_end_index }}
                                 <span class="f_list_page_num">of {{ total_lots }} entries</span>
                             </div>
-{#                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :#}
-{#                                <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>#}
-{#                            </div>#}
+                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :
+                                <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show

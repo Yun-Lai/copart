@@ -119,6 +119,9 @@ class Filter(models.Model):
         verbose_name_plural = _('Lots per Filter')
         ordering = ['pk']
 
+    def __str__(self):
+        return '/'.join([self.name, str(self.count), self.type])
+
 
 SOURCE = (
     ('C', 'Copart'),

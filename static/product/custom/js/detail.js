@@ -34,8 +34,10 @@ function front_global_event_proc_funcs() {
  * */
 function front_detail_event_proc_funcs() {
     jQuery(".p_a_gallery_sub_img").click(function () {
+        jQuery(".active").removeClass('active');
         jQuery(".f_l_detail_photo").attr("src", jQuery(this).attr("src"));
         jQuery(".f_detail_main_img_a").attr("href", jQuery(this).attr("src"));
+        jQuery(this).parent().addClass('active');
     });
 
     // gallery arrow margintop setting

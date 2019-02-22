@@ -69,7 +69,7 @@ function front_landing_event_proc_funcs() {
             params.push('location=' + locations);
 
         params.push("status=['Sites', 'Already Sold', 'Featured Items', 'Make']");
-        params.push("sort={'sort_by':'year', 'sort_type': 'desc'}");
+        params.push("sort={'sort_by':'info__year', 'sort_type': 'desc'}");
 
         location.href = encodeURI("/lots_by_search/?" + params.join('&'));
     });

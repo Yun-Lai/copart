@@ -4,7 +4,7 @@
 {% load humanize %}
 {% load extra_filters %}
 
-{% block title %}{{ lot.name }}{% endblock %}
+{% block title %}{{ lot.info.name }}{% endblock %}
 
 {% block content %}
     <div class="main f_car_detail_main">
@@ -12,15 +12,15 @@
             <div class="row f_asearch_tdv f_detail_cnt_dv">
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 f_l_detail_photo_cnt">
                     <div>
-                        <div class="f_detail_item_tlt">{{ lot.name }}
-                            {% if lot.lot_highlights|is_icon %}
-                                {% for icon in lot.lot_highlights %}
+                        <div class="f_detail_item_tlt">{{ lot.info.name }}
+                            {% if lot.info.lot_highlights|is_icon %}
+                                {% for icon in lot.info.lot_highlights %}
                                     <div class="f_l_y_d f_l_s{{ icon|lower }}">{{ icon }}</div>
                                 {% endfor %}
                             {% endif %}
                         </div>
-                        <a href="{{ lot|get_lot_image:0 }}" class="btn btn-default fancybox-button f_detail_main_img_a">
-                            <img class="f_l_detail_photo" src="{{ lot|get_lot_image:0 }}">
+                        <a href="{{ lot.info|get_lot_image:0 }}" class="btn btn-default fancybox-button f_detail_main_img_a">
+                            <img class="f_l_detail_photo" src="{{ lot.info|get_lot_image:0 }}">
                         </a>
                         <div class="f_detail_img_view_all_photos">View All Photos</div>
                         {% if lot.foregoing %} }}<div class="f_detail_img_foregoing">Foregoing</div>{% endif %}
@@ -28,56 +28,30 @@
                     <div class="f_l_d_p_c_causel">
                         <div class="row">
                             <div class="span12">
-                                <div class="well p_d_well">
-                                    <div id="myCarousel" class="carousel slide">
-                                        <div class="carousel-inner">
-                                            <div class="item active">
-                                                <div class="row">
-                                                    {% for i in 'xxxx' %}
-                                                        <div class="col-md-3 col-xs-3">
-                                                            <a href="#x" class="thumbnail">
-                                                                <img class="p_a_gallery_sub_img"
-                                                                     src="{{ lot|get_lot_image:forloop.counter0 }}"
-                                                                     style="max-width:100%;">
-                                                            </a>
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
+                                <div class="item">
+                                    <div class="row">
+                                        {% for i in 'xxxxx' %}
+                                            <div class="col-5-columns">
+                                                <a href="#x" class="thumbnail{% if forloop.counter0 == 0 %} active{% endif %}">
+                                                    <img class="p_a_gallery_sub_img"
+                                                         src="{{ lot.info|get_lot_image:forloop.counter0 }}"
+                                                         style="max-width:100%;">
+                                                </a>
                                             </div>
-                                            <div class="item">
-                                                <div class="row">
-                                                    {% for i in 'xxxx' %}
-                                                        <div class="col-md-3 col-xs-3">
-                                                            <a href="#x" class="thumbnail">
-                                                                <img class="p_a_gallery_sub_img"
-                                                                     src="{{ lot|get_lot_image4:forloop.counter0 }}"
-                                                                     style="max-width:100%;">
-                                                            </a>
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="row">
+                                        {% for i in 'xxxxx' %}
+                                            <div class="col-5-columns">
+                                                <a href="#x" class="thumbnail">
+                                                    <img class="p_a_gallery_sub_img"
+                                                         src="{{ lot.info|get_lot_image5:forloop.counter0 }}"
+                                                         style="max-width:100%;">
+                                                </a>
                                             </div>
-                                            <div class="item">
-                                                <div class="row">
-                                                    {% for i in 'xx' %}
-                                                        <div class="col-md-3 col-xs-3">
-                                                            <a href="#x" class="thumbnail">
-                                                                <img class="p_a_gallery_sub_img"
-                                                                     src="{{ lot|get_lot_image8:forloop.counter0 }}"
-                                                                     style="max-width:100%;">
-                                                            </a>
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a class="left carousel-control f_detail_arrow_a" href="#myCarousel"
-                                           data-slide="prev">‹</a>
-                                        <a class="right carousel-control f_detail_arrow_a" href="#myCarousel"
-                                           data-slide="next">›</a>
-                                    </div><!--/myCarousel-->
-
-                                </div><!--/well-->
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -85,20 +59,20 @@
                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 f_detail_infos_dv">
                     <div class="row f_detail_right_side_top_row">
                         <div class="col-md-6 col-xs-12 f_d_i_t_dv">
-                            <div class="f_asearch_tlt_dv">Lot #{{ lot.lot }}</div>
+                            <div class="f_asearch_tlt_dv">Lot #{{ lot.info.lot }}</div>
                             <div class="f_detail_info_cnt">
                                 <div class="row">
                                     <div class="col-md-5 col-xs-5">Doc Type:</div>
-                                    <div class="col-md-7 g_txt_right">{{ lot.doc_type_stt }} - {{ lot.doc_type_ts }}</div>
+                                    <div class="col-md-7 g_txt_right">{{ lot.info.doc_type_stt }} - {{ lot.info.doc_type_ts }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-5 col-xs-5">Odometer:</div>
-                                    <div class="col-md-7 g_txt_right">{{ lot.odometer_orr|intcomma }} {{ lot.odometer_ord }}</div>
+                                    <div class="col-md-7 g_txt_right">{{ lot.info.odometer_orr|intcomma }} {{ lot.info.odometer_ord }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-5 col-xs-5">Highlights:</div>
                                     <div class="col-md-7 g_txt_right">
-                                        {% for highlight in lot.lot_highlights %}
+                                        {% for highlight in lot.info.lot_highlights %}
                                             {{ highlight|get_highlights }}
                                             <br>
                                         {% endfor %}
@@ -106,72 +80,72 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-7 col-xs-7">Primary Damage:</div>
-                                    <div class="col-md-5 g_txt_right">{{ lot.lot_1st_damage }}</div>
+                                    <div class="col-md-5 g_txt_right">{{ lot.info.lot_1st_damage }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-7 col-xs-7">Secondary Damage:</div>
-                                    <div class="col-md-5 g_txt_right">{{ lot.lot_2nd_damage }}</div>
+                                    <div class="col-md-5 g_txt_right">{{ lot.info.lot_2nd_damage }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-7 col-xs-7">Est.Retail Value:</div>
-                                    <div class="col-md-5 g_txt_right">${{ lot.retail_value|intcomma }} {{ lot.currency }}</div>
+                                    <div class="col-md-5 g_txt_right">${{ lot.info.retail_value|intcomma }} {{ lot.info.currency }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 col-xs-4">VIN:</div>
-                                    <div class="col-md-8 g_txt_right">{{ lot.vin }}</div>
+                                    <div class="col-md-8 g_txt_right">{{ lot.info.vin }}</div>
                                 </div>
                             </div>
                             <div class="f_asearch_tlt_dv">Features</div>
                             <div class="f_detail_info_cnt">
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Body Style:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.body_style }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.body_style }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Color:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.color }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.color }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Engine Type:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.engine_type }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.engine_type }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Cylinders:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.cylinders }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.cylinders }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Transmission:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.transmission }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.transmission }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Drive:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.drive }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.drive }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Fuel:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.fuel }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.fuel }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Keys:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.keys }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.keys }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Notes:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.notes }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.notes }}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="f_asearch_tlt_dv">Bid Information</div>
                             {% if lot.sold_price > 0 %}
-                                <div class="f_detail_bid_tlt_r">LOT SOLD for ${{ lot.sold_price|intcomma }} {{ lot.currency }}</div>
-                                <div id="lot_type" hidden>{{ lot.type }}</div>
-                                <div id="lot_make" hidden>{{ lot.make }}</div>
+                                <div class="f_detail_bid_tlt_r">LOT SOLD for ${{ lot.sold_price|intcomma }} {{ lot.info.currency }}</div>
+                                <div id="lot_type" hidden>{{ lot.info.type }}</div>
+                                <div id="lot_make" hidden>{{ lot.info.make }}</div>
                             {% endif %}
                             <div class="f_detail_info_cnt">
                                 {% if lot.sold_price > 0 %}
                                     <div class="f_detail_bid_cnt_r">
-                                        Browser our current inventory of <br> {{ lot.name }} <br>
+                                        Browser our current inventory of <br> {{ lot.info.name }} <br>
                                         <input type="button" class="f_asearch_l_btn f_detail_find_more_btn" value="Find More Like This" id="detail_find_more">
                                     </div>
                                 {% else %}
@@ -185,12 +159,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 col-xs-6">Current Bid:</div>
-                                        <div class="col-md-6 g_txt_right">${{ lot.current_bid|intcomma }} {{ lot.currency }}</div>
+                                        <div class="col-md-6 g_txt_right">${{ lot.current_bid|intcomma }} {{ lot.info.currency }}</div>
     {#                                    <div class="col-md-12 g_txt_right f_d_seller_r">Seller Reserve Not Yet Met</div>#}
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 col-xs-6">Want it Today?</div>
-                                        <div class="col-md-6 g_txt_right">${{ lot.buy_today_bid|intcomma }} {{ lot.currency }}</div>
+                                        <div class="col-md-6 g_txt_right">${{ lot.buy_today_bid|intcomma }} {{ lot.info.currency }}</div>
                                     </div>
                                 {% endif %}
                             </div>
@@ -198,15 +172,15 @@
                             <div class="f_detail_info_cnt">
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Location:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.location }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.location }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Lane/Item/Grid/Row:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.lane }}/{{ lot.item }}/{{ lot.grid }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.lane }}/{{ lot.info.item }}/{{ lot.info.grid }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Sale Name:</div>
-                                    <div class="col-md-6 g_txt_right">{{ lot.location }}</div>
+                                    <div class="col-md-6 g_txt_right">{{ lot.info.location }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 col-xs-6">Sale Date:</div>
@@ -228,12 +202,12 @@
                         <div class="col-lg-3 col-md-6 col-xs-12">
                             <div class="product-item">
                                 <div class="pi-img-wrapper">
-                                    <img src="{{ similar_lot|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.name }}">
+                                    <img src="{{ similar_lot.info|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.info.name }}">
                                 </div>
                                 <div class="f_pi_detail">
-                                    <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
-                                    <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
-                                    <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View Details</a>
+                                    <h3><a href="{% url 'detail_page' similar_lot.info.lot %}" class="g_txt_bold">{{ similar_lot.info.name }}</a></h3>
+                                    <div class="pi-price">${{ similar_lot.info.retail_value|intcomma }} {{ similar_lot.info.currency }}</div>
+                                    <a href="{% url 'detail_page' similar_lot.info.lot %}" class="btn btn-default add2cart">View Details</a>
                                 </div>
                             </div>
                         </div>
@@ -244,12 +218,12 @@
                         <div class="col-lg-3 col-md-6 col-xs-12">
                             <div class="product-item">
                                 <div class="pi-img-wrapper">
-                                    <img src="{{ similar_lot|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.name }}">
+                                    <img src="{{ similar_lot.info|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.info.name }}">
                                 </div>
                                 <div class="f_pi_detail">
-                                    <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
-                                    <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
-                                    <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View Details</a>
+                                    <h3><a href="{% url 'detail_page' similar_lot.info.lot %}" class="g_txt_bold">{{ similar_lot.info.name }}</a></h3>
+                                    <div class="pi-price">${{ similar_lot.info.retail_value|intcomma }} {{ similar_lot.info.currency }}</div>
+                                    <a href="{% url 'detail_page' similar_lot.info.lot %}" class="btn btn-default add2cart">View Details</a>
                                 </div>
                             </div>
                         </div>
@@ -260,12 +234,12 @@
                         <div class="col-lg-3 col-md-6 col-xs-12">
                             <div class="product-item">
                                 <div class="pi-img-wrapper">
-                                    <img src="{{ similar_lot|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.name }}">
+                                    <img src="{{ similar_lot.info|get_lot_image:0 }}" class="img-responsive" alt="{{ similar_lot.info.name }}">
                                 </div>
                                 <div class="f_pi_detail">
-                                    <h3><a href="{% url 'detail_page' similar_lot.lot %}" class="g_txt_bold">{{ similar_lot.name }}</a></h3>
-                                    <div class="pi-price">${{ similar_lot.retail_value|intcomma }} {{ similar_lot.currency }}</div>
-                                    <a href="{% url 'detail_page' similar_lot.lot %}" class="btn btn-default add2cart">View Details</a>
+                                    <h3><a href="{% url 'detail_page' similar_lot.info.lot %}" class="g_txt_bold">{{ similar_lot.info.name }}</a></h3>
+                                    <div class="pi-price">${{ similar_lot.info.retail_value|intcomma }} {{ similar_lot.info.currency }}</div>
+                                    <a href="{% url 'detail_page' similar_lot.info.lot %}" class="btn btn-default add2cart">View Details</a>
                                 </div>
                             </div>
                         </div>

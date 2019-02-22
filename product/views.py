@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import translation
-from django.db.models import Q, Count, CharField, Value
+from django.db.models import Q, Count, CharField, Value, F
 from django.db.models.functions import Cast, ExtractDay, ExtractMonth, ExtractYear, Concat
 
 from product.tasks import *
@@ -86,20 +86,20 @@ def ajax_getimages(request):
     if not lot_id:
         return JsonResponse({'result': False})
 
-    lot = Vehicle.objects.get(info__lot=int(lot_id))
-    if lot.info.source:
-        images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.info.images.split('|')]
-        thumb_images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.info.thumb_images.split('|')]
+    lot = VehicleInfo.objects.get(lot=int(lot_id))
+    if lot.source:
+        images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.images.split('|')]
+        thumb_images = ['https://cs.copart.com/v1/AUTH_svc.pdoc00001/' + a for a in lot.thumb_images.split('|')]
     else:
         images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=640&height=480' % a for a in
-                  lot.info.images.split('|')]
+                  lot.images.split('|')]
         thumb_images = ['https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % a for a in
-                        lot.info.images.split('|')]
+                        lot.images.split('|')]
 
     return JsonResponse({
         'result': True,
-        'lot_name': lot.info.name,
-        'lot': lot.info.lot,
+        'lot_name': lot.name,
+        'lot': lot.lot,
         'images': images,
         'thumb_images': thumb_images,
     })
@@ -109,13 +109,13 @@ def view_ajax_get_lot(request):
     vin_or_lot = request.GET.get('vin_or_lot', '')
     vin_or_lot = vin_or_lot.strip()
     if 8 == len(vin_or_lot) and vin_or_lot.isnumeric():
-        if Vehicle.objects.filter(info__lot=int(vin_or_lot)).exists():
+        if VehicleInfo.objects.filter(lot=int(vin_or_lot)).exists():
             return JsonResponse({'result': True, 'lot': vin_or_lot})
         else:
             return JsonResponse({'result': False})
-    lot = Vehicle.objects.filter(info__vin=vin_or_lot).order_by('-id')
+    lot = VehicleInfo.objects.filter(vin=vin_or_lot).order_by('-id')
     if len(lot):
-        return JsonResponse({'result': True, 'lot': lot[0].info.lot})
+        return JsonResponse({'result': True, 'lot': lot[0].lot})
     return JsonResponse({'result': False})
 
 
@@ -131,8 +131,8 @@ def view_ajax_get_makes_of_type(request):
 def view_ajax_get_models_of_make(request):
     finder_type = request.GET.get('finder_type', '')
     finder_make = request.GET.get('finder_make', '')
-    vehicle_makes = Vehicle.objects.filter(info__type=finder_type).filter(
-        info__make__icontains=finder_make).values_list('info__model', flat=True)
+    vehicle_makes = VehicleInfo.objects.filter(type=finder_type).filter(
+        make__icontains=finder_make).values_list('model', flat=True)
     vehicle_makes = sorted(list(set(vehicle_makes)))
     return JsonResponse({
         'result': True,
@@ -141,7 +141,7 @@ def view_ajax_get_models_of_make(request):
 
 
 def index(request):
-    new_arrivals = Vehicle.objects.filter(~Q(info__retail_value=0)).order_by('-id')[:12]
+    new_arrivals = VehicleInfo.objects.filter(~Q(retail_value=0)).order_by('-id')[:12]
     featured_filters = Filter.objects.filter(type='F')
     vehicle_types = Filter.objects.filter(type='T')
     vehicle_makes = Filter.objects.filter(type='M').order_by('-count')[:55]
@@ -173,8 +173,9 @@ def lots_by_search(request):
 
     if sort_:
         sort = eval(sort_)
+        sort['sort_by'] = 'info__' + sort['sort_by']
     else:
-        sort = dict(sort_by='year', sort_type='desc')
+        sort = dict(sort_by='info__year', sort_type='desc')
 
     sort_direction = ''
     if 'desc' == sort['sort_type']:
@@ -204,50 +205,44 @@ def lots_by_search(request):
         featured_filter = Filter.objects.get(id=int(feature))
         filter_word.append(featured_filter.name)
         if 'Buy It Now' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(~Q(buy_today_bid=0))
+            lots = lots.filter(~Q(buy_today_bid=0))
         elif 'Pure Sale Items' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(~Q(bid_status='PURE SALE'))
+            lots = lots.filter(~Q(bid_status='PURE SALE'))
         elif 'New Items' == featured_filter.name:
             cur_date = datetime.datetime.now().date()
             from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
             to_date = from_date + datetime.timedelta(days=6)
-            lots = lots.filter(sold_price=0).filter(created_at__range=(from_date, to_date))
+            lots = lots.filter(created_at__range=(from_date, to_date))
         elif 'Lots with Bids' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(~Q(current_bid=0))
+            lots = lots.filter(~Q(current_bid=0))
         elif 'No Bids Yet' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(current_bid=0)
+            lots = lots.filter(current_bid=0)
         elif 'Hybrid Vehicles' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(fuel="HYBRID ENGINE")
+            lots = lots.filter(info__fuel="HYBRID ENGINE")
         elif 'Repossessions' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(lot_highlights__contains='B')
+            lots = lots.filter(info__lot_highlights__contains='B')
         elif 'Donations' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(lot_highlights__contains='D').filter(
-                ~Q(lot_highlights="Did Not Test Start"))
+            lots = lots.filter(info__lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start"))
         elif 'Featured Vehicles' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(lot_highlights__contains='F')
+            lots = lots.filter(info__lot_highlights__contains='F')
         elif 'Offsite Sales' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(lot_highlights__contains='O')
+            lots = lots.filter(info__lot_highlights__contains='O')
         elif 'Run and Drive' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(lot_highlights__contains='R')
+            lots = lots.filter(info__lot_highlights__contains='R')
         elif 'Clean Title' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(~Q(doc_type_td__icontains='salvage'))
+            lots = lots.filter(~Q(info__doc_type_td__icontains='salvage'))
         elif 'Salvage Title' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(doc_type_td__icontains='salvage')
+            lots = lots.filter(info__doc_type_td__icontains='salvage')
         elif 'Front End' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(
-                Q(lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End'))
+            lots = lots.filter(Q(info__lot_1st_damage__icontains='Front End') or Q(info__2nd_damage__icontains='Front End'))
         elif 'Hail Damage' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(
-                Q(lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail'))
+            lots = lots.filter(Q(info__lot_1st_damage__icontains='Hail') or Q(info__lot_2nd_damage__icontains='Hail'))
         elif 'Normal Wear' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(
-                Q(lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear'))
+            lots = lots.filter(Q(info__lot_1st_damage__icontains='Normal Wear') or Q(info__lot_2nd_damage__icontains='Normal Wear'))
         elif 'Minor Dents/Scratch' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(
-                Q(lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor'))
+            lots = lots.filter(Q(info__lot_1st_damage__icontains='Minor') or Q(info__lot_2nd_damage__icontains='Minor'))
         elif 'Water/Flood' == featured_filter.name:
-            lots = lots.filter(sold_price=0).filter(
-                Q(lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood'))
+            lots = lots.filter(Q(info__lot_1st_damage__icontains='Water/Flood') or Q(info__lot_2nd_damage__icontains='Water/Flood'))
         else:
             lots = lots.all()
 
@@ -272,30 +267,30 @@ def lots_by_search(request):
     ############################
 
     if vehicle_type:
-        lots = lots.filter(type=vehicle_type)
-        lots_sold = lots_sold.filter(type=vehicle_type)
+        lots = lots.filter(info__type=vehicle_type)
+        lots_sold = lots_sold.filter(info__type=vehicle_type)
     if year:
         year_range = year.replace('%2C', ',')[1:-1].split(',')
         from_year = year_range[0]
         to_year = year_range[1]
-        lots = lots.filter(year__range=(from_year, to_year))
-        lots_sold = lots_sold.filter(year__range=(from_year, to_year))
+        lots = lots.filter(info__year__range=(from_year, to_year))
+        lots_sold = lots_sold.filter(info__year__range=(from_year, to_year))
         filter_word.append('[' + str(from_year) + ' TO ' + str(to_year) + ']')
     if make:
-        lots = lots.filter(make__icontains=make)
-        lots_sold = lots_sold.filter(make__icontains=make)
+        lots = lots.filter(info__make__icontains=make)
+        lots_sold = lots_sold.filter(info__make__icontains=make)
         filter_word.append(make)
         initial_status.append('make=' + make)
         filter_makes.append(make.upper())
     if model:
-        lots = lots.filter(model=model)
-        lots_sold = lots_sold.filter(model=model)
+        lots = lots.filter(info__model=model)
+        lots_sold = lots_sold.filter(info__model=model)
         filter_word.append(model)
         initial_status.append('model=' + model)
         filter_models.append(model)
     if location:
-        lots = lots.filter(location=location)
-        lots_sold = lots_sold.filter(location=location)
+        lots = lots.filter(info__location=location)
+        lots_sold = lots_sold.filter(info__location=location)
         filter_word.append(location)
         initial_status.append('location=' + location)
         filter_locations.append(location)
@@ -353,15 +348,15 @@ def lots_by_search(request):
             # AND condition filters
             if 'source' == param_key and 'source' != ignore:
                 if 'copart' == param_value:
-                    lots_ = lots_.filter(source=True)
+                    lots_ = lots_.filter(info__source=True)
                 elif 'iaai' == param_value:
-                    lots_ = lots_.filter(source=False)
+                    lots_ = lots_.filter(info__source=False)
             elif 'featured' == param_key and 'featured' != ignore:
                 for feature_ in param_value:
                     if 'Buy It Now' == feature_:
                         lots_ = lots_.filter(~Q(buy_today_bid=0))
                     elif 'Run and Drive' == feature_:
-                        lots_ = lots_.filter(lot_highlights__contains='R')
+                        lots_ = lots_.filter(info__lot_highlights__contains='R')
                     elif 'Pure Sale Items' == feature_:
                         lots_ = lots_.filter(~Q(bid_status='PURE SALE'))
                     elif 'New Items' == feature_:
@@ -371,26 +366,26 @@ def lots_by_search(request):
                         lots_ = lots_.filter(created_at__range=(f_date, t_date))
             # OR condition filters
             elif 'makes' == param_key and 'makes' != ignore:
-                query = Q(make__icontains=param_value[0])
+                query = Q(info__make__icontains=param_value[0])
                 for make_ in param_value[1:]:
-                    query |= Q(make__icontains=make_)
+                    query |= Q(info__make__icontains=make_)
                 lots_ = lots_.filter(query)
             elif 'models' == param_key and 'models' != ignore:
-                query = Q(model=param_value[0])
+                query = Q(info__model=param_value[0])
                 for model_ in param_value[1:]:
-                    query |= Q(model=model_)
+                    query |= Q(info__model=model_)
                 lots_ = lots_.filter(query)
             elif 'years' == param_key and 'years' != ignore:
-                query = Q(year=param_value[0])
+                query = Q(info__year=param_value[0])
                 for year_ in param_value[1:]:
-                    query |= Q(year=year_)
+                    query |= Q(info__year=year_)
                 lots_ = lots_.filter(query)
             elif 'odometers' == param_key and 'odometers' != ignore:
                 pass
             elif 'locations' == param_key and 'locations' != ignore:
-                query = Q(location=param_value[0])
+                query = Q(info__location=param_value[0])
                 for location_ in param_value[1:]:
-                    query |= Q(location=location_)
+                    query |= Q(info__location=location_)
                 lots_ = lots_.filter(query)
             elif 'sale_dates' == param_key and 'sale_dates' != ignore:
                 query = Q(sale_date__year=str(param_value[0]).split('/')[2],
@@ -402,49 +397,49 @@ def lots_by_search(request):
                                sale_date__day=str(sale_date_).split('/')[1])
                 lots_ = lots_.filter(query)
             elif 'engine_types' == param_key and 'engine_types' != ignore:
-                query = Q(engine_type=param_value[0])
+                query = Q(info__engine_type=param_value[0])
                 for engine_type_ in param_value[1:]:
-                    query |= Q(engine_type=engine_type_)
+                    query |= Q(info__engine_type=engine_type_)
                 lots_ = lots_.filter(query)
             elif 'transmissions' == param_key and 'transmissions' != ignore:
-                query = Q(transmission=param_value[0])
+                query = Q(info__transmission=param_value[0])
                 for transmission_ in param_value[1:]:
-                    query |= Q(transmission=transmission_)
+                    query |= Q(info__transmission=transmission_)
                 lots_ = lots_.filter(query)
             elif 'drive_trains' == param_key and 'drive_trains' != ignore:
-                query = Q(drive=param_value[0])
+                query = Q(info__drive=param_value[0])
                 for drive_trains_ in param_value[1:]:
-                    query |= Q(drive=drive_trains_)
+                    query |= Q(info__drive=drive_trains_)
                 lots_ = lots_.filter(query)
             elif 'cylinderss' == param_key and 'cylinderss' != ignore:
-                query = Q(cylinders=param_value[0])
+                query = Q(info__cylinders=param_value[0])
                 for cylinderss_ in param_value[1:]:
-                    query |= Q(cylinders=cylinderss_)
+                    query |= Q(info__cylinders=cylinderss_)
                 lots_ = lots_.filter(query)
             elif 'fuels' == param_key and 'fuels' != ignore:
-                query = Q(fuel=param_value[0])
+                query = Q(info__fuel=param_value[0])
                 for fuels_ in param_value[1:]:
-                    query |= Q(fuel=fuels_)
+                    query |= Q(info__fuel=fuels_)
                 lots_ = lots_.filter(query)
             elif 'body_styles' == param_key and 'body_styles' != ignore:
-                query = Q(body_style=param_value[0])
+                query = Q(info__body_style=param_value[0])
                 for body_styles_ in param_value[1:]:
-                    query |= Q(body_style=body_styles_)
+                    query |= Q(info__body_style=body_styles_)
                 lots_ = lots_.filter(query)
             elif 'vehicle_types' == param_key and 'vehicle_types' != ignore:
-                query = Q(type=param_value[0])
+                query = Q(info__type=param_value[0])
                 for vehicle_types_ in param_value[1:]:
-                    query |= Q(type=vehicle_types_)
+                    query |= Q(info__type=vehicle_types_)
                 lots_ = lots_.filter(query)
             elif 'damages' == param_key and 'damages' != ignore:
-                query = Q(lot_1st_damage=param_value[0])
+                query = Q(info__lot_1st_damage=param_value[0])
                 for damages_ in param_value[1:]:
-                    query |= Q(lot_1st_damage=damages_)
+                    query |= Q(info__lot_1st_damage=damages_)
                 lots_ = lots_.filter(query)
             elif 'doctypes' == param_key and 'doctypes' != ignore:
-                query = Q(doc_type_td__contains=str(param_value[0]).upper())
+                query = Q(info__doc_type_td__contains=str(param_value[0]).upper())
                 for doctypes_ in param_value[1:]:
-                    query |= Q(doc_type_td__contains=str(doctypes_).upper())
+                    query |= Q(info__doc_type_td__contains=str(doctypes_).upper())
                 lots_ = lots_.filter(query)
 
         return lots_
@@ -452,15 +447,15 @@ def lots_by_search(request):
     ##########################
 
     # get filters count
-    copart_count = lots.filter(source=True).count()
-    iaai_count = lots.filter(source=False).count()
+    copart_count = lots.filter(info__source=True).count()
+    iaai_count = lots.filter(info__source=False).count()
     # sold_count = VehicleSold.objects.count()
     sold_count = lots_sold.count()
 
     featured_lots = filter_by_filters(lots).order_by(sort_direction + sort['sort_by'])
 
     flfc21_count = featured_lots.filter(~Q(buy_today_bid=0)).count()
-    flfc22_count = featured_lots.filter(lot_highlights__contains='R').count()
+    flfc22_count = featured_lots.filter(info__lot_highlights__contains='R').count()
     flfc23_count = featured_lots.filter(~Q(bid_status='PURE SALE')).count()
     cur_date = datetime.datetime.now().date()
     from_date = cur_date - datetime.timedelta(days=cur_date.weekday() + 7)
@@ -475,22 +470,18 @@ def lots_by_search(request):
 
     ###################################
     make_lots = filter_by_filters(lots, 'makes')
-    count_makes = list(make_lots.values('make').annotate(count=Count('make')))
+    count_makes = list(make_lots.values('info__make').annotate(make=F('info__make'), count=Count('info__make')))
 
     model_lots = filter_by_filters(lots, 'models')
-    count_models = list(model_lots.values('model').annotate(count=Count('model')))
+    count_models = list(model_lots.values('info__model').annotate(model=F('info__model'), count=Count('info__model')))
 
     year_lots = filter_by_filters(lots, 'years')
-    count_years = list(year_lots.values('year').annotate(count=Count('year'))[::-1])
+    count_years = list(year_lots.values('info__year').annotate(year=F('info__year'), count=Count('info__year'))[::-1])
 
     location_lots = filter_by_filters(lots, 'locations')
-    count_locations = list(location_lots.values('location').annotate(count=Count('location')))
+    count_locations = list(location_lots.values('info__location').annotate(location=F('info__location'), count=Count('info__location')))
 
     sale_date_lots = filter_by_filters(lots, 'sale_dates').order_by('-sale_date')
-    # count_sale_dates = list(
-    #     sale_date_lots.annotate(sale_day=TruncDate('sale_date')).values('sale_day').annotate(count=Count('sale_day')))
-    # count_sale_dates_for_tag = list(
-    #     sale_date_lots.annotate(sale_day='sale_date').values('sale_day').annotate(count=Count('sale_day')))
 
     test = sale_date_lots.annotate(
             month=Cast(ExtractMonth('sale_date'), CharField()),
@@ -500,9 +491,6 @@ def lots_by_search(request):
         ).values('sale_day')
 
     res = test.values('sale_day').annotate(count=Count('sale_day'))
-    # count_sale_dates = list(test.values('sale_day').annotate(count=Count('sale_day')))
-
-    # print('test resullt ----> ', test.values('sale_day').distinct())
 
     temp_day = []
     temp_count = []
@@ -515,7 +503,6 @@ def lots_by_search(request):
     count_sale_dates = []
     for i, day in enumerate(temp_day):
         count_sale_dates.append({'sale_day': day, 'count': temp_count[i]})
-    # print('res: ', count_sale_dates)
 
     count_sale_dates_for_tag = count_sale_dates.copy()
 
@@ -530,53 +517,53 @@ def lots_by_search(request):
                                                     + "0" + count_sale_dates[sid]['sale_day'][3:]
 
     engine_type_lots = filter_by_filters(lots, 'engine_types')
-    count_engine_types = list(engine_type_lots.values('engine_type').annotate(count=Count('engine_type')))
+    count_engine_types = list(engine_type_lots.values('info__engine_type').annotate(engine_type=F('info__engine_type'), count=Count('info__engine_type')))
     for sid, count_engine_type_ in enumerate(count_engine_types):
-        if count_engine_type_['engine_type'] is None or count_engine_type_['engine_type'] == "":
+        if count_engine_type_['info__engine_type'] is None or count_engine_type_['info__engine_type'] == "":
             del count_engine_types[sid]
 
     transmission_lots = filter_by_filters(lots, 'transmissions')
-    count_transmissions = list(transmission_lots.values('transmission').annotate(count=Count('transmission')))
+    count_transmissions = list(transmission_lots.values('info__transmission').annotate(transmission=F('info__transmission'), count=Count('info__transmission')))
     for sid, count_transmission_ in enumerate(count_transmissions):
-        if count_transmission_['transmission'] is None or count_transmission_['transmission'] == "":
+        if count_transmission_['info__transmission'] is None or count_transmission_['info__transmission'] == "":
             del count_transmissions[sid]
 
     drive_train_lots = filter_by_filters(lots, 'drive_trains')
-    count_drive_trains = list(drive_train_lots.values('drive').annotate(count=Count('drive')))
+    count_drive_trains = list(drive_train_lots.values('info__drive').annotate(drive=F('info__drive'), count=Count('info__drive')))
     for sid, count_drive_train_ in enumerate(count_drive_trains):
-        if count_drive_train_['drive'] is None or count_drive_train_['drive'] == "":
+        if count_drive_train_['info__drive'] is None or count_drive_train_['info__drive'] == "":
             del count_drive_trains[sid]
 
     cylinders_lots = filter_by_filters(lots, 'cylinderss')
-    count_cylinderss = list(cylinders_lots.values('cylinders').annotate(count=Count('cylinders')))
+    count_cylinderss = list(cylinders_lots.values('info__cylinders').annotate(cylinders=F('info__cylinders'), count=Count('info__cylinders')))
     for sid, count_cylinders_ in enumerate(count_cylinderss):
-        if count_cylinders_['cylinders'] is None or count_cylinders_['cylinders'] == "":
+        if count_cylinders_['info__cylinders'] is None or count_cylinders_['info__cylinders'] == "":
             del count_cylinderss[sid]
 
     fuel_lots = filter_by_filters(lots, 'fuels')
-    count_fuels = list(fuel_lots.values('fuel').annotate(count=Count('fuel')))
+    count_fuels = list(fuel_lots.values('info__fuel').annotate(fuel=F('info__fuel'), count=Count('info__fuel')))
     for sid, count_fuel_ in enumerate(count_fuels):
-        if count_fuel_['fuel'] is None or count_fuel_['fuel'] == "":
+        if count_fuel_['info__fuel'] is None or count_fuel_['info__fuel'] == "":
             del count_fuels[sid]
 
     body_style_lots = filter_by_filters(lots, 'body_styles')
-    count_body_styles = list(body_style_lots.values('body_style').annotate(count=Count('body_style')))
+    count_body_styles = list(body_style_lots.values('info__body_style').annotate(body_style=F('info__body_style'), count=Count('info__body_style')))
     for sid, count_body_style_ in enumerate(count_body_styles):
-        if count_body_style_['body_style'] is None or count_body_style_['body_style'] == "":
+        if count_body_style_['info__body_style'] is None or count_body_style_['info__body_style'] == "":
             del count_body_styles[sid]
 
     vehicle_type_lots = filter_by_filters(lots, 'vehicle_types')
-    count_vehicle_types = list(vehicle_type_lots.values('type').annotate(count=Count('type')))
+    count_vehicle_types = list(vehicle_type_lots.values('info__type').annotate(type=F('info__type'), count=Count('info__type')))
     for sid, count_vehicle_type_ in enumerate(count_vehicle_types):
-        if count_vehicle_type_['type'] is None or count_vehicle_type_['type'] == "":
+        if count_vehicle_type_['info__type'] is None or count_vehicle_type_['info__type'] == "":
             del count_vehicle_types[sid]
         else:
-            count_vehicle_types[sid]['type'] = dict(TYPES)[count_vehicle_type_['type']]
+            count_vehicle_types[sid]['info__type'] = dict(TYPES)[count_vehicle_type_['info__type']]
 
     damage_lots = filter_by_filters(lots, 'damages')
-    count_damages = list(damage_lots.values('lot_1st_damage').annotate(count=Count('lot_1st_damage')))
+    count_damages = list(damage_lots.values('info__lot_1st_damage').annotate(lot_1st_damage=F('info__lot_1st_damage'), count=Count('info__lot_1st_damage')))
     for sid, count_damage_ in enumerate(count_damages):
-        if count_damage_['lot_1st_damage'] is None or count_damage_['lot_1st_damage'] == "":
+        if count_damage_['info__lot_1st_damage'] is None or count_damage_['info__lot_1st_damage'] == "":
             del count_damages[sid]
 
     doctype_lots = filter_by_filters(lots, 'doctypes')
@@ -586,7 +573,7 @@ def lots_by_search(request):
     for doctype_field in doctype_fields:
         count_doctypes.append(
             {'doc_type_td': doctype_field,
-             'count': doctype_lots.filter(doc_type_td__contains=str(doctype_field).upper()).count()})
+             'count': doctype_lots.filter(info__doc_type_td__contains=str(doctype_field).upper()).count()})
 
     '''odometer_lots = filter_by_filters(lots, 'odometers')
     odometers = odometer_lots.raw(
@@ -717,7 +704,6 @@ def lots_by_search(request):
         'status': status,
     }
 
-    print('filter_featured: ', filter_featured)
     return render(request, 'product/list.html', context=context)
 
 
@@ -1258,20 +1244,18 @@ def ajax_lots_by_search(request):
 
 
 def detail(request, lot):
-    lot = Vehicle.objects.get(lot=int(lot))
+    lot = Vehicle.objects.get(info__lot=int(lot))
     is_similar = True
 
-    similar = Vehicle.objects.filter(make=lot.make).filter(model=lot.model).filter(year=lot.year).filter(
-        ~Q(lot=int(lot.lot))).order_by('-id')
+    similar = Vehicle.objects.filter(info__make=lot.info.make).filter(info__model=lot.info.model).filter(info__year=lot.info.year).filter(~Q(info__lot=int(lot.info.lot))).order_by('-id')
     if len(similar) >= 12:
         similar = similar[:12]
     else:
-        similar = Vehicle.objects.filter(make=lot.make).filter(model=lot.model).filter(~Q(lot=int(lot.lot))).order_by(
-            '-id')
+        similar = Vehicle.objects.filter(info__make=lot.info.make).filter(info__model=lot.info.model).filter(~Q(info__lot=int(lot.info.lot))).order_by('-id')
         if len(similar) >= 12:
             similar = similar[:12]
         else:
-            similar = Vehicle.objects.filter(~Q(retail_value=0)).filter(~Q(lot=int(lot.lot))).order_by('-id')[:12]
+            similar = Vehicle.objects.filter(~Q(info__retail_value=0)).filter(~Q(info__lot=int(lot.info.lot))).order_by('-id')[:12]
             is_similar = False
 
     context = {'lot': lot, 'similar': similar, 'is_similar': is_similar}

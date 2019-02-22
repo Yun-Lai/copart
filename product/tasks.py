@@ -237,6 +237,8 @@ def scrap_copart_lots(make_ids, account):
 
                             vehicle_item.save()
                             print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update')
+                        else:
+                            print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update - Ignored')
                     except Vehicle.DoesNotExist:
                         vehicle_item = Vehicle()
                         vehicle_item.info = vehicle_info_item

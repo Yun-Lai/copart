@@ -203,7 +203,7 @@
                                 <div class="sidebar-section">
                                     <div class="sidebar-title">
                                         <a{% if app.url %} href="{{ app.url }}"{% endif %} class="sidebar-title-link"{% if app.url_blank %} target="_blank"{% endif %}>
-                                            {% if app.label == "Django_Comments"%}Blog Comments{% else %}{{ app.label }}{% endif %}
+                                            {% if app.label == "Constance"%}Settings{% else %}{{ app.label }}{% endif %}
                                         </a>
                                     </div>
                                     {% for model in app.items %}
@@ -213,7 +213,7 @@
                                                     <span class="sidebar-right">
                                                         <span class="sidebar-right-arrow icon-arrow-right"></span>
                                                     </span>
-                                                    <span class="sidebar-link-label">{{ model.label }}</span>
+                                                    <span class="sidebar-link-label">{% if model.label == "Config"%}Settings{% else %}{{ model.label }}{% endif %}</span>
                                                 </a>
                                             </div>
                                         {% endif %}
