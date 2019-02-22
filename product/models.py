@@ -184,8 +184,7 @@ class VehicleInfo(models.Model):
         return self.vin + ' ' + str(self.lot)
 
     def vin_(self):
-        return mark_safe(
-            '<a href="https://www.copart.com/lot/' + str(self.lot) + '" target="_blank">' + self.vin + '</a>')
+        return mark_safe('<a href="/lot/' + str(self.lot) + '" target="_blank">' + self.vin + '</a>')
     vin_.admin_order_field = 'vin'
 
     def odometer(self):
@@ -204,7 +203,7 @@ class VehicleInfo(models.Model):
     est_retail_value.admin_order_field = 'retail_value'
 
     def avatar_img(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(
+        return mark_safe('<a href="/lot/' + str(
             self.lot) + '" target="_blank"><img src="{url}" title="{title}" width="96" height="72"></a>'.format(
             lot=self.lot, url=self.avatar, title=self.name))
     avatar_img.short_description = 'Avatar'
@@ -256,14 +255,13 @@ class Vehicle(models.Model):
         return self.info.vin + ' ' + str(self.info.lot)
 
     def avatar_img(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(
+        return mark_safe('<a href="/lot/' + str(
             self.info.lot) + '" target="_blank"><img src="{url}" title="{title}" width="96" height="72"></a>'.format(
             lot=self.lot, url=self.info.avatar, title=self.info.name))
     avatar_img.short_description = 'Avatar'
 
     def vin(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
-                         str(self.info.vin) + '</a>')
+        return mark_safe('<a href="/lot/' + str(self.info.lot) + '" target="_blank">' + str(self.info.vin) + '</a>')
     vin.admin_order_field = 'info__vin'
 
     def lot(self):
@@ -328,13 +326,13 @@ class VehicleSold(models.Model):
         return self.info.vin + ' ' + str(self.info.lot)
 
     def avatar_img(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(
+        return mark_safe('<a href="/lot/' + str(
             self.info.lot) + '" target="_blank"><img src="{url}" title="{title}" width="96" height="72"></a>'.format(
             lot=self.lot, url=self.info.avatar, title=self.info.name))
     avatar_img.short_description = 'Avatar'
 
     def vin(self):
-        return mark_safe('<a href="https://www.copart.com/lot/' + str(self.info.lot) + '" target="_blank">' +
+        return mark_safe('<a href="/lot/' + str(self.info.lot) + '" target="_blank">' +
                          str(self.info.vin) + '</a>')
     vin.admin_order_field = 'info__vin'
 
