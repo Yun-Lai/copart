@@ -24,42 +24,56 @@
                             <div class="row f_asearch_tab1">
                                 <div class="f_max_1280">
                                     <div class="col-md-4 col-sd-4 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:":10" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                        {% for featured_filter in featured_filters %}
+                                            {% if 0 < featured_filter.count %}
+                                                <a href="/lots_by_search/?feature={{ featured_filter.id }}{{ status }}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                            {% endif %}
                                         {% endfor %}
                                     </div>
-                                    <div class="col-md-4 col-sd-4 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"10:20" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="col-md-4 col-sd-4 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"20:" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
-                                        {% endfor %}
-                                    </div>
+{#                                    <div class="col-md-4 col-sd-4 col-xs-12">#}
+{#                                        {% for featured_filter in featured_filters|slice:":10" %}#}
+{#                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
+{#                                    <div class="col-md-4 col-sd-4 col-xs-12">#}
+{#                                        {% for featured_filter in featured_filters|slice:"10:20" %}#}
+{#                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
+{#                                    <div class="col-md-4 col-sd-4 col-xs-12">#}
+{#                                        {% for featured_filter in featured_filters|slice:"20:" %}#}
+{#                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
                                 </div>
                                 <div class="f_min_1280">
-                                    <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:":8" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                    <div class="col-md-4 col-sd-4 col-xs-12">
+                                        {% for featured_filter in featured_filters %}
+                                            {% if 0 < featured_filter.count %}
+                                                <a href="/lots_by_search/?feature={{ featured_filter.id }}{{ status }}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
+                                            {% endif %}
                                         {% endfor %}
                                     </div>
-                                    <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"8:14" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"14:21" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="col-md-3 col-xs-12">
-                                        {% for featured_filter in featured_filters|slice:"21:" %}
-                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>
-                                        {% endfor %}
-                                    </div>
+{#                                    <div class="col-md-3 col-xs-12">#}
+{#                                        {% for featured_filter in featured_filters|slice:":8" %}#}
+{#                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
+{#                                    <div class="col-md-3 col-xs-12">#}
+{#                                        {% for featured_filter in featured_filters|slice:"8:14" %}#}
+{#                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
+{#                                    <div class="col-md-3 col-xs-12">#}
+{#                                        {% for featured_filter in featured_filters|slice:"14:21" %}#}
+{#                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
+{#                                    <div class="col-md-3 col-xs-12">#}
+{#                                        {% for featured_filter in featured_filters|slice:"21:" %}#}
+{#                                            <a href="{% if 0 == featured_filter.count %}#{% else %}/lots_by_search/?feature={{ featured_filter.id }}{{ status }}{% endif %}">{{ featured_filter.name }} ({{ featured_filter.count }})</a>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
                                 </div>
                             </div>
                             <div class="row f_asearch_tab2 g_none_dis">

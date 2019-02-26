@@ -67,19 +67,23 @@
                             class="material-icons f_list_left_filter_min_i">line_weight</i></div>
                     <div class="f_asearch_cnt_dv f_list_filter_cnt Check">
                         <div>
+                        {% if config.SHOW_SITES %}
                             <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Sites' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Sites</div>
                             <div class="f_l_f_cnt{% if 'Sites' not in status %} g_none_dis{% endif %}">
                                 <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc10"{% if '' == applied_filter_source %} checked{% endif %}/><label for="flfc10">&nbsp;All</label><br>
                                 <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc11"{% if 'copart' == applied_filter_source %} checked{% endif %}/><label for="flfc11">&nbsp;Copart ({{ copart_count }})</label><br>
                                 <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc12"{% if 'iaai' == applied_filter_source %} checked{% endif %}/><label for="flfc12">&nbsp;IAAI ({{ iaai_count }})</label><br>
                             </div>
+                        {% endif %}
 
+                        {% if config.SHOW_SOLD %}
                             <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Already Sold' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Already Sold</div>
                             <div class="f_l_f_cnt{% if 'Already Sold' not in status %} g_none_dis{% endif %}">
                                 <input type="checkbox" name="f_list_filter_sold" id="flfc100"{% if 'yes' == applied_sold %} checked{% endif %}/>
                                 <label for="flfc100">&nbsp;Show Real Price ({{ sold_count }})</label>
                                 <br>
                             </div>
+                        {% endif %}
 
                             <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Featured Items' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Featured Items</div>
                             <div class="f_l_f_cnt{% if 'Featured Items' not in status %} g_none_dis{% endif %}">

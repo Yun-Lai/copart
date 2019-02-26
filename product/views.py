@@ -1,28 +1,13 @@
-import datetime
-from urllib.parse import urlencode
-
 from django.core.paginator import Paginator
-from django.db.models.functions import Trunc, TruncYear, TruncDate
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
-from django.urls import reverse
-from django.utils import translation
-from django.db.models import Q, Count, CharField, Value, F
+from django.db.models import Count, CharField, Value, F
 from django.db.models.functions import Cast, ExtractDay, ExtractMonth, ExtractYear, Concat
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
 
-from product.tasks import *
+from constance import config
+
 from product.models import Vehicle, VehicleSold, VehicleMakes, Filter, Location, TYPES
-
-
-# def switch_language(request, language):
-#     translation.activate(language)
-#     request.session[translation.LANGUAGE_SESSION_KEY] = language
-#     return redirect('/admin/')
-
-# def custom_redirect(url_name, *args, **kwargs):
-#     url = reverse(url_name, args=args)
-#     params = urlencode(kwargs)
-#     return HttpResponseRedirect(url + "?%s" % params)
+from product.tasks import *
 
 
 def view_scrap_copart_all(request):
@@ -702,6 +687,8 @@ def lots_by_search(request):
         'initial': '&'.join(initial_status),
         'url': 'params=' + params_ + '&sort=' + sort_ if params_ else '',
         'status': status,
+
+        'config': config,
     }
 
     return render(request, 'product/list.html', context=context)
