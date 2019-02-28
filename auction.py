@@ -45,16 +45,16 @@ async def copart(param):
                     if vehicle_info_item:
                         query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE info_id = {}".format
                         cursor.execute(query(data['BID'], vehicle_info_item[0]))
-                        # conn.commit()
+                        conn.commit()
                         print(','.join([param, data['LOTNO'], data['BID'], 'updated']))
                     else:
                         query = "INSERT INTO product_vehiclenotexist(lot, sold_price, sale_date) VALUES ({}, {}, '{}')".format
                         cursor.execute(query(data['LOTNO'], data['BID'], str(datetime.now())[:-7]))
-                        # conn.commit()
+                        conn.commit()
                         print(','.join([param, data['LOTNO'], data['BID'], 'saved to product_vehiclenotexist table']))
 
                 if 'TEXT' in data:
-                    conn.commit()
+                    # conn.commit()
                     cursor.close()
                     conn.close()
                     break

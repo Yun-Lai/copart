@@ -14,18 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.urls import path
-from django.contrib import admin
 from django.conf.urls.static import static
+from django.contrib import admin
 
+from product import views as product_view
 from copart import settings
-
 
 urlpatterns = [
     url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
 
-    url(r'^nevermind/', admin.site.urls),
+    url(settings.COPART_ADMIN_URL, admin.site.urls),
     url(r'^', include('product.urls')),
 
     # url(r'^rosetta/', include('rosetta.urls')),
@@ -42,3 +41,6 @@ urlpatterns = [
 #     urlpatterns = [
 #         url(r'^__debug__/', include(debug_toolbar.urls)),
 #     ] + urlpatterns
+
+handler404 = product_view.view_404
+handler500 = product_view.view_404

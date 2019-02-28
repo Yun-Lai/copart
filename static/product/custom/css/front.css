@@ -1004,11 +1004,15 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
     display:    none;
     position:   fixed;
     z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .8 )
+    top: 50% !important;
+    left: 50%;
+    width: 200px;
+    margin-top: -26px;
+    height: 70px;
+    margin-left: -100px;
+    border: aqua 2px solid;
+    border-radius: 3px;
+    background: rgba( 255, 255, 255 )
                 url(../imgs/loading.gif)
                 50% 50%
                 no-repeat;
