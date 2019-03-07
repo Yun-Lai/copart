@@ -787,7 +787,7 @@ def scrap_filters_count():
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Donations', type='F')
-    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='D').filter(~Q(lot_highlights="Did Not Test Start")).count()
+    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='D').filter(~Q(info__lot_highlights="Did Not Test Start")).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
@@ -817,27 +817,27 @@ def scrap_filters_count():
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Front End', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Front End') or Q(lot_2nd_damage__icontains='Front End')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Front End') or Q(info__lot_2nd_damage__icontains='Front End')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Hail Damage', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Hail') or Q(lot_2nd_damage__icontains='Hail')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Hail') or Q(info__lot_2nd_damage__icontains='Hail')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Normal Wear', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Normal Wear') or Q(lot_2nd_damage__icontains='Normal Wear')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Normal Wear') or Q(info__lot_2nd_damage__icontains='Normal Wear')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Minor Dents/Scratch', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Minor') or Q(lot_2nd_damage__icontains='Minor')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Minor') or Q(info__lot_2nd_damage__icontains='Minor')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Water/Flood', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Water/Flood') or Q(lot_2nd_damage__icontains='Water/Flood')).count()
+    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Water/Flood') or Q(info__lot_2nd_damage__icontains='Water/Flood')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 

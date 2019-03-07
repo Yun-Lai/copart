@@ -9,19 +9,19 @@
     let applied_filter_features = {{ applied_filter_features|safe }};
     let all_makes_for_filter = {{ makes|safe }};
     let applied_filter_makes = {{ applied_filter_makes|safe }};
+
     let all_models_for_filter = {{ models|safe }};
     let applied_filter_models = {{ applied_filter_models|safe }};
     let all_years_for_filter = {{ years|safe }};
     let applied_filter_years = {{ applied_filter_years|safe }};
     let all_odometers_for_filter = {{ odometers|safe }};
     let applied_filter_odometers = {{ applied_filter_odometers|safe }};
-
     let all_locations_for_filter = {{ locations|safe }};
     let applied_filter_locations = {{ applied_filter_locations|safe }};
     let all_sale_dates_for_filter = {{ sale_dates_for_tag|safe }};
     let applied_filter_sale_dates = {{ applied_filter_sale_dates|safe }};
     let all_engine_types_for_filter = {{ engine_types|safe }};
-    let applied_filter_engin_tyes = {{ applied_filter_engine_types|safe }};
+    let applied_filter_engine_types = {{ applied_filter_engine_types|safe }};
     let all_transmissions_for_filter = {{ transmissions|safe }};
     let applied_filter_transmissions = {{ applied_filter_transmissions|safe }};
     let all_drive_trains_for_filter = {{ drive_trains|safe }};
@@ -48,19 +48,23 @@
                         class="material-icons f_list_left_filter_min_i">line_weight</i></div>
                 <div class="f_asearch_cnt_dv f_list_filter_cnt Check">
                     <div>
+                    {% if config.SHOW_SITES %}
                         <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Sites' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Sites</div>
                         <div class="f_l_f_cnt{% if 'Sites' not in status %} g_none_dis{% endif %}">
                             <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc10"{% if '' == applied_filter_source %} checked{% endif %}/><label for="flfc10">&nbsp;All</label><br>
                             <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc11"{% if 'copart' == applied_filter_source %} checked{% endif %}/><label for="flfc11">&nbsp;Copart ({{ copart_count }})</label><br>
                             <input type="radio" class="f_list_filter_site" name="f_list_filter_site" id="flfc12"{% if 'iaai' == applied_filter_source %} checked{% endif %}/><label for="flfc12">&nbsp;IAAI ({{ iaai_count }})</label><br>
                         </div>
+                    {% endif %}
 
+                    {% if config.SHOW_SOLD %}
                         <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Already Sold' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Already Sold</div>
                         <div class="f_l_f_cnt{% if 'Already Sold' not in status %} g_none_dis{% endif %}">
                             <input type="checkbox" name="f_list_filter_sold" id="flfc100"{% if 'yes' == applied_sold %} checked{% endif %}/>
                             <label for="flfc100">&nbsp;Show Real Price ({{ sold_count }})</label>
                             <br>
                         </div>
+                    {% endif %}
 
                         <div class="f_l_f_tlt"><i class="fa fa-fw{% if 'Featured Items' in status %} fa-minus-square{% else %} fa-plus-square{% endif %}"></i>Featured Items</div>
                         <div class="f_l_f_cnt{% if 'Featured Items' not in status %} g_none_dis{% endif %}">
@@ -233,7 +237,6 @@
                                 {% endfor %}
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -310,21 +313,21 @@
                             {% endif %}
 
                             {% if applied_filter_engine_types %}
-                                    {% for applied_filter in applied_filter_engine_types %}
-                                        <div id="id_filter_engine_type_{% replace_str applied_filter "." "-" %}" class="f_l_f_a_item filter_engine_type">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
-                                    {% endfor %}
+                                {% for applied_filter in applied_filter_engine_types %}
+                                    <div id="id_filter_engine_type_{% replace_str applied_filter "." "-" %}" class="f_l_f_a_item filter_engine_type">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
                             {% endif %}
 
                             {% if applied_filter_transmissions %}
-                                    {% for applied_filter in applied_filter_transmissions %}
-                                        <div id="id_filter_transmission_{{ applied_filter }}" class="f_l_f_a_item filter_transmission">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
-                                    {% endfor %}
+                                {% for applied_filter in applied_filter_transmissions %}
+                                    <div id="id_filter_transmission_{{ applied_filter }}" class="f_l_f_a_item filter_transmission">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
                             {% endif %}
 
                             {% if applied_filter_drive_trains %}
-                                    {% for applied_filter in applied_filter_drive_trains %}
-                                        <div id="id_filter_drive_train_{% replace_str applied_filter "/" "_" %}" class="f_l_f_a_item filter_drive_train">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
-                                    {% endfor %}
+                                {% for applied_filter in applied_filter_drive_trains %}
+                                    <div id="id_filter_drive_train_{% replace_str applied_filter "/" "_" %}" class="f_l_f_a_item filter_drive_train">{{ applied_filter }}<img class="f_list_fr_close" src="{% static 'product/custom/imgs/close.png' %}"/></div>
+                                {% endfor %}
                             {% endif %}
 
                             {% if applied_filter_cylinders %}
@@ -333,7 +336,7 @@
                                 {% endfor %}
                             {% endif %}
 
-                            {% if applied_filter_features or applied_filter_makes or applied_filter_models or applied_filter_years or applied_filter_odometers or applied_filter_locations or applied_filter_sale_dates or applied_filter_engine_types or applied_filter_transmissions or applied_filter_drive_trains or applied_filter_cylinders or applied_filter_fuels or applied_filter_body_styles or applied_filter_doctypes %}
+                            {% if applied_filter_features or applied_filter_makes or applied_filter_models or applied_filter_years or applied_filter_odometers or applied_filter_locations or applied_filter_sale_dates or applied_filter_engine_types or applied_filter_transmissions or applied_filter_drive_trains or applied_filter_cylinders or applied_filter_fuels or applied_filter_body_styles or applied_filter_vehicle_types or applied_filter_damages or applied_filter_doctypes %}
                             {% else %}
                                 No Filters Applied
                             {% endif %}
@@ -371,47 +374,44 @@
                                style="width:100%">
                             <thead>
                             <tr class="h">
-                                    <th>Images</th>
-                                    <th class="h" id="lots_year" sorting_1="disabled"><span>Year&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_make" sorting_1="disabled"><span>Make&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_model" sorting_1="disabled"><span>Model&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_location" sorting_1="disabled"><span>Location&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_sale_date" sorting_1="disabled"><span>Sale Date&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_odometer_orr" sorting_1="disabled"><span>Odometer&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_doc_type_ts" sorting_1="disabled"><span>Doc Type&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_lot_1st_damage" sorting_1="disabled"><span>Damage&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_retail_value" sorting_1="disabled"><span>Retail Value&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                    <th class="h" id="lots_current_bid" sorting_1="disabled"><span>Current Bid&nbsp;&nbsp;<i class="glyphicon glyphicon-sort"></i></span></th>
-                                </tr>
+                                <th>Images</th>
+                                <th class="h" id="lots_year" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Year</span></th>
+                                <th class="h" id="lots_make" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Make</span></th>
+                                <th class="h" id="lots_model" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Model</span></th>
+                                <th class="h" id="lots_location" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Location</span></th>
+                                <th class="h" id="lots_sale_date" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Sale Date</span></th>
+                                <th class="h" id="lots_odometer_orr" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Odometer</span></th>
+                                <th class="h" id="lots_doc_type_ts" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Doc Type</span></th>
+                                <th class="h" id="lots_lot_1st_damage" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Damage</span></th>
+                                <th class="h" id="lots_retail_value" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Retail Value</span></th>
+                                <th class="h" id="lots_current_bid" sorting_1="disabled"><span><i class="glyphicon glyphicon-sort"></i>  Current Bid</span></th>
+                            </tr>
                             </thead>
                             <tbody>
                             {% for lot in lots %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'detail_page' lot.lot %}" target="_blank">
-                                            <img src="{{ lot.avatar }}" class="f_l_f_product_img"/>
+                                        <a href="{% url 'detail_page' lot.info.lot %}" target="_blank">
+                                            <img src="{{ lot.info.avatar }}" class="f_l_f_product_img"/>
                                             <div class="f_lr_td_img_dv">View All Photos</div>
                                         </a>
                                     </td>
-                                    <td>{{ lot.year }}<br>
-                                        {% if lot.lot_highlights|is_icon %}
-                                            {% for icon in lot.lot_highlights %}
+                                    <td>{{ lot.info.year }}<br>
+                                        {% if lot.info.lot_highlights|is_icon %}
+                                            {% for icon in lot.info.lot_highlights %}
                                                 <div class="f_l_y_s f_l_s{{ icon|lower }}">{{ icon }}</div>
                                             {% endfor %}
                                         {% endif %}
                                     </td>
-                                    <td>{{ lot.make|safe }}</td>
-                                    <td>{{ lot.model }}</td>
-{#                                        <td>NY-LNG ISLAND <br> SF002</td>#}
-                                    <td>{{ lot.location }}</td>
-{#                                        <td>09/12/2018<br>08:00pm OMST</td>#}
+                                    <td>{{ lot.info.make|safe }}</td>
+                                    <td>{{ lot.info.model }}</td>
+                                    <td>{{ lot.info.location }}</td>
                                     <td>{{ lot.sale_date }}</td>
-{#                                        <td>260, 216 E</td>#}
-                                    <td>{{ lot.odometer_orr|intcomma }}</td>
-                                    <td>{{ lot.doc_type_ts }} - {{ lot.doc_type_stt }}</td>
-                                    <td>{{ lot.lot_1st_damage }}</td>
-                                    <td>${{ lot.retail_value|intcomma }} {{ lot.currency }}</td>
-                                    <td>${{ lot.current_bid|intcomma }} {{ lot.currency }}</td>
+                                    <td>{{ lot.info.odometer_orr|intcomma }}</td>
+                                    <td>{{ lot.info.doc_type_ts }} - {{ lot.info.doc_type_stt }}</td>
+                                    <td>{{ lot.info.lot_1st_damage }}</td>
+                                    <td>${{ lot.info.retail_value|intcomma }} {{ lot.info.currency }}</td>
+                                    <td>${{ lot.current_bid|intcomma }} {{ lot.info.currency }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -421,9 +421,9 @@
                         <div class="col-md-6 col-xs-5 f_l_s_f_sp">Showing {{ page_start_index }} to {{ page_end_index }}
                             <span class="f_list_page_num">of {{ total_lots }} entries</span>
                         </div>
-{#                            <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :#}
-{#                                <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>#}
-{#                            </div>#}
+{#                        <div class="col-md-6 col-xs-7 f_l_s_f_sp g_txt_right">Search :#}
+{#                            <input class="f_f_r_t_search_ipt" placeholder=" By Lot or VIN"/>#}
+{#                        </div>#}
                     </div>
                     <div class="row">
                         <div class="col-md-4 col-sm-4 col-xs-5 f_l_s_f_sp">Show

@@ -16,11 +16,14 @@ urlpatterns = [
 
     url(r'^$', views.index, name='index_page'),
     url(r'^lots_by_search/', views.lots_by_search, name='list_page_by_search'),
+    url(r'^lots_search/', views.lots_search, name='list_page_search'),
     url(r'^lot/(?P<lot>[\w-]+)/$', views.detail, name='detail_page'),
 
     # url(r'^ajax_getimages/', csrf_exempt(views.ajax_getimages), name='ajax_getimages'),
     url(r'^ajax_get_lot/', views.view_ajax_get_lot),
     url(r'^ajax_get_makes/', views.view_ajax_get_makes_of_type),
     url(r'^ajax_get_models/', views.view_ajax_get_models_of_make),
+
     url(r'^ajax_get_vehicles/', views.ajax_lots_by_search),
+    url(r'^ajax_vehicles/', views.ajax_lots_search),
 ]

@@ -139,7 +139,6 @@ class VehicleInfo(models.Model):
     make = models.CharField(_('Make'), max_length=50, default='')
     model = models.CharField(_('Model'), max_length=50, default='')
     year = models.IntegerField(_('Year'), null=True, blank=True)
-    location = models.CharField(_('Location'), max_length=50, default='')
     currency = models.CharField(_('Currency'), max_length=3, default='')
     avatar = models.URLField(_('Avatar'), null=True, blank=True)
     source = models.BooleanField(_('Source'), default=True)
@@ -169,6 +168,7 @@ class VehicleInfo(models.Model):
     notes = models.TextField(_('Notes'), null=True, blank=True)
 
     # Location
+    location = models.CharField(_('Location'), max_length=50, default='')
     lane = models.CharField(_('Lane'), max_length=1, default='')
     item = models.CharField(_('Item'), max_length=20, default='')
     grid = models.CharField(_('Grid/Row'), max_length=5, default='')
