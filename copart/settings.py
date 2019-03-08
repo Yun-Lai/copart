@@ -252,7 +252,7 @@ MANAGERS = ADMINS
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'zazacopart1@gmail.com'
-EMAIL_HOST_PASSWORD = 'm1llerh0u4e'
+EMAIL_HOST_PASSWORD = 'm1llerh0u4e1'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[copart]'
