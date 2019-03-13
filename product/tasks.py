@@ -83,18 +83,16 @@ def scrap_copart_all():
             continue
 
     accounts = [
-        {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'},
-        {'username': 'zazacopart1@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'jobcopart@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'mycopartcars@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'copartvehicles@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'copart.gitlab@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'},
-        {'username': 'zazacopart1@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'jobcopart@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'mycopartcars@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'copartvehicles@gmail.com', 'password': 'm1llerh0u4e'},
-        {'username': 'copart.gitlab@gmail.com', 'password': 'm1llerh0u4e'},
+        {'username': 'tatermaz@gmail.com', 'password': '54TrAp34fY'},
+        {'username': 'sanrebno@gmail.com', 'password': '123TGBN4rt'},
+        {'username': 'aldnvdrinad@gmail.com', 'password': '2ldnvdr1n@d'},
+        {'username': 'st1syhabern@gmail.com', 'password': 'R#jgn)S(s!d'},
+        {'username': 'al90drudani@gmail.com', 'password': 'd@n!ev@ndu'},
+        {'username': 'sheihberna@gmail.com', 'password': '$he!hbern@'},
+        {'username': 'danievandu@gmail.com', 'password': 'd@n!ev@ndu'},
+        {'username': 'noiirreab@gmail.com', 'password': 'n0!rre@b'},
+        {'username': 'berttyana@gmail.com', 'password': 'bert!@n@'},
+        {'username': 'rebasahi@gmail.com', 'password': 'reb@$@h!'},
     ]
     div_count = 10
     total = sum([a[1] for a in data])
