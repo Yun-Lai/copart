@@ -145,6 +145,7 @@ def scrap_copart_lots(make_ids, account):
     driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
                               desired_capabilities=DesiredCapabilities.CHROME)
 
+    print('-------------', account)
     driver.get('https://www.copart.com/login/')
     while "https://www.copart.com/dashboard/" != driver.current_url:
         wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])

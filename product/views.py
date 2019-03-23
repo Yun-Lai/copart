@@ -20,7 +20,7 @@ def view_scrap_copart_all(request):
 @login_required
 def view_scrap_copart(request):
     make_id = request.GET.get('id')
-    scrap_copart_lots.delay([make_id], {'username': 'vdm.cojocaru@gmail.com', 'password': 'c0p2rt'})
+    scrap_copart_lots.delay([make_id], {'username': 'tatermaz@gmail.com', 'password': '54TrAp34fY'})
 
     return redirect('/' + settings.COPART_ADMIN_URL + 'product/vehiclemakes/')
 
