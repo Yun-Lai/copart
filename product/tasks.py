@@ -137,7 +137,7 @@ def scrap_copart_all():
 @task(
     name="product.tasks.scrap_copart_lots",
     ignore_result=True,
-    time_limit=36000,
+    time_limit=50400,
     queue='high',
     options={'queue': 'high'}
 )
