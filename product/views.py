@@ -117,15 +117,6 @@ def view_ajax_get_lot(request):
     return JsonResponse({'result': False})
 
 
-def view_ajax_get_makes_of_type(request):
-    finder_type = request.GET.get('finder_type', '')
-    vehicle_makes = VehicleMakes.objects.filter(type=finder_type)
-    return JsonResponse({
-        'result': True,
-        'makes': [a.description for a in vehicle_makes],
-    })
-
-
 def view_ajax_get_models_of_make(request):
     finder_type = request.GET.get('finder_type', '')
     finder_make = request.GET.get('finder_make', '')
@@ -143,6 +134,7 @@ def index(request):
     featured_filters = Filter.objects.filter(type='F')
     vehicle_types = Filter.objects.filter(type='T')
     vehicle_makes = Filter.objects.filter(type='M').order_by('-count')[:55]
+    vehicle_all_makes = list(VehicleMakes.objects.values())
     locations = Location.objects.all()
 
     context = {
@@ -150,6 +142,7 @@ def index(request):
         'featured_filters': featured_filters,
         'vehicle_types': vehicle_types,
         'vehicle_makes': vehicle_makes,
+        'vehicle_all_makes': vehicle_all_makes,
         'locations': locations,
         'year_range': range(1920, datetime.datetime.now().year + 2)[::-1],
         'status': '&status=%5B%27Sites%27,%20%27Already%20Sold%27,%20%27Featured%20Items%27,%20%27Make%27%5D',
@@ -1268,8 +1261,12 @@ def detail(request, lot):
         if len(similar) >= 12:
             similar = similar[:12]
         else:
-            similar = Vehicle.objects.filter(~Q(info__retail_value=0)).filter(~Q(info__lot=int(lot.info.lot))).order_by('-id')[:12]
-            is_similar = False
+            similar = Vehicle.objects.filter(info__make=lot.info.make).filter(~Q(info__lot=int(lot.info.lot))).order_by('-id')
+            if len(similar) >= 12:
+                similar = similar[:12]
+            else:
+                similar = Vehicle.objects.filter(~Q(info__retail_value=0)).filter(~Q(info__lot=int(lot.info.lot))).order_by('-id')[:12]
+                is_similar = False
 
     context = {'lot': lot, 'similar': similar, 'is_similar': is_similar}
     return render(request, 'product/detail.html', context=context)

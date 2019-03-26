@@ -43,3 +43,7 @@
     padding: 6px 10px;
     display: inherit;
 }
+
+select:disabled {
+    background: #C0C0C0;
+}

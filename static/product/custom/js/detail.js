@@ -3,6 +3,8 @@ jQuery(function () {
     front_global_event_proc_funcs();
     // detail page event proc functions
     front_detail_event_proc_funcs();
+    // zoom image on mouse hover
+    zoom_mouse_hover();
 });
 
 /**
@@ -64,5 +66,20 @@ function front_detail_event_proc_funcs() {
 
     $("#detail_find_more").on('click', function () {
         location.href = "/lots_by_search/" + $("#lot_type").html() + "/2008/2019/" + $("#lot_make").html() + "/_/_/";
+    });
+}
+
+/**
+ * Zoom image on mouse hover
+ */
+
+function zoom_mouse_hover() {
+    $(".f_l_detail_photo").parent().on("mouseover", function () {
+        $(this).children(".f_l_detail_photo").css({"transform": "scale(1.4)"});
+    }).on("mouseout", function () {
+        $(this).children(".f_l_detail_photo").css({"transform": "scale(1)"});
+    }).on("mousemove", function (e) {
+        $(this).children(".f_l_detail_photo").css({'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% '
+                + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 +'%'});
     });
 }

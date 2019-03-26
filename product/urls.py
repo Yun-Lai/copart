@@ -21,7 +21,6 @@ urlpatterns = [
 
     # url(r'^ajax_getimages/', csrf_exempt(views.ajax_getimages), name='ajax_getimages'),
     url(r'^ajax_get_lot/', views.view_ajax_get_lot),
-    url(r'^ajax_get_makes/', views.view_ajax_get_makes_of_type),
     url(r'^ajax_get_models/', views.view_ajax_get_models_of_make),
 
     url(r'^ajax_get_vehicles/', views.ajax_lots_by_search),

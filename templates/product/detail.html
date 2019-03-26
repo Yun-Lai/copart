@@ -19,7 +19,7 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-                        <a href="{{ lot.info|get_lot_image:0 }}" class="btn btn-default fancybox-button f_detail_main_img_a">
+                        <a href="{{ lot.info|get_lot_image:0 }}" class="btn btn-default fancybox-button f_detail_main_img_a" style="overflow: hidden">
                             <img class="f_l_detail_photo" src="{{ lot.info|get_lot_image:0 }}">
                         </a>
                         <div class="f_detail_img_view_all_photos">View All Photos</div>

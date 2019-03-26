@@ -7,6 +7,9 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+    <script>
+    let vehicle_all_makes = {{ vehicle_all_makes|safe }};
+    </script>
     <div class="main">
         <div class="container">
             <!-- ADVANCED SEARCH -->
@@ -154,7 +157,7 @@
                                     <div class="col-sm-4 col-xs-4"><input type="button" value="All"
                                                                           class="f_asearch_l_btn f_site_copart_btn"/>
                                     </div>
-                                    <div class="col-sm-4 col-xs-4"><input type="button" value="Copaart"
+                                    <div class="col-sm-4 col-xs-4"><input type="button" value="Copart"
                                                                           class="f_asearch_l_btn f_site_copart_btn"/>
                                     </div>
                                     <div class="col-sm-4 col-xs-4"><input type="button" value="IAAI"

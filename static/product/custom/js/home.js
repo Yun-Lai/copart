@@ -75,20 +75,12 @@ function front_landing_event_proc_funcs() {
     });
 
     function ajax_get_makes(finder_type) {
-        $.ajax({
-            type: 'GET',
-            url: '/ajax_get_makes/',
-            data: {finder_type: finder_type},
-            success: function (response) {
-                if (response.result) {
-                    var str_makes = '<option value="0">All Makes</option>';
-                    for (var i = 0; i < response.makes.length; i++) {
-                        str_makes += '<option value="' + response.makes[i] + '">' + response.makes[i] + '</option>';
-                    }
-                    $("#finder_makes").html(str_makes);
-                }
-            }
-        });
+        let makes = vehicle_all_makes.filter(item => item['type'] === finder_type);
+        let html = '<option value="0">All Makes</option>';
+        for (let i = 0; i < makes.length; i++) {
+            html += '<option value="' + makes[i]['description'] + '">' + makes[i]['description'] + '</option>';
+        }
+        $("#finder_makes").html(html);
     }
     $("#finder_types").on('change', function() {
         let finder_type = $(this).val();
@@ -101,6 +93,7 @@ function front_landing_event_proc_funcs() {
             $("#finder_models").html('<option value="0">All Models</option>');
             return;
         }
+        $("#finder_models").prop('disabled', 'disabled');
         $.ajax({
             type: 'GET',
             url: '/ajax_get_models/',
@@ -109,6 +102,7 @@ function front_landing_event_proc_funcs() {
                 finder_make: finder_make
             },
             success: function (response) {
+                $("#finder_models").prop('disabled', false);
                 if (response.result) {
                     var str_makes = '<option value="0">All Models</option>';
                     for (var i = 0; i < response.models.length; i++) {
