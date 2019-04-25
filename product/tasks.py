@@ -1,37 +1,49 @@
 from __future__ import absolute_import
 
-import re
+import datetime
 import json
+import os
 import random
+import re
 import subprocess
+import time
 from multiprocessing.pool import ThreadPool
 
-from constance import config
-from django.db.models import Q
-from lxml.html import fromstring
-import datetime
-from django.utils import timezone
-
-from django.core.mail import mail_managers
-
+import requests
 from celery.schedules import crontab
 from celery.task import task, periodic_task
-
-import requests
-import time
+from constance import config
+from django.core.mail import mail_managers
+from django.db.models import Q
+from django.utils import timezone
+from lxml.html import fromstring
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait as wait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait as wait
 
 from product.models import *
+from .webdriver import get_webdriver, get_proxies
+from .ua import get_random_ua
 
 GLOBAL = {'live_auctions': []}
 
+# Modify here times to sleep between reqeusts
+SLEEP_TIMES = {
+    'LOC_DETAILS': (1, 4),
+    'MAKE_IDS': (1, 4),
+}
+
+
+def get_accounts():
+    accounts_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../accounts.json')
+    with open(accounts_path, 'r') as f:
+        return json.load(f)
+
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='7')),
+    run_every=(crontab(minute='0', hour='7', day_of_week='wed')),
     name="product.tasks.scrap_copart_all",
     ignore_result=True,
     queue='high',
@@ -40,13 +52,16 @@ GLOBAL = {'live_auctions': []}
 def scrap_copart_all():
     if not config.SCRAP_COPART_LOTS:
         return
+    # Run this in test mode
+    test_mode = False
+
     misc = '#MakeCode:{code} OR #MakeDesc:{description}, #VehicleTypeCode:VEHTYPE_{type},#LotYear:[1920 TO 2019]'.format
     payloads = 'draw={draw}&columns[0][data]=0&columns[0][name]=&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]=&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]=&columns[1][searchable]=true&columns[1][orderable]=false&columns[1][search][value]=&columns[1][search][regex]=false&columns[2][data]=2&columns[2][name]=&columns[2][searchable]=true&columns[2][orderable]=true&columns[2][search][value]=&columns[2][search][regex]=false&columns[3][data]=3&columns[3][name]=&columns[3][searchable]=true&columns[3][orderable]=true&columns[3][search][value]=&columns[3][search][regex]=false&columns[4][data]=4&columns[4][name]=&columns[4][searchable]=true&columns[4][orderable]=true&columns[4][search][value]=&columns[4][search][regex]=false&columns[5][data]=5&columns[5][name]=&columns[5][searchable]=true&columns[5][orderable]=true&columns[5][search][value]=&columns[5][search][regex]=false&columns[6][data]=6&columns[6][name]=&columns[6][searchable]=true&columns[6][orderable]=true&columns[6][search][value]=&columns[6][search][regex]=false&columns[7][data]=7&columns[7][name]=&columns[7][searchable]=true&columns[7][orderable]=true&columns[7][search][value]=&columns[7][search][regex]=false&columns[8][data]=8&columns[8][name]=&columns[8][searchable]=true&columns[8][orderable]=true&columns[8][search][value]=&columns[8][search][regex]=false&columns[9][data]=9&columns[9][name]=&columns[9][searchable]=true&columns[9][orderable]=true&columns[9][search][value]=&columns[9][search][regex]=false&columns[10][data]=10&columns[10][name]=&columns[10][searchable]=true&columns[10][orderable]=true&columns[10][search][value]=&columns[10][search][regex]=false&columns[11][data]=11&columns[11][name]=&columns[11][searchable]=true&columns[11][orderable]=true&columns[11][search][value]=&columns[11][search][regex]=false&columns[12][data]=12&columns[12][name]=&columns[12][searchable]=true&columns[12][orderable]=true&columns[12][search][value]=&columns[12][search][regex]=false&columns[13][data]=13&columns[13][name]=&columns[13][searchable]=true&columns[13][orderable]=true&columns[13][search][value]=&columns[13][search][regex]=false&columns[14][data]=14&columns[14][name]=&columns[14][searchable]=true&columns[14][orderable]=false&columns[14][search][value]=&columns[14][search][regex]=false&columns[15][data]=15&columns[15][name]=&columns[15][searchable]=true&columns[15][orderable]=false&columns[15][search][value]=&columns[15][search][regex]=false&order[0][column]=1&order[0][dir]=asc&start={start}&length={length}&search[value]=&search[regex]=false&sort=auction_date_type desc,auction_date_utc asc&defaultSort=true&filter[MISC]={misc}&query=*&watchListOnly=false&freeFormSearch=false&page={page}&size={size}'.format
 
     url = "https://www.copart.com/public/vehicleFinder/search"
     headers = {
         "Host": "www.copart.com",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
+        "User-Agent": get_random_ua(),
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Language": "en-US,en;q=0.5",
         "Accept-Encoding": "gzip, deflate, br",
@@ -58,7 +73,12 @@ def scrap_copart_all():
 
     data = []
 
-    for id, makes in enumerate(VehicleMakes.objects.all()):
+    if test_mode:
+        vehicle_makes = VehicleMakes.objects.all()[:100]
+    else:
+        vehicle_makes = VehicleMakes.objects.all()
+
+    for idx, makes in enumerate(vehicle_makes):
         vtype = makes.type
         description = makes.description
         code = makes.code
@@ -67,34 +87,23 @@ def scrap_copart_all():
                            page=0, size=1)
         while True:
             try:
-                response = requests.request("POST", url, data=payload, headers=headers)
+                response = requests.request("POST", url, data=payload, headers=headers, proxies=get_proxies())
                 break
-            except:
-                print('scrap_copart_all(), 1 - ' + url)
+            except Exception as e:
+                print(f'ERROR: scrap_copart_all(), 1 - {url}, {e}')
                 time.sleep(1)
 
         try:
             result = json.loads(response.text)['data']['results']
             total = result['totalElements']
-            print(','.join([str(id), description, str(total)]))
+            print(','.join([str(idx), description, str(total)]))
             data.append([makes.id, total])
         except:
             print('scrap_copart_all(), 2 - ' + response.text)
             continue
 
-    accounts = [
-        {'username': 'tatermaz@gmail.com', 'password': '54TrAp34fY'},
-        {'username': 'sanrebno@gmail.com', 'password': '123TGBN4rt'},
-        {'username': 'aldnvdrinad@gmail.com', 'password': '2ldnvdr1n@d'},
-        {'username': 'st1syhabern@gmail.com', 'password': 'R#jgn)S(s!d'},
-        {'username': 'al90drudani@gmail.com', 'password': 'd@n!ev@ndu'},
-        {'username': 'sheihberna@gmail.com', 'password': '$he!hbern@'},
-        {'username': 'danievandu@gmail.com', 'password': 'd@n!ev@ndu'},
-        {'username': 'noiirreab@gmail.com', 'password': 'n0!rre@b'},
-        {'username': 'berttyana@gmail.com', 'password': 'bert!@n@'},
-        {'username': 'rebasahi@gmail.com', 'password': 'reb@$@h!'},
-    ]
-    div_count = 10
+    accounts = get_accounts()
+    div_count = len(accounts)
     total = sum([a[1] for a in data])
     average = ((total + div_count - 1) // div_count)
     remaining_count = div_count
@@ -142,15 +151,19 @@ def scrap_copart_all():
     options={'queue': 'high'}
 )
 def scrap_copart_lots(make_ids, account):
-    driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
-                              desired_capabilities=DesiredCapabilities.CHROME)
+    driver = get_webdriver(account)
 
     print('-------------', account)
     driver.get('https://www.copart.com/login/')
     while "https://www.copart.com/dashboard/" != driver.current_url:
-        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
-        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
-        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(
+            account['username'])
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(
+            account['password'])
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
         time.sleep(3)
 
     page_count = 1000
@@ -161,7 +174,7 @@ def scrap_copart_lots(make_ids, account):
     detail_url = 'https://www.copart.com/public/data/lotdetails/solr/lotImages/{}'.format
     headers = {
         "Host": "www.copart.com",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
+        "User-Agent": get_random_ua(),
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Language": "en-US,en;q=0.5",
         "Accept-Encoding": "gzip, deflate, br",
@@ -177,9 +190,10 @@ def scrap_copart_lots(make_ids, account):
         description = make.description
         code = make.code
 
-        payload = payloads(draw=1, start=0, length=page_count, misc=misc(code=code, description=description, type=vtype),
+        payload = payloads(draw=1, start=0, length=page_count,
+                           misc=misc(code=code, description=description, type=vtype),
                            page=0, size=page_count)
-        response = requests.request("POST", url, data=payload, headers=headers)
+        response = requests.request("POST", url, data=payload, headers=headers, proxies=get_proxies())
         result = json.loads(response.text)['data']['results']
         total = result['totalElements']
 
@@ -203,6 +217,7 @@ def scrap_copart_lots(make_ids, account):
                     lot = lot_data['lotDetails']
                 except Exception as e:
                     print('scrap_copart_lots(), 6 - No lotDetails, ' + detail_url(_lot['ln']), e)
+                    print('scrap_copart_lots(), 6 - No lotDetails, page source %s' % driver.page_source)
                     continue
 
                 vin = lot.get('fv', '')
@@ -271,7 +286,8 @@ def scrap_copart_lots(make_ids, account):
 
                     vehicle_info_item.doc_type_ts = lot.get('ts', '')
                     vehicle_info_item.doc_type_stt = lot.get('stt', '')
-                    vehicle_info_item.doc_type_td = lot.get('td', '')  # TN - SALVAGE CERTIFICATE, QC - GRAVEMENT ACCIDENTE
+                    vehicle_info_item.doc_type_td = lot.get('td',
+                                                            '')  # TN - SALVAGE CERTIFICATE, QC - GRAVEMENT ACCIDENTE
                     vehicle_info_item.odometer_orr = lot['orr']  # 0 mi (NOT ACTUAL), 0 km (EXEMPT), 76,848 mi (ACTUAL)
                     vehicle_info_item.odometer_ord = lot['ord']  # NOT ACTUAL
                     highlights = []
@@ -304,7 +320,8 @@ def scrap_copart_lots(make_ids, account):
                     vehicle_info_item.grid = lot['gr']
 
                     vehicle_info_item.images = '|'.join([a['url'][44:] for a in images.get('FULL_IMAGE', [])])
-                    vehicle_info_item.thumb_images = '|'.join([a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
+                    vehicle_info_item.thumb_images = '|'.join(
+                        [a['url'][44:] for a in images.get('THUMBNAIL_IMAGE', [])])
                     # vehicle_info_item.high_images = '|'.join([a['url'][44:] for a in images.get('HIGH_RESOLUTION_IMAGE', [])])
                     vehicle_info_item.save()
 
@@ -325,13 +342,17 @@ def scrap_copart_lots(make_ids, account):
                     print('vehicleinfo, vehicle - ' + description + ' - ' + str(lot['ln']) + ', Insert')
                     vehicle_item.save()
 
+                # Sleep some time to avoid being banned
+                time.sleep(random.uniform(*SLEEP_TIMES['LOC_DETAILS']))
+
             if page == pages_num:
                 break
 
             page += 1
             payload = payloads(draw=page, start=page_count * (page - 1), length=page_count,
-                               misc=misc(code=code, description=description, type=vtype), page=page - 1, size=page_count)
-            response = requests.request("POST", url, data=payload, headers=headers)
+                               misc=misc(code=code, description=description, type=vtype), page=page - 1,
+                               size=page_count)
+            response = requests.request("POST", url, data=payload, headers=headers, proxies=get_proxies())
             print('page - ' + str(page))
 
             result = json.loads(response.text)['data']['results']
@@ -341,6 +362,9 @@ def scrap_copart_lots(make_ids, account):
         print('total - ' + str(total))
         print('total pages - ' + str(pages_num))
 
+        # Need to sleep some time before trying new requests to make sure we don't get banned
+        time.sleep(random.uniform(*SLEEP_TIMES['MAKE_IDS']))
+
     if [553] == make_ids:
         scrap_filters_count.delay()
 
@@ -349,7 +373,7 @@ def scrap_copart_lots(make_ids, account):
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='13')),
+    run_every=(crontab(minute='0', hour='13', day_of_week='wed')),
     name="product.tasks.scrap_not_exist_lots",
     ignore_result=True,
     queue='high',
@@ -358,15 +382,24 @@ def scrap_copart_lots(make_ids, account):
 def scrap_not_exist_lots():
     if not config.SCRAP_COPART_NOT_EXIST_LOTS:
         return
-    driver = webdriver.Remote(command_executor='http://hub:4444/wd/hub',
-                              desired_capabilities=DesiredCapabilities.CHROME)
 
-    account = {'username': 'copart.gitlab@gmail.com', 'password': 'm1llerh0u4e'}
+    accounts = get_accounts()
+
+    account = random.choice(accounts)
+
+    driver = get_webdriver(account)
+
     driver.get('https://www.copart.com/login/')
+
     while "https://www.copart.com/dashboard/" != driver.current_url:
-        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(account['username'])
-        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(account['password'])
-        wait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginUsernametextbox"]'))).send_keys(
+            account['username'])
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//input[@data-uname="loginPasswordtextbox"]'))).send_keys(
+            account['password'])
+        wait(driver, 10).until(
+            EC.visibility_of_element_located((By.XPATH, '//button[@data-uname="loginSigninmemberbutton"]'))).click()
         time.sleep(3)
 
     detail_url = 'https://www.copart.com/public/data/lotdetails/solr/lotImages/{}'.format
@@ -509,7 +542,7 @@ def scrap_iaai_lots():
                 if not vin or vin.endswith('*'):
                     # send_vin_error.delay(vin, )
                     raise Exception
-            except:     # Unknown, BILL OF SALE, N/A, NONE
+            except:  # Unknown, BILL OF SALE, N/A, NONE
                 print(item_url(item_id=item_id) + ' - vin not correct ' + lot['VIN'])
                 return
 
@@ -575,8 +608,11 @@ def scrap_iaai_lots():
             db_item.lane = lot['AuctionLane'] if lot['AuctionLane'] else '-'
             db_item.item = lot['Slot']
             # db_item.grid = models.CharField(_('Grid/Row'), max_length=5, default='')
-            db_item.sale_date = timezone.make_aware(datetime.datetime.strptime(lot['LiveDate'], '%m/%d/%Y %I:%M:%S %p'), timezone.get_current_timezone())
-            db_item.last_updated = timezone.make_aware(datetime.datetime.strptime(str(datetime.datetime.now().year) + '-' + lot['SaleInfo']['ModifiedDate'], '%Y-%b-%d %I:%M%p (CDT)'), timezone.get_current_timezone())
+            db_item.sale_date = timezone.make_aware(datetime.datetime.strptime(lot['LiveDate'], '%m/%d/%Y %I:%M:%S %p'),
+                                                    timezone.get_current_timezone())
+            db_item.last_updated = timezone.make_aware(
+                datetime.datetime.strptime(str(datetime.datetime.now().year) + '-' + lot['SaleInfo']['ModifiedDate'],
+                                           '%Y-%b-%d %I:%M%p (CDT)'), timezone.get_current_timezone())
 
             db_item.source = False
 
@@ -593,7 +629,8 @@ def scrap_iaai_lots():
             if response.text != '':
                 images = json.loads(response.text)
                 db_item.images = '|'.join([a['K'] for a in images['keys']])
-                db_item.avatar = 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % images['keys'][0]['K']
+                db_item.avatar = 'https://vis.iaai.com:443/resizer?imageKeys=%s&width=128&height=96' % \
+                                 images['keys'][0]['K']
 
             db_item.save()
             if created:
@@ -666,7 +703,7 @@ def scrap_iaai_lots():
 
 
 @periodic_task(
-    run_every=crontab(minute='*/20', hour='*', day_of_week='mon,tue,wed,thu,fri'),
+    run_every=crontab(minute='*/20', hour='*', day_of_week='wed'),
     name="product.tasks.scrap_live_auctions",
     ignore_result=True,
     time_limit=3600,
@@ -716,7 +753,9 @@ def scrap_live_auctions():
                 continue
             command = "python auction.py " + param + '-' + str(random.randint(204, 206)) + " &"
             subprocess.call(command, shell=True)
-            print('new auction - https://www.copart.com/auctionDashboard?auctionDetails=' + param[:-1].lstrip('0') + '-' + param[-1])
+            print(
+                'new auction - https://www.copart.com/auctionDashboard?auctionDetails=' + param[:-1].lstrip('0') + '-' +
+                param[-1])
         GLOBAL['live_auctions'] = params
         print(len(params))
     except Exception as e:
@@ -786,7 +825,8 @@ def scrap_filters_count():
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Donations', type='F')
-    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='D').filter(~Q(info__lot_highlights="Did Not Test Start")).count()
+    featured_filter.count = Vehicle.objects.filter(info__lot_highlights__contains='D').filter(
+        ~Q(info__lot_highlights="Did Not Test Start")).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
@@ -816,27 +856,32 @@ def scrap_filters_count():
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Front End', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Front End') or Q(info__lot_2nd_damage__icontains='Front End')).count()
+    featured_filter.count = Vehicle.objects.filter(
+        Q(info__lot_1st_damage__icontains='Front End') or Q(info__lot_2nd_damage__icontains='Front End')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Hail Damage', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Hail') or Q(info__lot_2nd_damage__icontains='Hail')).count()
+    featured_filter.count = Vehicle.objects.filter(
+        Q(info__lot_1st_damage__icontains='Hail') or Q(info__lot_2nd_damage__icontains='Hail')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Normal Wear', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Normal Wear') or Q(info__lot_2nd_damage__icontains='Normal Wear')).count()
+    featured_filter.count = Vehicle.objects.filter(
+        Q(info__lot_1st_damage__icontains='Normal Wear') or Q(info__lot_2nd_damage__icontains='Normal Wear')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Minor Dents/Scratch', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Minor') or Q(info__lot_2nd_damage__icontains='Minor')).count()
+    featured_filter.count = Vehicle.objects.filter(
+        Q(info__lot_1st_damage__icontains='Minor') or Q(info__lot_2nd_damage__icontains='Minor')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
     featured_filter, created = Filter.objects.get_or_create(name='Water/Flood', type='F')
-    featured_filter.count = Vehicle.objects.filter(Q(info__lot_1st_damage__icontains='Water/Flood') or Q(info__lot_2nd_damage__icontains='Water/Flood')).count()
+    featured_filter.count = Vehicle.objects.filter(
+        Q(info__lot_1st_damage__icontains='Water/Flood') or Q(info__lot_2nd_damage__icontains='Water/Flood')).count()
     featured_filter.save()
     print(featured_filter.name + '-' + str(featured_filter.count))
 
@@ -936,7 +981,7 @@ def find_correct_vin():
 
 
 @periodic_task(
-    run_every=(crontab(minute='0', hour='12')),
+    run_every=(crontab(minute='0', hour='12', day_of_week='wed')),
     name="product.tasks.remove_unavailable_lots",
     ignore_result=True,
     queue='high',
