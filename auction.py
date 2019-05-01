@@ -55,47 +55,46 @@ async def copart(param):
             print("Response from WS invalid: ", channel_data[0]['d'][1][2])
             return
         else:
-            print("Connected OK!")
+            print(f"[{param}] Connected OK!")
 
         r = 4
 
         old = datetime.now()
         while True:
-            bids_data = await websocket.recv()
             try:
+                bids_data = await websocket.recv()
+
                 greeting_data = json.loads(bids_data)
                 data = greeting_data[0]['d'][1]
-                if not isinstance(data, dict):
-                    print(f"Received {bids_data} but is invalid, keep listening", bids_data)
-                    continue
+                if isinstance(data, dict):
+                    decoded = base64.b64decode(data['Data'])
+                    data = json.loads(decoded.decode())
 
-                decoded = base64.b64decode(data['Data'])
-                data = json.loads(decoded.decode())
+                    if TO_DB:
+                        if 'ATTRIBUTE' in data:
+                            query = "SELECT id FROM product_vehicleinfo WHERE lot = {}".format
+                            cursor.execute(query(data['LOTNO']))
+                            vehicle_info_item = cursor.fetchone()
+                            if vehicle_info_item:
+                                query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE info_id = {}".format
+                                cursor.execute(query(data['BID'], vehicle_info_item[0]))
+                                conn.commit()
+                                print(f'[{param}] %s' % ','.join([param, data['LOTNO'], data['BID'], 'updated']))
+                            else:
+                                query = "INSERT INTO product_vehiclenotexist(lot, sold_price, sale_date) VALUES ({}, {}, '{}')".format
+                                cursor.execute(query(data['LOTNO'], data['BID'], str(datetime.now())[:-7]))
+                                conn.commit()
+                                print(f'[{param}] %s' %
+                                      ','.join([param, data['LOTNO'], data['BID'],
+                                                'saved to product_vehiclenotexist table']))
 
-                if TO_DB:
-                    if 'ATTRIBUTE' in data:
-                        query = "SELECT id FROM product_vehicleinfo WHERE lot = {}".format
-                        cursor.execute(query(data['LOTNO']))
-                        vehicle_info_item = cursor.fetchone()
-                        if vehicle_info_item:
-                            query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE info_id = {}".format
-                            cursor.execute(query(data['BID'], vehicle_info_item[0]))
-                            conn.commit()
-                            print(','.join([param, data['LOTNO'], data['BID'], 'updated']))
-                        else:
-                            query = "INSERT INTO product_vehiclenotexist(lot, sold_price, sale_date) VALUES ({}, {}, '{}')".format
-                            cursor.execute(query(data['LOTNO'], data['BID'], str(datetime.now())[:-7]))
-                            conn.commit()
-                            print(
-                                ','.join([param, data['LOTNO'], data['BID'], 'saved to product_vehiclenotexist table']))
-
-                    if 'TEXT' in data:
-                        # conn.commit()
-                        cursor.close()
-                        conn.close()
-                        break
+                        if 'TEXT' in data:
+                            # conn.commit()
+                            cursor.close()
+                            conn.close()
+                            break
             except Exception as e:
-                print("Autction ERROR: ", e)
+                print(f"[{param}] Auction ERROR: ", e)
 
             now = datetime.now()
             if (now - old).seconds > 28:
