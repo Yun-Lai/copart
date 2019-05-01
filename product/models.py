@@ -252,7 +252,7 @@ class Vehicle(models.Model):
         verbose_name_plural = _('Vehicles')
 
     def __str__(self):
-        return f'Vehicle(vin={self.info.vin}, lot={self.info.lot})'
+        return f'Vehicle(vin={self.info.vin}, lot={self.info.lot}, sold_price={self.sold_price})'
 
     def set_sold_price(self, sold_price):
         self.sold_price = sold_price
