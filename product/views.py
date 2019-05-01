@@ -74,7 +74,7 @@ def view_remove_unavailable_lots(request):
     return redirect('/' + settings.COPART_ADMIN_URL)
 
 
-def view_404(request):
+def view_404(request, **kwargs):
     return redirect('/')
 
 

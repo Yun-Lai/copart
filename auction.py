@@ -20,9 +20,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-TO_DB = True
+logging.getLogger('websockets').setLevel(logging.WARNING)
 
-logger.debug("=="*500)
+TO_DB = True
 
 
 async def copart(param):
@@ -97,7 +97,7 @@ async def copart(param):
                         if 'TEXT' in data:
                             break
             except Exception as e:
-                print(f"[{param}] Auction ERROR: ", e)
+                print(f"[{param}] Auction ERROR: %s" % e)
 
             now = datetime.now()
             if (now - old).seconds > 28:
@@ -114,8 +114,8 @@ if __name__ == '__main__':
     arg = sys.argv[1:]
 
     if len(arg) == 1:
-        print('started - https://www.copart.com/auctionDashboard?auctionDetails=' + arg[0][:-1].lstrip('0') + '-' +
-              arg[0][-1])
+        logger.debug('started - https://www.copart.com/auctionDashboard?auctionDetails=' +
+                     arg[0][:-1].lstrip('0') + '-' + arg[0][-1])
         get_copart_auction(arg[0])
     else:
-        print('Please input the correct command')
+        logger.debug('Please input the correct command')
