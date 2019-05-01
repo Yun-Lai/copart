@@ -15,8 +15,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'copart.settings')
 django.setup()
 
 from product.models import VehicleInfo, Vehicle, VehicleNotExist
+from django.utils.timezone import get_current_timezone
+import logging
+
+logger = logging.getLogger(__name__)
 
 TO_DB = True
+
+logger.debug("=="*500)
 
 
 async def copart(param):
@@ -74,22 +80,20 @@ async def copart(param):
                     if TO_DB:
                         if 'ATTRIBUTE' in data:
                             vehicle_info = VehicleInfo.objects.filter(lot=data['LOTNO']).first()
-                            print("vehicle_info", vehicle_info)
 
                             if vehicle_info:
                                 vehicle = Vehicle.objects.get(info=vehicle_info)
                                 vehicle.set_sold_price(data['BID'])
-                                print("vehicle", vehicle)
-                                print(f'[{param}] %s' % ','.join([param, data['LOTNO'], data['BID'], 'updated']))
+                                print(f"[{param}] Update: {vehicle}")
                             else:
                                 params = {
                                     'lot': data['LOTNO'],
                                     'sold_price': data['BID'],
-                                    'sale_date': str(datetime.now())[:-7],
+                                    'sale_date': datetime.now(tz=get_current_timezone())
                                 }
-                                created, obj = VehicleNotExist.objects.get_or_create(**params)
+                                obj, created = VehicleNotExist.objects.get_or_create(**params)
                                 if created:
-                                    print(f"Saved : {obj}")
+                                    print(f"[{param}] Saved : {obj}")
                         if 'TEXT' in data:
                             break
             except Exception as e:
