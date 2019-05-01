@@ -181,7 +181,7 @@ class VehicleInfo(models.Model):
         verbose_name_plural = _('Vehicle Information')
 
     def __str__(self):
-        return self.vin + ' ' + str(self.lot)
+        return f'VehicleInfo(vin={self.vin}, lot={self.lot})'
 
     def vin_(self):
         return mark_safe('<a href="/lot/' + str(self.lot) + '" target="_blank">' + self.vin + '</a>')
@@ -232,7 +232,7 @@ class VehicleInfo(models.Model):
 
 
 class Vehicle(models.Model):
-    info = models.ForeignKey(VehicleInfo, on_delete=models.CASCADE)
+    info = models.ForeignKey(VehicleInfo, on_delete=models.CASCADE, related_name='vehicle')
     # Bid Information
     bid_status = models.CharField(_('Bid Status'), max_length=30, default='')
     sale_status = models.CharField(_('Sale Status'), max_length=30, default='')
@@ -252,7 +252,12 @@ class Vehicle(models.Model):
         verbose_name_plural = _('Vehicles')
 
     def __str__(self):
-        return self.info.vin + ' ' + str(self.info.lot)
+        return f'Vehicle(vin={self.info.vin}, lot={self.info.lot})'
+
+    def set_sold_price(self, sold_price):
+        self.sold_price = sold_price
+        self.sale_status = 'SOLD'
+        self.save()
 
     def avatar_img(self):
         return mark_safe('<a href="/lot/' + str(
@@ -382,6 +387,9 @@ class VehicleNotExist(models.Model):
     lot = models.IntegerField(_('Lot'), unique=True)
     sold_price = models.IntegerField(_('Sold Price'))
     sale_date = models.DateTimeField(_('Sale Date'), auto_now_add=True)
+
+    def __str__(self):
+        return f'VehicleNotExist(lot={self.lot}, sold_price={self.sold_price}, sale_date={self.sale_date})'
 
 
 class Foregoing(models.Model):

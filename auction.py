@@ -1,21 +1,22 @@
 import asyncio
 import base64
 import json
+import os
 import sys
 from datetime import datetime
 
-import psycopg2
+import django
 import time
 import websockets
 
-from dbconfig import read_postgres_db_config
+sys.path.append('../copart')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'copart.settings')
+django.setup()
+
+from product.models import VehicleInfo, Vehicle, VehicleNotExist
 
 TO_DB = True
-
-if TO_DB:
-    db_config = read_postgres_db_config()
-    conn = psycopg2.connect(**db_config)
-    cursor = conn.cursor()
 
 
 async def copart(param):
@@ -72,26 +73,24 @@ async def copart(param):
 
                     if TO_DB:
                         if 'ATTRIBUTE' in data:
-                            query = "SELECT id FROM product_vehicleinfo WHERE lot = {}".format
-                            cursor.execute(query(data['LOTNO']))
-                            vehicle_info_item = cursor.fetchone()
-                            if vehicle_info_item:
-                                query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE info_id = {}".format
-                                cursor.execute(query(data['BID'], vehicle_info_item[0]))
-                                conn.commit()
+                            vehicle_info = VehicleInfo.objects.filter(lot=data['LOTNO']).first()
+                            print("vehicle_info", vehicle_info)
+
+                            if vehicle_info:
+                                vehicle = Vehicle.objects.get(info=vehicle_info)
+                                vehicle.set_sold_price(data['BID'])
+                                print("vehicle", vehicle)
                                 print(f'[{param}] %s' % ','.join([param, data['LOTNO'], data['BID'], 'updated']))
                             else:
-                                query = "INSERT INTO product_vehiclenotexist(lot, sold_price, sale_date) VALUES ({}, {}, '{}')".format
-                                cursor.execute(query(data['LOTNO'], data['BID'], str(datetime.now())[:-7]))
-                                conn.commit()
-                                print(f'[{param}] %s' %
-                                      ','.join([param, data['LOTNO'], data['BID'],
-                                                'saved to product_vehiclenotexist table']))
-
+                                params = {
+                                    'lot': data['LOTNO'],
+                                    'sold_price': data['BID'],
+                                    'sale_date': str(datetime.now())[:-7],
+                                }
+                                created, obj = VehicleNotExist.objects.get_or_create(**params)
+                                if created:
+                                    print(f"Saved : {obj}")
                         if 'TEXT' in data:
-                            # conn.commit()
-                            cursor.close()
-                            conn.close()
                             break
             except Exception as e:
                 print(f"[{param}] Auction ERROR: ", e)
