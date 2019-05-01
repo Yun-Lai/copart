@@ -51,8 +51,8 @@ async def copart(param):
         channel_data = json.loads(channel_data)
 
         if not channel_data[0]['d'][1][1]:
-            print(channel_data)
-            print("Response from WS invalid: ", channel_data[0]['d'][1][2])
+            print(f"[{param}] {channel_data}")
+            print(f"[{param}] Response from WS invalid: %s" % channel_data[0]['d'][1][2])
             return
         else:
             print(f"[{param}] Connected OK!")

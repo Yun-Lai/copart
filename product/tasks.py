@@ -6,10 +6,10 @@ import os
 import random
 import re
 import subprocess
-import time
 from multiprocessing.pool import ThreadPool
 
 import requests
+import time
 from celery.schedules import crontab
 from celery.task import task, periodic_task
 from constance import config
@@ -24,17 +24,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as wait
 
 from product.models import *
-from .webdriver import get_webdriver, get_proxies
 from .ua import get_random_ua
+from .webdriver import get_webdriver, get_proxies
 
 GLOBAL = {'live_auctions': []}
 
 # Modify here times to sleep between requests randomly
 SLEEP_TIMES = {
-    'LOC_DETAILS': (1, 4),
-    'MAKE_IDS': (1, 4),
+    'LOTS_DETAILS': (1, 4),  # sleep random from this range before getting next loc
+    'LOTS_PER_PAGE': (1, 4),  # sleep some random from this range before going to next page
 }
-
 
 def get_accounts():
     accounts_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../accounts.json')
@@ -343,7 +342,7 @@ def scrap_copart_lots(make_ids, account):
                     vehicle_item.save()
 
                 # Sleep some time to avoid being banned
-                time.sleep(random.uniform(*SLEEP_TIMES['LOC_DETAILS']))
+                time.sleep(random.uniform(*SLEEP_TIMES['LOTS_DETAILS']))
 
             if page == pages_num:
                 break
@@ -363,7 +362,7 @@ def scrap_copart_lots(make_ids, account):
         print('total pages - ' + str(pages_num))
 
         # Need to sleep some time before trying new requests to make sure we don't get banned
-        time.sleep(random.uniform(*SLEEP_TIMES['MAKE_IDS']))
+        time.sleep(random.uniform(*SLEEP_TIMES['LOTS_PER_PAGE']))
 
     if [553] == make_ids:
         scrap_filters_count.delay()
