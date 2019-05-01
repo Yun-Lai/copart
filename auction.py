@@ -21,7 +21,7 @@ if TO_DB:
 async def copart(param):
     nirvanalv = param.split('-')[1]
     param = param.split('-')[0]
-    params = {
+    connection_params = {
         'origin': 'https://g2auction.copart.com',
         'extra_headers': {
             'Accept-Encoding': 'gzip, deflate, br',
@@ -33,41 +33,45 @@ async def copart(param):
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.108 Safari/537.36',
         }
     }
-    uri = f'wss://nirvanalv{nirvanalv}.copart.com/sv/ws'
+    uri = f'wss://nirvanarn{nirvanalv}.copart.com/sv/ws'
 
-    async with websockets.connect(uri, **params) as websocket:
-        # param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=Linux&S=ANONYMOUS&A=VB3&G=T&D=F&B=&R={r}&1Date={date}&'.format
+    async with websockets.connect(uri, **connection_params) as websocket:
         param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=MacIntel&S=ANONYMOUS&A=VB3.5&G=T&D=F&B=&R={r}&1Date={date}&'.format
         keep_alive = 'F=3&R={r}&'.format
         param_2nd = 'F=5&R={r}&E=1&N=/COPART{auction_num}/outbound,0,,F'.format
 
-        await websocket.send(param_1st(r=2, date=str(int(time.time() * 1000))))
+        packet_1 = param_1st(r=2, date=str(int(time.time() * 1000)))
+        await websocket.send(packet_1)
         await websocket.recv()
 
-        await websocket.send(param_2nd(r=4, auction_num=param))
+        packet_2 = param_2nd(r=3, auction_num=param)
+        await websocket.send(packet_2)
         channel_data = await websocket.recv()
 
         channel_data = json.loads(channel_data)
 
         if not channel_data[0]['d'][1][1]:
             print(channel_data)
-            print("Response from WS: ", channel_data[0]['d'][1][2])
+            print("Response from WS invalid: ", channel_data[0]['d'][1][2])
             return
+        else:
+            print("Connected OK!")
 
         r = 4
 
         old = datetime.now()
         while True:
-            greeting = await websocket.recv()
+            bids_data = await websocket.recv()
             try:
-                greeting_data = json.loads(greeting)
+                greeting_data = json.loads(bids_data)
                 data = greeting_data[0]['d'][1]
                 if not isinstance(data, dict):
-                    print(f"Received {greeting} but is invalid, keep listening", greeting)
+                    print(f"Received {bids_data} but is invalid, keep listening", bids_data)
                     continue
 
                 decoded = base64.b64decode(data['Data'])
                 data = json.loads(decoded.decode())
+
                 if TO_DB:
                     if 'ATTRIBUTE' in data:
                         query = "SELECT id FROM product_vehicleinfo WHERE lot = {}".format
