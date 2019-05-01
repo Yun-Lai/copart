@@ -29,7 +29,7 @@ from .ua import get_random_ua
 
 GLOBAL = {'live_auctions': []}
 
-# Modify here times to sleep between reqeusts
+# Modify here times to sleep between requests randomly
 SLEEP_TIMES = {
     'LOC_DETAILS': (1, 4),
     'MAKE_IDS': (1, 4),

@@ -1,68 +1,101 @@
-import sys
+import asyncio
 import base64
 import json
-import asyncio
-import websockets
-import time
+import sys
 from datetime import datetime
+
 import psycopg2
+import time
+import websockets
+
 from dbconfig import read_postgres_db_config
 
-db_config = read_postgres_db_config()
-conn = psycopg2.connect(**db_config)
-cursor = conn.cursor()
+TO_DB = True
+
+if TO_DB:
+    db_config = read_postgres_db_config()
+    conn = psycopg2.connect(**db_config)
+    cursor = conn.cursor()
+
 
 async def copart(param):
     nirvanalv = param.split('-')[1]
     param = param.split('-')[0]
-    async with websockets.connect('wss://nirvanalv' + nirvanalv + '.copart.com/sv/ws') as websocket:
-        param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=Linux&S=ANONYMOUS&A=VB3&G=T&D=F&B=&R={}&1Date={}&'.format
-        await websocket.send(param_1st(2, str(int(time.time() * 1000))))
+    params = {
+        'origin': 'https://g2auction.copart.com',
+        'extra_headers': {
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en,ro;q=0.9,en-US;q=0.8',
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache',
+            'Origin': 'https://g2auction.copart.com',
+            'Host': f'nirvanarn{nirvanalv}.copart.com',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.108 Safari/537.36',
+        }
+    }
+    uri = f'wss://nirvanalv{nirvanalv}.copart.com/sv/ws'
+
+    async with websockets.connect(uri, **params) as websocket:
+        # param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=Linux&S=ANONYMOUS&A=VB3&G=T&D=F&B=&R={r}&1Date={date}&'.format
+        param_1st = 'F=1&Connection-Type=JC&Y=10&V=Netscape&P=nws&W=81457-81457&X=February-12 2016&Z=MacIntel&S=ANONYMOUS&A=VB3.5&G=T&D=F&B=&R={r}&1Date={date}&'.format
+        keep_alive = 'F=3&R={r}&'.format
+        param_2nd = 'F=5&R={r}&E=1&N=/COPART{auction_num}/outbound,0,,F'.format
+
+        await websocket.send(param_1st(r=2, date=str(int(time.time() * 1000))))
         await websocket.recv()
 
-        param_2nd = 'F=5&R={}&E=1&N=/COPART{}/outbound,0,,F'.format
-        await websocket.send(param_2nd(3, param))
-        await websocket.recv()
+        await websocket.send(param_2nd(r=4, auction_num=param))
+        channel_data = await websocket.recv()
 
-        keep_alive = 'F=3&R={}&'.format
+        channel_data = json.loads(channel_data)
+
+        if not channel_data[0]['d'][1][1]:
+            print(channel_data)
+            print("Response from WS: ", channel_data[0]['d'][1][2])
+            return
+
         r = 4
 
         old = datetime.now()
         while True:
             greeting = await websocket.recv()
             try:
-                decoded = base64.b64decode(json.loads(greeting)[0]['d'][1]['Data'])
+                greeting_data = json.loads(greeting)
+                data = greeting_data[0]['d'][1]
+                if not isinstance(data, dict):
+                    print(f"Received {greeting} but is invalid, keep listening", greeting)
+                    continue
+
+                decoded = base64.b64decode(data['Data'])
                 data = json.loads(decoded.decode())
-                if 'ATTRIBUTE' in data:
-                    # print(','.join([param, data['LOTNO'], data['BID']]))
-                    # auction_file = open('auction_history.txt', 'a')
-                    # auction_file.write(','.join([param, data['LOTNO'], data['BID'], '\n']))
-                    # auction_file.close()
+                if TO_DB:
+                    if 'ATTRIBUTE' in data:
+                        query = "SELECT id FROM product_vehicleinfo WHERE lot = {}".format
+                        cursor.execute(query(data['LOTNO']))
+                        vehicle_info_item = cursor.fetchone()
+                        if vehicle_info_item:
+                            query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE info_id = {}".format
+                            cursor.execute(query(data['BID'], vehicle_info_item[0]))
+                            conn.commit()
+                            print(','.join([param, data['LOTNO'], data['BID'], 'updated']))
+                        else:
+                            query = "INSERT INTO product_vehiclenotexist(lot, sold_price, sale_date) VALUES ({}, {}, '{}')".format
+                            cursor.execute(query(data['LOTNO'], data['BID'], str(datetime.now())[:-7]))
+                            conn.commit()
+                            print(
+                                ','.join([param, data['LOTNO'], data['BID'], 'saved to product_vehiclenotexist table']))
 
-                    query = "SELECT id FROM product_vehicleinfo WHERE lot = {}".format
-                    cursor.execute(query(data['LOTNO']))
-                    vehicle_info_item = cursor.fetchone()
-                    if vehicle_info_item:
-                        query = "UPDATE product_vehicle SET sold_price = {}, sale_status = 'SOLD' WHERE info_id = {}".format
-                        cursor.execute(query(data['BID'], vehicle_info_item[0]))
-                        conn.commit()
-                        print(','.join([param, data['LOTNO'], data['BID'], 'updated']))
-                    else:
-                        query = "INSERT INTO product_vehiclenotexist(lot, sold_price, sale_date) VALUES ({}, {}, '{}')".format
-                        cursor.execute(query(data['LOTNO'], data['BID'], str(datetime.now())[:-7]))
-                        conn.commit()
-                        print(','.join([param, data['LOTNO'], data['BID'], 'saved to product_vehiclenotexist table']))
+                    if 'TEXT' in data:
+                        # conn.commit()
+                        cursor.close()
+                        conn.close()
+                        break
+            except Exception as e:
+                print("Autction ERROR: ", e)
 
-                if 'TEXT' in data:
-                    # conn.commit()
-                    cursor.close()
-                    conn.close()
-                    break
-            except:
-                pass
             now = datetime.now()
             if (now - old).seconds > 28:
-                await websocket.send(keep_alive(3, r))
+                await websocket.send(keep_alive(r=r))
                 r += 1
                 old = datetime.now()
 
@@ -70,11 +103,13 @@ async def copart(param):
 def get_copart_auction(param):
     asyncio.get_event_loop().run_until_complete(copart(param))
 
+
 if __name__ == '__main__':
     arg = sys.argv[1:]
 
     if len(arg) == 1:
-        print('started - https://www.copart.com/auctionDashboard?auctionDetails=' + arg[0][:-1].lstrip('0') + '-' + arg[0][-1])
+        print('started - https://www.copart.com/auctionDashboard?auctionDetails=' + arg[0][:-1].lstrip('0') + '-' +
+              arg[0][-1])
         get_copart_auction(arg[0])
     else:
         print('Please input the correct command')

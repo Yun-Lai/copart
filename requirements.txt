@@ -2,6 +2,7 @@
 #git+https://github.com/gkuhn1/django-admin-multiupload.git
 #git+https://github.com/python-force/django-admin-multiupload.git
 Django==2.0.2
+requests
 #django-blog-zinnia==0.19
 #git+https://github.com/Wtower/django-blog-zinnia.git
 #django-ckeditor==5.4.0
@@ -22,7 +23,6 @@ Unipath==1.1
 selenium
 django-celery-beat
 websockets==5.0
-requests
 lxml
 #mysql-connector-python
 #mysqlclient
