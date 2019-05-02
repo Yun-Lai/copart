@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import concurrent.futures
 import datetime
 import json
 import os
@@ -22,18 +23,23 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as wait
+import logging
 
 from product.models import *
 from .ua import get_random_ua
 from .webdriver import get_webdriver, get_proxies
 
+
+logger = logging.getLogger(__name__)
+
 GLOBAL = {'live_auctions': []}
 
 # Modify here times to sleep between requests randomly
 SLEEP_TIMES = {
-    'LOTS_DETAILS': (1, 4),  # sleep random from this range before getting next loc
-    'LOTS_PER_PAGE': (1, 4),  # sleep some random from this range before going to next page
+    'LOTS_DETAILS': (0, 0),  # sleep random from this range before getting next loc
+    'LOTS_PER_PAGE': (0, 0),  # sleep some random from this range before going to next page
 }
+
 
 def get_accounts():
     accounts_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../accounts.json')
@@ -49,6 +55,7 @@ def get_accounts():
     options={'queue': 'high'}
 )
 def scrap_copart_all():
+
     if not config.SCRAP_COPART_LOTS:
         return
     # Run this in test mode
@@ -77,37 +84,57 @@ def scrap_copart_all():
     else:
         vehicle_makes = VehicleMakes.objects.all()
 
-    for idx, makes in enumerate(vehicle_makes):
-        vtype = makes.type
-        description = makes.description
-        code = makes.code
-
-        payload = payloads(draw=1, start=0, length=1, misc=misc(code=code, description=description, type=vtype),
-                           page=0, size=1)
+    def _make_request(_data):
         while True:
             try:
-                response = requests.request("POST", url, data=payload, headers=headers, proxies=get_proxies())
-                break
+                response = requests.post(url, data=_data, headers=headers, proxies=get_proxies())
+                response.raise_for_status()
+                return response
             except Exception as e:
-                print(f'ERROR: scrap_copart_all(), 1 - {url}, {e}')
+                if 'Cannot connect to proxy' in str(e):
+                    # No need to log here the error
+                    pass
+                else:
+                    print(f'ERROR: scrap_copart_all(), 1 - {url}, {e}')
                 time.sleep(1)
 
-        try:
-            result = json.loads(response.text)['data']['results']
-            total = result['totalElements']
-            print(','.join([str(idx), description, str(total)]))
-            data.append([makes.id, total])
-        except:
-            print('scrap_copart_all(), 2 - ' + response.text)
-            continue
+    with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
+        future_results = {}
+
+        for idx, makes in enumerate(vehicle_makes):
+            vtype = makes.type
+            description = makes.description
+            code = makes.code
+
+            payload = payloads(draw=1, start=0, length=1, misc=misc(code=code, description=description, type=vtype),
+                               page=0, size=1)
+
+            future_results[executor.submit(_make_request, payload)] = makes
+
+        for idx, future in enumerate(concurrent.futures.as_completed(future_results)):
+            makes = future_results[future]  # type: VehicleMakes
+
+            response = future.result()
+            response_data = response.json()
+
+            try:
+                result = response_data['data']['results']
+                total = result['totalElements']
+                print(','.join([str(idx), makes.description, str(total)]))
+                data.append([makes.id, total])
+            except:
+                print('scrap_copart_all(), 2 - ' + response.text)
+                continue
+
+    del future_results
 
     accounts = get_accounts()
     div_count = len(accounts)
     total = sum([a[1] for a in data])
     average = ((total + div_count - 1) // div_count)
     remaining_count = div_count
-    print(total)
-    print(average)
+    print(f"total={total}")
+    print(f"average={average}")
 
     data = sorted(data, key=lambda x: x[1], reverse=True)
 
@@ -249,9 +276,9 @@ def scrap_copart_lots(make_ids, account):
                                     datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
 
                             vehicle_item.save()
-                            print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update')
+                            print(f"vehicle - {description} - {lot['ln']}, Update")
                         else:
-                            print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Update - Ignored')
+                            print(f"vehicle - {description} - {lot['ln']}, Update - Ignored")
                     except Vehicle.DoesNotExist:
                         vehicle_item = Vehicle()
                         vehicle_item.info = vehicle_info_item
@@ -269,7 +296,7 @@ def scrap_copart_lots(make_ids, account):
                                 datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
 
                         vehicle_item.save()
-                        print('vehicle - ' + description + ' - ' + str(lot['ln']) + ', Insert')
+                        print(f"vehicle - {description} - {lot['ln']}, Insert")
                 else:
                     vehicle_info_item = VehicleInfo()
                     vehicle_info_item.lot = lot['ln']
@@ -338,7 +365,7 @@ def scrap_copart_lots(make_ids, account):
                         vehicle_item.last_updated = timezone.make_aware(
                             datetime.datetime.fromtimestamp(lot['lu'] / 1000), timezone.get_current_timezone())
 
-                    print('vehicleinfo, vehicle - ' + description + ' - ' + str(lot['ln']) + ', Insert')
+                    print(f"vehicleinfo, vehicle - {description} - {lot['ln']}, Insert")
                     vehicle_item.save()
 
                 # Sleep some time to avoid being banned
@@ -358,8 +385,8 @@ def scrap_copart_lots(make_ids, account):
             total = result['totalElements']
             pages_num = (total + 999) // 1000
 
-        print('total - ' + str(total))
-        print('total pages - ' + str(pages_num))
+        print(f'total - {total}')
+        print(f'total pages - {pages_num}')
 
         # Need to sleep some time before trying new requests to make sure we don't get banned
         time.sleep(random.uniform(*SLEEP_TIMES['LOTS_PER_PAGE']))

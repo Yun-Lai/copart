@@ -4,11 +4,14 @@ import random
 import tempfile
 import zipfile
 from urllib.parse import urlparse
+import logging
 
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
+from selenium.webdriver.remote.remote_connection import LOGGER
 from . import utils
+
+LOGGER.setLevel(logging.CRITICAL)
 
 PROXY_TEMPLATE = 'https://lum-customer-hl_a3dca943-zone-static-session-{session_id}:wbuavmmsjwg9@zproxy.lum-superproxy.io:22225'
 
@@ -102,6 +105,7 @@ def get_webdriver(account, auth_extension=True):
     proxy = PROXY_TEMPLATE.format(session_id=session_id)
     desired_capabilities = DesiredCapabilities.CHROME.copy()
     options = webdriver.ChromeOptions()
+    options.add_argument("--disable-logging")
     options.add_argument(f"--user-agent=\"{account['ua']}\"")
     if proxy:
         options.add_argument(f'--proxy-server={proxy}')
