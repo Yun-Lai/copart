@@ -20,7 +20,6 @@ services:
     restart: unless-stopped
     volumes:
       - ../postgres_data:/var/lib/postgresql/data/
-      - ./pg/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
     ports:
       - "5432:5432"
 
