@@ -47,6 +47,23 @@ def get_accounts():
         return json.load(f)
 
 
+def make_request(url, **kwargs):
+    max_retry_count = 10
+    retry_count = 0
+    while True:
+        try:
+            kwargs['proxies'] = get_proxies()
+            response = requests.post(url, **kwargs)
+            response.raise_for_status()
+            return response
+        except Exception as e:
+            time.sleep(1)
+            retry_count += 1
+            if retry_count >= max_retry_count:
+                print(f"Max retry reached for url: {url}")
+                raise
+
+
 @periodic_task(
     run_every=(crontab(minute='0', hour='7', day_of_week='wed')),
     name="product.tasks.scrap_copart_all",
@@ -87,8 +104,7 @@ def scrap_copart_all():
     def _make_request(_data):
         while True:
             try:
-                response = requests.post(url, data=_data, headers=headers, proxies=get_proxies())
-                response.raise_for_status()
+                response = make_request(url, data=_data, headers=headers, proxies=get_proxies())
                 return response
             except Exception as e:
                 if 'Cannot connect to proxy' in str(e):
@@ -219,7 +235,7 @@ def scrap_copart_lots(make_ids, account):
         payload = payloads(draw=1, start=0, length=page_count,
                            misc=misc(code=code, description=description, type=vtype),
                            page=0, size=page_count)
-        response = requests.request("POST", url, data=payload, headers=headers, proxies=get_proxies())
+        response = make_request(url, data=payload, headers=headers, proxies=get_proxies())
         result = json.loads(response.text)['data']['results']
         total = result['totalElements']
 
@@ -378,7 +394,7 @@ def scrap_copart_lots(make_ids, account):
             payload = payloads(draw=page, start=page_count * (page - 1), length=page_count,
                                misc=misc(code=code, description=description, type=vtype), page=page - 1,
                                size=page_count)
-            response = requests.request("POST", url, data=payload, headers=headers, proxies=get_proxies())
+            response = make_request(url, data=payload, headers=headers, proxies=get_proxies())
             print('page - ' + str(page))
 
             result = json.loads(response.text)['data']['results']
