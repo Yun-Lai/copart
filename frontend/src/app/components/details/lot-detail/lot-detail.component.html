@@ -1,0 +1,310 @@
+<div class="row f_asearch_tdv f_detail_cnt_dv">
+    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 f_l_detail_photo_cnt">
+        <div *ngIf="lotDetail && lotDetail.info">
+            <div class="f_detail_item_tlt">{{ lotDetail.info['name'] }}
+              <ng-container *ngIf="lotDetail.info">
+                <ng-container *ngIf="lotDetail.info['lot_highlights'] | isIcon">
+                  <ng-container *ngFor="let icon of lotDetail.info['lot_highlights'].split('')">
+                    <div class="f_l_y_d f_l_s{{icon|lowercase }}">{{icon}}</div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+            <div style="margin: 0; padding: 0" class="detail_image">
+              <div class="btn btn-default fancybox-button f_detail_main_img_a"
+                 style="overflow: hidden; background-siz: cover; background-position: center; position: absolute">
+                <img class="f_l_detail_photo" style="opacity: 0" src="{{ lotDetail.info.images | getImage : selected_image }}">
+                  <app-zoom-image [url]="lotDetail.info.images | getImage : selected_image"></app-zoom-image>
+              </div>
+            </div>
+
+            <div class="f_detail_img_view_all_photos">View All Photos</div>
+        </div>
+        <div class="f_l_d_p_c_causel">
+            <div class="row">
+                <div class="span12">
+                    <div class="item">
+                        <div class="row" *ngIf="lotDetail.info">
+                          <ng-container *ngFor="let i of [0,1,2,3,4]">
+                            <div class="col causel-row">
+                                <div class="thumbnail" (click)="imageShow(i)"
+                                   [ngClass]="(selected_image === i) ? 'active' : ''">
+                                    <img class="p_a_gallery_sub_img"
+                                         src="{{ lotDetail.info.images | getImage : i }}"
+                                         style="max-width:100%;">
+                                </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="row" *ngIf="lotDetail.info">
+                          <ng-container *ngFor="let i of [5,6,7,8,9]">
+                            <div class="col causel-row">
+                                <div class="thumbnail" (click)="imageShow(i)"
+                                   [ngClass]="(selected_image === i) ? 'active' : ''">
+                                    <img class="p_a_gallery_sub_img"
+                                         src="{{ lotDetail.info.images | getImage : i }}"
+                                         style="max-width:100%;">
+                                </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12 f_detail_infos_dv" *ngIf="lotDetail && lotDetail.info">
+        <div class="row f_detail_right_side_top_row">
+            <div class="col-md-6 col-xs-12 f_d_i_t_dv">
+                <div class="f_asearch_tlt_dv">Lot #{{ lotDetail.info.lot }}</div>
+                <div class="f_detail_info_cnt">
+                    <div class="row">
+                        <div class="col-5">Doc Type:</div>
+                        <div class="col-7 g_txt_right">{{ lotDetail.info.doc_type_stt }} - {{ lotDetail.info.doc_type_ts }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">Odometer:</div>
+                        <div class="col-7 g_txt_right">{{ lotDetail.info.odometer_orr| number }} {{ lotDetail.info.odometer_ord }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">Highlights:</div>
+                        <div class="col-7 g_txt_right">
+                          <ng-container *ngFor="let icon of lotDetail.info['lot_highlights'].split('')">
+                            {{icon | getHighlight}}<br/>
+                          </ng-container>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">Primary Damage:</div>
+                        <div class="col-5 g_txt_right">{{ lotDetail.info.lot_1st_damage }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">Secondary Damage:</div>
+                        <div class="col-5 g_txt_right">{{ lotDetail.info.lot_2nd_damage }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">Est.Retail Value:</div>
+                        <div class="col-5 g_txt_right">${{ lotDetail.info.retail_value | number }} {{ lotDetail.info.currency }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">VIN:</div>
+                        <div class="col-8 g_txt_right">{{ lotDetail.info.vin }}</div>
+                    </div>
+                </div>
+                <div class="f_asearch_tlt_dv">Features</div>
+                <div class="f_detail_info_cnt">
+                    <div class="row">
+                        <div class="col-6">Body Style:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.body_style }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Color:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.color }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Engine Type:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.engine_type }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Cylinders:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.cylinders }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Transmission:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.transmission }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Drive:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.drive }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Fuel:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.fuel }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Keys:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.keys }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Notes:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.notes }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div class="f_asearch_tlt_dv">Bid Information</div>
+                <div class="f_detail_info_cnt" *ngIf="!sold">
+                    <ng-container *ngIf="lotDetail.sold_price > 0">
+                        <div class="f_detail_bid_cnt_r">
+                          Browser our current inventory of <br> {{ lotDetail.info.name }} <br>
+                          <input type="button" class="f_asearch_l_btn f_detail_find_more_btn" value="Find More Like This" id="detail_find_more">
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="lotDetail.sold_price <= 0">
+                        <div class="row">
+                          <div class="col-md-6 col-xs-6">Bid State:</div>
+                          <div class="col-md-6 g_txt_right">{{ lotDetail.bid_status }}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 col-xs-6">Sale Status:</div>
+                          <div class="col-md-6 g_txt_right">{{ lotDetail.sale_status }}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 col-xs-6">Current Bid:</div>
+                          <div class="col-md-6 g_txt_right">${{ lotDetail.current_bid|number }} {{ lotDetail.info.currency }}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 col-xs-6">Want it Today?</div>
+                          <div class="col-md-6 g_txt_right">${{ lotDetail.buy_today_bid|number }} {{ lotDetail.info.currency }}</div>
+                        </div>
+                    </ng-container>
+                </div>
+                <ng-container *ngIf="sold && lotDetail.info">
+                  <div class="f_detail_bid_tlt_r">
+                    LOT SOLD for ${{ lotDetail.sold_price | number }} {{ lotDetail.info.currency }}
+                  </div>
+                  <div class="f_detail_info_cnt">
+                      <div class="f_detail_bid_cnt_r">
+                          Browser our current inventory of <br>
+                          {{lotDetail.info['name'] }}<br>
+                          <input type="button" class="f_asearch_l_btn f_detail_find_more_btn" value="Find More Like This">
+                      </div>
+                  </div>
+                </ng-container>
+
+                <div class="f_asearch_tlt_dv">Sale Information</div>
+                <div class="f_detail_info_cnt">
+                    <div class="row">
+                        <div class="col-6">Location:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.location }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Lane/Item/Grid/Row:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.lane }}/{{ lotDetail.info.item }}/{{ lotDetail.info.grid }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Sale Name:</div>
+                        <div class="col-6 g_txt_right">{{ lotDetail.info.location }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Sale Date:</div>
+                        <div class="col-6 g_txt_right">{{lotDetail.sale_date | date}}, {{lotDetail.sale_date | date:"h a" | lowercase}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Last Updated:</div>
+                        <div class="col-6 g_txt_right" *ngIf="lotDetail.last_updated">{{lotDetail.last_updated | date}}, {{lotDetail.last_updated | date:"shortTime" | lowercase}}</div>
+                        <div class="col-6 g_txt_right" *ngIf="!lotDetail.last_updated"></div>
+                    </div>
+                </div>
+                <ng-container>
+                    <div class="f_asearch_tlt_dv">Vehicle Full Report</div>
+                    <div class="f_detail_info_cnt report">
+                      <ng-container *ngIf="!loading">
+                        <div class="row" *ngIf="sold_status">
+                          <div class="col-6">
+                            <strong>Get Real Price:</strong>
+                          </div>
+                          <div class="col-6 g_txt_right chart">
+                            <a class="showMoreBids" (click)="openModal('charts')">SHOW CHART</a>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="historyLength > 1">
+                          <div class="col-6">
+                            <strong>Previous Winning Bids:</strong>
+                          </div>
+                          <div class="col-6 g_txt_right">
+                            <a class="showMoreBids" (click)="openModal('previous-bid')">Show Bids</a>
+                          </div>
+                        </div>
+                        <ng-container *ngIf="winningBidDetails.length > 0">
+                          <ng-container *ngIf="foregoingBidDetail.length > 0">
+                            <div class="row">
+                              <div class="col-6">{{foregoingBidDetail[0]['sale_date'] | date}}</div>
+                              <div class="col-6 g_txt_right">
+                                <a *ngIf="this.lotDetail['info']['lot'] != foregoingBidDetail[0]['info']['lot']" [routerLink]="['/lot/' + foregoingBidDetail[0].info.lot]" >
+                                  Relisted
+                                </a>
+                                <a *ngIf="this.lotDetail['info']['lot'] == foregoingBidDetail[0]['info']['lot']">
+                                  <b>Relisted (This listing)</b>
+                                </a>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngFor="let winningBidDetail of winningBidDetails;">
+                            <div class="row" *ngIf="!((foregoingBidDetail.length > 0) && (winningBidDetail['info']['lot'] == foregoingBidDetail[0]['info']['lot']))">
+                              <div class="col-6">{{winningBidDetail['sale_date'] | date}}</div>
+                              <div class="col-6 g_txt_right">
+                                <a *ngIf="this.lotDetail['info']['lot'] != winningBidDetail['info']['lot']" [routerLink]="['/lot/' + winningBidDetail.info.lot]" >
+                                  Lot sold for ${{ winningBidDetail.sold_price | number }}
+                                </a>
+                                <a *ngIf="this.lotDetail['info']['lot'] == winningBidDetail['info']['lot']">
+                                  <b>Lot sold (This listing)</b>
+                                </a>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="(winningBidDetails.length == 0) && respond">
+                          <div class="row">
+                            <div class="col g_txt_center">
+                              No previous auctions found
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngIf="loading || !respond">
+                        <div style="min-height: 60px;margin-bottom: -20px; background: url('/assets/product/custom/imgs/sub_loading.gif'); background-position: center; background-repeat: no-repeat">
+
+                        </div>
+                      </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<jw-modal id="previous-bid" (click)="closeModal('previous-bid');">
+  <div class="modal-bid-history"  (click)="$event.stopPropagation()">
+      <div class="f_asearch_tlt_dv">Previous Winning Bids</div>
+      <div class="f_detail_info_cnt report">
+
+        <ng-container *ngIf="!showFullHistory">
+          <ng-container *ngFor="let winningBid of winningBids; let i = index;">
+            <div class="row" *ngIf="i < 4">
+              <div class="col-4">{{winningBid['sale_date'] | date}}</div>
+              <div class="col-8 g_txt_right">
+                <label>Seller Declined $ {{winningBid.sold_price | number}}</label>
+              </div>
+            </div>
+          </ng-container>
+          <div  class="col-12 g_txt_left chart full-history" *ngIf="(winningBids.length > 4)">
+            <a class="showMoreBids full-history" (click)="setShowFullHistory()">Show full History</a>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="showFullHistory">
+          <ng-container *ngFor="let winningBid of winningBids; let i = index;">
+            <div class="row">
+              <div class="col-4 ">{{winningBid['sale_date'] | date}}</div>
+              <div class="col-8 g_txt_right">
+                <label>Seller Declined $ {{winningBid.sold_price | number}}</label>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <button class="close-button" (click)="closeModal('previous-bid');">Close</button>
+  </div>
+</jw-modal>
+
+<jw-modal id="charts" (click)="closeModal('charts');">
+  <div class="modal-chart" (click)="$event.stopPropagation()">
+      <div class="f_asearch_tlt_dv">Real Price</div>
+      <div class="f_detail_info_cnt report">
+        <iframe [src]="url | safe"></iframe>
+      </div>
+      <button class="close-button" (click)="closeModal('charts');">Close</button>
+  </div>
+</jw-modal>
+

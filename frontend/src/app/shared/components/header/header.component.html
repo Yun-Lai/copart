@@ -1,0 +1,26 @@
+<div class="header f_header">
+    <div class="container-fluid">
+        <div class="row header-row">
+            <div class="col-lg-3 col-md-12 col-sm-12">
+<!--              <div class="f_logo">-->
+                <a class="site-logo" [routerLink]="['/']"><img src="./assets/product/custom/imgs/logo.png"></a>
+<!--              </div>-->
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="f_search_dv">
+                    <input class="f_search_ipt" [(ngModel)]="searchKey" placeholder="Search by VIN or Lot" >
+                    <input type="button" (click)="goToLot()" class="f_search_btn" id="f_global_search_btn" value="SEARCH" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-12 col-sm-12">
+                <div class="top-cart-block f_sign_dv">
+                    <ul class="list-unstyled list-inline pull-right">
+                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#f_refer_a_friend">Refer a Friend</a></li>
+                        <li><a [routerLink]="['/']">Sign In</a></li>
+                        <li><a [routerLink]="['/']">Join Free</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

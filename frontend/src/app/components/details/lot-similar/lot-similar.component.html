@@ -1,0 +1,50 @@
+<div class="f_asearch_tlt_dv"><b *ngIf="is_similar">Similar Vehicles</b><b *ngIf="!is_similar">New Arrivals</b></div>
+<div class="row f_new_arrival_cnts">
+    <ng-container *ngFor="let lot of similar.slice(0,4)">
+        <div class="arrival-card">
+            <div class="product-item">
+                <div class="pi-img-wrapper">
+                    <img src="{{ lot.info.images | getImage : 0}}" class="img-responsive" alt="{{ lot.info.name }}">
+                </div>
+                <div class="f_pi_detail">
+                    <h3>
+                      <a (click)="gotoDetails(lot.info.lot)" [routerLink]="['/lot/' + lot.info.lot]" class="g_txt_bold">
+                        {{ lot.info.name }}
+                      </a>
+                    </h3>
+                  <div class="f_pi_detail_view">
+                    <div class="pi-price">${{ lot.info.retail_value|number }} {{ lot.info.currency }}</div>
+                    <a [routerLink]="['/lot/' + lot.info.lot]" class="btn btn-default add2cart">{{'View Details' | uppercase}}</a>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="showExternal">
+      <ng-container *ngFor="let lot of similar.slice(4,12)">
+        <div class="arrival-card">
+            <div class="product-item">
+                <div class="pi-img-wrapper">
+                    <img src="{{ lot.info.images | getImage : 0}}" class="img-responsive" alt="{{ lot.info.name }}">
+                </div>
+                <div class="f_pi_detail">
+                    <h3>
+                      <a [routerLink]="['/lot/' + lot.info.lot]" class="g_txt_bold">
+                        {{ lot.info.name }}
+                      </a>
+                    </h3>
+                  <div class="f_pi_detail_view">
+                    <div class="pi-price">${{ lot.info.retail_value|number }} {{ lot.info.currency }}</div>
+                    <a [routerLink]="['/lot/' + lot.info.lot]" class="btn btn-default add2cart">{{'View Details' | uppercase}}</a>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </ng-container>
+    </ng-container>
+</div>
+
+<div class="f_arrival_extend_div">
+    <img *ngIf="!showExternal" src="./assets/product/custom/imgs/down.png" (click)="showExternalArrivals()" state="0" class="f_arrival_extend_img"/>
+    <img *ngIf="showExternal" src="./assets/product/custom/imgs/top.png" (click)="hideExternalArrivals()" state="0" class="f_arrival_extend_img"/>
+</div>

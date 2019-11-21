@@ -1,0 +1,28 @@
+.f_asearch_tdv {
+  padding: 0 5px 50px 5px;
+  justify-content: space-between;
+}
+.f_list_filter_dv {
+  width: 200px;
+  display: inline-block;
+}
+.f_list_search_result_cnt_dv {
+  //display: inline-block;
+  float: right;
+  width: calc(100vw - 245px);
+}
+
+
+
+
+@media only screen and (max-width: 992px){
+  .f_list_filter_dv {
+    position: absolute;
+    z-index: 1000;
+    margin-top: -20px;
+  }
+  .f_list_search_result_cnt_dv {
+    margin-top: 20px;
+    width: 100% !important;
+  }
+}

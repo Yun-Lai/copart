@@ -1,0 +1,11 @@
+type=V&year=%5B2020,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2019,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2018,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2017,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2016,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2015,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2014,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2013,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2012,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2011,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D
+type=V&year=%5B2010,2020%5D&status=%5B%22Sites%22,%22Already%20Sold%22,%22Featured%20Items%22,%22Make%22%5D&sort=%7B%22sort_by%22:%22year%22,%22sort_type%22:%22desc%22%7D

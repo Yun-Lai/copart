@@ -1,0 +1,93 @@
+<div class="my_shadow">
+  <div class="f_asearch_tlt_dv">Vehicle Finder</div>
+  <div class="f_asearch_cnt_dv f_asearch_rr_cnt">
+      <div class="row f_site_row">
+          <div class="col-lg-4 col-md-12"></div>
+          <div class="col-lg-8 col-md-12">
+              <div class="row c_row">
+                  <div class="col-4"><input type="button" value="All"
+                                                        class="f_asearch_l_btn f_site_copart_btn"/>
+                  </div>
+                  <div class="col-4"><input type="button" value="Copart"
+                                                        class="f_asearch_l_btn f_site_copart_btn"/>
+                  </div>
+                  <div class="col-4"><input type="button" value="IAAI"
+                                                        class="f_asearch_l_btn"/></div>
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-4 col-md-12 g_txt_right f_as_rr_label">Types</div>
+          <div class="col-lg-8 col-md-12">
+              <select class="g_slt f_r_s_slt" id="finder_types" [(ngModel)]="selected_vehicle_type"  (ngModelChange)="selectType()">
+                  <option *ngFor="let vehicle_type of vehicle_types" label="{{vehicle_type.name|typeName}}" value="{{vehicle_type.name}}">
+                    {{ vehicle_type.name| typeName}}
+                  </option>
+              </select>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-4 col-md-12 g_txt_right f_as_rr_label">Year</div>
+          <div class="col-lg-8 col-md-12">
+              <div class="row c_row">
+                  <div class="col-5">
+                      <select class="g_slt f_as_year_slt f_r_s_slt" id="finder_from_year" [(ngModel)]="selected_year_range[0]">
+                          <option  *ngFor="let year of year_range" label="{{year}}" [ngValue]="year">
+                            {{year}}
+                          </option>
+                      </select>
+                  </div>
+                  <div class="col-2 g_txt_center">
+                      To
+                  </div>
+                  <div class="col-5">
+                      <select class="g_slt f_as_year_slt f_r_s_slt" id="finder_from_year" [(ngModel)]="selected_year_range[1]">
+                          <option *ngFor="let year of year_range" label="{{year}}" [ngValue]="year">
+                            {{year}}
+                          </option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-4 col-md-12 g_txt_right f_as_rr_label">Make</div>
+          <div class="col-lg-8 col-md-12">
+              <select class="g_slt f_r_s_slt" id="finder_makes"  [(ngModel)]="selected_vehicle_makes" (ngModelChange)="selectMake()">
+                    <option value="0">All Makes</option>
+                    <option *ngFor="let vehicle_make of vehicle_all_makes" value="{{vehicle_make.description}}">
+                        {{vehicle_make.description}}
+                    </option>
+              </select>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-4 col-md-12 g_txt_right f_as_rr_label">Model</div>
+          <div class="col-lg-8 col-md-12">
+              <select class="g_slt f_r_s_slt" id="finder_models"  [disabled]="model_disabled" [(ngModel)]="selected_model">
+                  <option *ngFor="let model of models" label="{{model}}" value="{{model}}">
+                      {{model}}
+                  </option>
+              </select>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-4 col-md-12 g_txt_right f_as_rr_label">Location</div>
+          <div class="col-lg-8 col-md-12">
+              <select class="g_slt f_r_s_slt" id="finder_location" [(ngModel)]="selected_location">
+                <option value="All Locations" value="All Locations">All Locations</option>
+                <option *ngFor="let location of locations" label="{{ location.location }}" [value]="location.location">
+                  {{location.location }}
+                </option>
+              </select>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-4 col-md-12"></div>
+          <div class="col-lg-8 col-md-12 g_txt_right">
+              <input type="button" (click)="goToSearchPage()"
+                     class="f_asearch_l_btn" id="f_search_finder_btn" value="Search"/>
+          </div>
+      </div>
+  </div>
+</div>

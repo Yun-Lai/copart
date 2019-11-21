@@ -1,0 +1,111 @@
+.header-row{
+  @media (min-width: 992px) {
+    .f_search_dv{
+      padding: 5px;
+      margin-top: 30px;
+    }
+    .f_sign_dv{
+      margin-top: 40px;
+    }
+  }
+  @media (max-width: 991px) {
+    .f_search_dv{
+      margin: 6px 5px 0!important;
+    }
+    .f_sign_dv{
+      margin-top: 10px;
+      ul{
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+.site-logo {
+  img{
+    @media (min-width: 1280px) {
+      padding-top: 28px;
+      padding-bottom: 27px;
+      max-width: 270px;
+    }
+    @media (min-width: 992px) and (max-width: 1279px) {
+      padding-top: 28px;
+      padding-bottom: 27px;
+      width: calc(25vw - 33px);
+      max-width: 300px;
+    }
+    @media (max-width: 991px) {
+      width: 300px;
+      margin-top: 1px;
+    }
+    @media (max-width: 480px) {
+      width: 300px;
+      margin-top: 1px;
+      max-width: 100%;
+    }
+  }
+}
+.header {
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.3);
+    background: #fff;
+    border-radius: 0;
+    margin-bottom: 23px;
+    z-index: 999;
+    position: relative;
+}
+.f_search_ipt{
+  width: 100%;
+  border: 1px solid silver;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px !important;
+}
+.f_search_btn{
+    border: 1px solid #4a4a4a;
+    font-size: 16px;
+    padding: 5px;
+    text-align: center;
+    width: 100px;
+    border-radius: 0px 5px 5px 0px !important;
+    float: right;
+    right: 0px;
+    margin-top: -34px;
+    z-index: 1000;
+    position: relative;
+    background-color: #4a4a4a;
+    color: white;
+}
+.top-cart-block{
+    float: right;
+    margin-top: 11px;
+    position: relative;
+    font: 400 13px 'Open Sans', Arial, sans-serif;
+}
+.list-inline {
+    padding-left: 0;
+    margin-left: -5px;
+    list-style: none;
+    li{
+        display: inline-block;
+        margin-left: 3px;
+        padding-right: 5px;
+        padding-left: 5px;
+        border-right: solid 1px #d8d8d8;
+        &:last-child{
+          border-right: unset
+        }
+      a{
+        color: gray;
+      }
+    }
+}
+.pull-right{
+  float: right;
+}
+@media only screen and (max-width: 600px){
+  .f_search_ipt, .f_search_btn {
+    font-size: 12px !important;
+  }
+  .f_search_btn {
+    margin-top: -29px;
+  }
+}

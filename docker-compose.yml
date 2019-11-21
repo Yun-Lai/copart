@@ -19,20 +19,30 @@ services:
     image: postgres:10
     restart: unless-stopped
     volumes:
-      - ../postgres_data:/var/lib/postgresql/data/
+      - ./postgres_data:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
 
   redis:
     image: redis:latest
-    restart: unless-stopped
+    restart: always
     volumes:
-      - redis_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - "6379:6379"
 
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - 80:80
+    expose:
+      - 80
+    depends_on:
+      - web
+
   web:
-    build: .
+    build: ./backend
     restart: unless-stopped
     command: |
       sh -c "
@@ -41,52 +51,54 @@ services:
         python3 manage.py loaddata copart/fixtures/vehiclemakes.json &&
         python3 manage.py loaddata copart/fixtures/user.json &&
         python3 manage.py collectstatic --noinput &&
-        python3 manage.py runserver 0.0.0.0:80
+        python3 manage.py runserver 0.0.0.0:8000
       "
     volumes:
-      - .:/code
+      - ./backend:/code
     ports:
-      - "80:80"
+      - "8000:8000"
     depends_on:
       - db
       - redis
+    links:
+      - db:db
 
   celery-worker-h:
-    build: .
+    build: ./backend
     command: celery -A copart worker --concurrency 20 --loglevel=INFO -n worker.high -Q high
     restart: unless-stopped
     volumes:
-      - .:/code
+      - ./backend:/code
     depends_on:
       - db
       - redis
 
   celery-worker-n:
-    build: .
+    build: ./backend
     command: celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.normal -Q normal
     restart: unless-stopped
     volumes:
-      - .:/code
+      - ./backend:/code
     depends_on:
       - db
       - redis
 
   celery-worker-l:
-    build: .
+    build: ./backend
     command: celery -A copart worker --concurrency 1 --loglevel=INFO -n worker.low -Q low
     restart: unless-stopped
     volumes:
-      - .:/code
+      - ./backend:/code
     depends_on:
       - db
       - redis
 
   celery-beat:
-    build: .
+    build: ./backend
     command: celery -A copart beat --loglevel=INFO
     restart: unless-stopped
     volumes:
-      - .:/code
+      - ./backend:/code
     depends_on:
       - db
       - redis

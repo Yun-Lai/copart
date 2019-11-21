@@ -1,0 +1,68 @@
+<div class="my_shadow">
+    <div class="f_search_tlt_dv">Browse Inventory</div>
+    <div class="f_search_cnt_dv">
+      <ul class="nav nav-tabs container-fluid" role="tablist">
+        <li class="nav-item col-lg-4 col-md-12">
+          <a id="a_featured" class="nav-link active" (click)="showTabs('featured')" role="tab" data-toggle="tab" >
+            <div torder="1" >Featured Items</div>
+          </a>
+        </li>
+        <li class="nav-item col-lg-4 col-md-12">
+          <a id="a_vehicleType" class="nav-link" (click)="showTabs('vehicleType')" role="tab" data-toggle="tab">
+            <div torder="2" >Vehicle Types</div>
+          </a>
+        </li>
+        <li class="nav-item col-lg-4 col-md-12">
+          <a id="a_makes" class="nav-link" (click)="showTabs('makes')" role="tab" data-toggle="tab">
+            <div torder="3">Makes</div>
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content f_search_r_cnts">
+        <div role="tabpanel" class="tab-pane fade show" id="featured">
+          <div class="col-lg-4 col-md-12">
+            <div *ngFor="let featured_filter of featured_filters.slice(0, 13)">
+              <a (click)="goSearch({feature: featured_filter.id})">
+                {{featured_filter.name}} ({{featured_filter.count}})
+              </a>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane face" id="vehicleType">
+          <div class="col-lg-4 col-md-12">
+            <div *ngFor="let vehicle_type of vehicle_types">
+              <a (click)="goSearch({type: vehicle_type.type})">
+                {{vehicle_type.name | typeName}} ({{vehicle_type.count}})
+              </a>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane face" id="makes">
+          <div class="col-lg-4 col-md-12">
+            <div *ngFor="let vehicle_make of vehicle_makes.slice(0,14)">
+              <a (click)="goSearch({make: vehicle_make.name})">
+                {{vehicle_make.name}} ({{vehicle_make.count}})
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-12">
+            <div *ngFor="let vehicle_make of vehicle_makes.slice(14,28)">
+              <a (click)="goSearch({make: vehicle_make.name})">
+                {{vehicle_make.name}} ({{vehicle_make.count}})
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-12">
+            <div *ngFor="let vehicle_make of vehicle_makes.slice(28,41)">
+              <a (click)="goSearch({make: vehicle_make.name})">
+                {{vehicle_make.name }} ({{vehicle_make.count}})
+              </a>
+            </div>
+            <div>
+              <a href="#">More...</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

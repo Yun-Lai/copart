@@ -1,0 +1,17 @@
+<app-header></app-header>
+<div class="main">
+  <div class="container-fluid">
+    <div class="row f_search_tdv">
+      <div class="col-lg-9 col-md-8 col-sm-6 f_l_sr_dv">
+        <app-browse-inventory [status]="status" [vehicle_types]="vehicle_types" ></app-browse-inventory>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 f_l_sr_dv">
+        <app-vehicle-finder [vehicle_types]="vehicle_types"></app-vehicle-finder>
+      </div>
+    </div>
+    <div class="f_new_arrivals">
+      <app-new-arrival></app-new-arrival>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
