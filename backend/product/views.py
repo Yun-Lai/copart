@@ -2465,7 +2465,7 @@ def lots_paged_by_search_api(request):
 
     if sort_:
         sort = eval(sort_)
-        if sort['sort_by'] != 'sale_date':
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
             sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
