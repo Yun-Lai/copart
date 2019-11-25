@@ -2237,7 +2237,8 @@ def lots_by_summary_api(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -2579,7 +2580,8 @@ def lots_count_searched_api(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -2662,7 +2664,8 @@ def lots_by_summary_api_features_make_model(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -2748,7 +2751,8 @@ def lots_by_summary_api_features(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -2825,7 +2829,8 @@ def lots_by_summary_api_make(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -2891,7 +2896,8 @@ def lots_by_summary_api_model(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -2957,7 +2963,8 @@ def lots_by_summary_api_year_date(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -3054,7 +3061,8 @@ def lots_by_summary_api_vehicle_damage(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -3173,7 +3181,8 @@ def lots_by_summary_api_fuel(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
@@ -3255,7 +3264,8 @@ def lots_by_summary_api_transmission(request):
 
     if sort_:
         sort = eval(sort_)
-        sort['sort_by'] = 'info__' + sort['sort_by']
+        if sort['sort_by'] != 'sale_date' and sort['sort_by'] != 'current_bid':
+            sort['sort_by'] = 'info__' + sort['sort_by']
     else:
         sort = dict(sort_by='info__year', sort_type='desc')
 
