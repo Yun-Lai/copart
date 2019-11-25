@@ -210,6 +210,8 @@ jw-modal {
     z-index: 2000;
     .modal-bid-history{
       width: 400px;
+      max-height: 391px;
+      overflow: auto;
       @media (max-width: 400px) {
         width: 100%!important;
       }
