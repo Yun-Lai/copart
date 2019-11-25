@@ -2565,7 +2565,7 @@ def lots_paged_by_search_api(request):
     return JsonResponse(context)
 
 
-@cache_page(CACHE_TTL)
+# @cache_page(CACHE_TTL)
 # @start_new_thread
 def lots_count_searched_api(request):
     vehicle_type = request.GET.get('type', '')
