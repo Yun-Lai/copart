@@ -1,0 +1,192 @@
+<div class="f_asearch_tlt_dv" id="filter">
+  Filters
+  <i class="material-icons f_list_left_filter_min_i" (click)="toggleItems()">line_weight</i>
+</div>
+<div *ngIf="showItems" class="f_asearch_cnt_dv f_list_filter_cnt Check">
+  <div>
+    <ng-container *ngIf="config['SHOW_SITES']">
+      <div class="f_l_f_tlt">
+        <i name="Featured Items" [ngClass]="(status.indexOf('Sites') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'" ></i>
+        Sites
+      </div>
+      <div class="f_l_f_cnt f_l_f_sub" [ngClass]="(status.indexOf('Sites') < 0)?  'g_none_dis' : ''">
+          <input type="radio" id="flfc10" class="f_list_filter_site" name="applied_filter_source"
+                 [(ngModel)]="applied_filter_source" (change)="addParams('source', 'copart')" value=""/>
+          <label for="flfc10">&nbsp;All</label><br>
+        <input type="radio" id="flfc11" class="f_list_filter_site"  name="applied_filter_source"
+               [(ngModel)]="applied_filter_source" (change)="addParams('source', 'copart')" value="copart"/>
+          <label for="flfc11">&nbsp;Copart ({{ copart_count }})</label><br>
+        <input type="radio" id="flfc12" class="f_list_filter_site"  name="applied_filter_source"
+               [(ngModel)]="applied_filter_source" (change)="addParams('source', 'iaai')" value="iaai"/>
+          <label for="flfc12">&nbsp;Iaai ({{ iaai_count }})</label><br>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="config['SHOW_SITES']">
+      <div class="f_l_f_tlt">
+        <i name="Featured Items" [ngClass]="(status.indexOf('Already Sold') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'" ></i>
+        Already Sold
+      </div>
+      <div class="f_l_f_cnt f_l_f_sub" [ngClass]="(status.indexOf('Already Sold') < 0)?  'g_none_dis' : ''">
+          <input type="checkbox" name="f_list_filter_sold" id="flfc100"
+                 [(ngModel)]="apply_sold" (change)="addParams('sold', 'yes')"  [checked]="apply_sold"/>
+          <label for="flfc100">&nbsp;Show Real Price ({{ sold_count }})</label>
+          <br>
+      </div>
+
+    </ng-container>
+    <div class="f_l_f_tlt" name="Featured Items" (click)="onClickItem($event)">
+      <i name="Featured Items" [ngClass]="(status.indexOf('Featured Items') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'" ></i>
+      Featured Items
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Featured Items') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_featured" [(ngModel)]="searchFeature" class="g_ipt" placeholder="Search" />
+      <div id="div_filter_featured" class="f_l_f_sub">
+        <ng-container *ngFor="let feature of features">
+          <ng-container *ngIf="(searchFeature == '') || ((feature.feature).toLowerCase()).indexOf(searchFeature.toLowerCase()) == 0">
+            <input type="checkbox" id="id_featured_{{ feature.feature }}" (change)="addParams('featured', feature.feature)" class="checkbox_featured"
+                   [checked]="(applied_filter_features.indexOf(feature.feature) >= 0 )? true : false"/>
+            <label for="id_featured_{{ feature.feature }}">{{ feature.feature }} ({{ feature.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt" name="Make" (click)="onClickItem($event)">
+      <i name="Make" [ngClass]="(status.indexOf('Make') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'"></i>
+      Make
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Make') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_make" class="g_ipt" [(ngModel)]="searchMake" placeholder="Search"/>
+      <div id="div_filter_make" class="f_l_f_sub">
+        <ng-container *ngFor="let make of makes">
+          <ng-container *ngIf="(searchMake == '') || ((make.make).toLowerCase()).indexOf(searchMake.toLowerCase()) == 0">
+            <input type="checkbox" id="id_make_{{ make.make }}" class="checkbox_make"  (change)="addParams('makes', make.make)"
+                   [checked]="(applied_filter_makes.indexOf(make.make) >= 0 )? true : false"/>
+            <label for="id_make_{{ make.make }}">{{ make.make }} ({{ make.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt" name="Model" (click)="onClickItem($event)">
+      <i name="Model" [ngClass]="(status.indexOf('Model') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'"></i>
+      Model
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Model') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_model" [(ngModel)]="searchModel" class="g_ipt" placeholder="Search"/>
+      <div id="div_filter_model" class="f_l_f_sub">
+        <ng-container *ngFor="let model of models">
+          <ng-container *ngIf="(searchModel == '') || ((model.model).toLowerCase()).indexOf(searchModel.toLowerCase()) == 0">
+            <input type="checkbox" id="id_make_{{ model.model }}" (change)="addParams('models', model.model)"
+                   class="checkbox_model" [checked]="(applied_filter_models.indexOf(model.model) >= 0 )? true : false"/>
+            <label for="id_model_{{ model.model }}">{{ model.model }} ({{ model.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt" name="Year" (click)="onClickItem($event)">
+      <i name="Year" [ngClass]="(status.indexOf('Year') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'" name="Year"></i>
+      Year
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Year') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_year" [(ngModel)]="searchYear" class="g_ipt" placeholder="Search"/>
+      <div id="div_filter_year" class="f_l_f_sub">
+        <ng-container *ngFor="let year of years">
+          <ng-container *ngIf="(searchYear == '') || ((year.year).toString()).indexOf(searchYear) == 0">
+            <input type="checkbox" id="id_make_{{ year.year }}" (change)="addParams('years', year.year)"
+                 class="checkbox_year" [checked]="(applied_filter_years.indexOf(year.year) >= 0 )? true : false"/>
+            <label for="id_year_{{ year.year }}">{{ year.year }} ({{ year.count }})</label> <br>
+          </ng-container>
+
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt" name="Body Style" (click)="onClickItem($event)">
+      <i name="Body Style" [ngClass]="(status.indexOf('Body Style') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'"></i>
+      Body Style
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Body Style') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_body_style" [(ngModel)]="searchBodyStyle" class="g_ipt" placeholder="Search"/>
+      <div id="div_filter_body_style" class="f_l_f_sub">
+        <ng-container *ngFor="let body_style of body_styles">
+          <ng-container *ngIf="(searchBodyStyle == '') || ((body_style.body_style).toLowerCase()).indexOf(searchBodyStyle.toLowerCase()) == 0">
+            <input type="checkbox" id="id_body_style_{{ body_style.body_style }}" (change)="addParams('body_styles', body_style.body_style)"
+                   class="checkbox_body_style" [checked]="(applied_filter_body_styles.indexOf(body_style.body_style) >= 0 )? true : false"/>
+            <label for="id_body_style_{{ body_style.body_style }}">{{ body_style.body_style| titlecase  }} ({{ body_style.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt" name="Fuel Type" (click)="onClickItem($event)">
+      <i name="Fuel Type" [ngClass]="(status.indexOf('Fuel Type') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'"></i>
+      Fuel Type
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Fuel Type') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_fuel" [(ngModel)]="searchFuelType" class="g_ipt" placeholder="Search"/>
+      <div id="div_filter_fuel" class="f_l_f_sub">
+        <ng-container *ngFor="let fuel of fuels">
+          <ng-container *ngIf="(searchFuelType == '') || ((fuel.fuel).toLowerCase()).indexOf(searchFuelType.toLowerCase()) == 0">
+            <input type="checkbox" id="id_fuel_{{ fuel.fuel }}" (change)="addParams('fuels', fuel.fuel)"
+                   class="checkbox_fuel" [checked]="(applied_filter_fuels.indexOf(fuel.fuel) >= 0 )? true : false"/>
+            <label for="id_fuel_{{ fuel.fuel }}">{{ fuel.fuel | titlecase }} ({{ fuel.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt" name="Engine Type" (click)="onClickItem($event)">
+      <i name="Engine Type" [ngClass]="(status.indexOf('Engine Type') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'"></i>
+      Engine Type
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Engine Type') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_engine_type" [(ngModel)]="searchEngineType" class="g_ipt" placeholder="Search"/>
+      <div id="div_filter_engine_type" class="f_l_f_sub">
+        <ng-container *ngFor="let engine_type of engine_types">
+          <ng-container *ngIf="(searchEngineType == '') || ((engine_type.engine_type.replace('.', '-')).toLowerCase()).indexOf(searchEngineType.toLowerCase()) == 0">
+            <input type="checkbox" id="id_engine_type_{{ engine_type.engine_type.replace('.', '-') }}" (change)="addParams('engine_types', engine_type.engine_type)"
+                   class="checkbox_engine_type" [checked]="(applied_filter_engine_types.indexOf(engine_type.engine_type) >= 0 )? true : false"/>
+            <label for="id_engine_type_{{ engine_type.engine_type.replace('.', '-') }}">{{ engine_type.engine_type }} ({{ engine_type.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt" name="Transmission" (click)="onClickItem($event)">
+      <i name="Transmission" [ngClass]="(status.indexOf('Transmission') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'"></i>
+      Transmission
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Transmission') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_transmission" [(ngModel)]="searchTransmission" class="g_ipt" placeholder="Search"/>
+      <div id="div_filter_transmission" class="f_l_f_sub">
+        <ng-container *ngFor="let transmission of transmissions">
+          <ng-container *ngIf="(searchTransmission == '') || ((transmission.transmission).toLowerCase()).indexOf(searchTransmission.toLowerCase()) == 0">
+            <input type="checkbox" id="id_transmission_{{ transmission.transmission }}" (change)="addParams('transmissions', transmission.transmission)"
+                   class="checkbox_transmission" [checked]="(applied_filter_transmissions.indexOf(transmission.transmission) >= 0 )? true : false"/>
+            <label for="id_transmission_{{ transmission.transmission }}">{{ transmission.transmission }} ({{ transmission.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="f_l_f_tlt"  name="Drive Train" (click)="onClickItem($event)">
+      <i  name="Drive Train" [ngClass]="(status.indexOf('Drive Train') < 0)? 'fa fa-fw fa-plus-square' :'fa fa-fw fa-minus-square'"></i>
+      Drive Train
+    </div>
+    <div class="f_l_f_cnt" [ngClass]="(status.indexOf('Drive Train') < 0)?  'g_none_dis' : ''">
+      <input id="input_filter_drive_train" [(ngModel)]="searchDriveTrain" class="g_ipt" placeholder="Search"/>
+      <div id="div_filter_drive_train" class="f_l_f_sub">
+        <ng-container *ngFor="let drive_train of drive_trains">
+          <ng-container *ngIf="(searchDriveTrain == '') || ((drive_train.drive.replace('/', '_') ).toLowerCase()).indexOf(searchDriveTrain.toLowerCase()) == 0">
+            <input type="checkbox" id="id_drive_train_{{ drive_train.drive.replace('/', '_') }}" (change)="addParams('drive_trains', drive_train.drive)"
+                   class="checkbox_drive_train" [checked]="(applied_filter_drive_trains.indexOf(drive_train.drive) >= 0 )? true : false"/>
+            <label for="id_drive_train_{{ drive_train.drive.replace('/', '_') }}">{{ drive_train.drive }} ({{ drive_train.count }})</label> <br>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+</div>

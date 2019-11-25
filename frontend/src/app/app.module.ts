@@ -29,7 +29,9 @@ import { GetHighlightPipe } from './utils/pipe/get-highlight.pipe';
 import { ZoomImageComponent } from './components/details/zoom-image/zoom-image.component';
 import { ModalComponent } from './components/details/lot-detail/jw-modal/jw-modal.component';
 import { SafePipe } from './utils/pipe/safe.pipe';
-// import * as $ from 'jquery';
+import { LotSearchComponent } from './pages/lot-search/lot-search.component';
+import { LotLeftSideComponent } from './components/lot-search/lot-left-side/lot-left-side.component';
+import { LotSearchListComponent } from './components/lot-search/lot-search-list/lot-search-list.component';
 
 export function launchAppConfig(hostService: HostService, http: HttpClient) { return () => hostService.init(http); }
 
@@ -62,6 +64,9 @@ export function launchAppConfig(hostService: HostService, http: HttpClient) { re
     ZoomImageComponent,
     ModalComponent,
     SafePipe,
+    LotSearchComponent,
+    LotLeftSideComponent,
+    LotSearchListComponent,
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: launchAppConfig, deps: [HostService, HttpClient], multi: true},
