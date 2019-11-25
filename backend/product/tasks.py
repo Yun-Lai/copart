@@ -318,7 +318,7 @@ def scrap_copart_lots(make_ids, account):
 
                 # try:
                 #     # vehicle_info_item = VehicleInfo.objects.get(lot=lot['ln'], vin=vin)
-                vehicle_info_item = VehicleInfo.objects.filter(lot=lot['ln'], vin=vin).order_by('id')[0]
+                vehicle_info_item = VehicleInfo.objects.filter(lot=lot['ln'], vin=vin).order_by('id')
                 # except VehicleInfo.DoesNotExist:
                 #     vehicle_info_item = None
                 if len(vehicle_info_item) == 0:
