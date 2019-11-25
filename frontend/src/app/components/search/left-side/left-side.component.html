@@ -282,7 +282,7 @@
       <div id="div_filter_cylinder" class="f_l_f_sub">
         <ng-container *ngFor="let cylinder of cylinders">
           <ng-container *ngIf="(searchCylinder == '') || ((cylinder.cylinders).toLowerCase()).indexOf(searchCylinder.toLowerCase()) == 0">
-            <input type="checkbox" id="id_cylinder_{{ cylinder.cylinders }}" (change)="addParams('cylinders', cylinder.cylinders)"
+            <input type="checkbox" id="id_cylinder_{{ cylinder.cylinders }}" (change)="addParams('cylinderss', cylinder.cylinders)"
                    class="checkbox_transmission" [checked]="(applied_filter_cylinders.indexOf(cylinder.cylinders) >= 0 )? true : false"/>
             <label for="id_cylinder_{{ cylinder.cylinders }}">{{ cylinder.cylinders }} ({{ cylinder.count }})</label> <br>
           </ng-container>

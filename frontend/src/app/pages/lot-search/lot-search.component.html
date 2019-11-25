@@ -2,52 +2,38 @@
 <div class="container-fluid">
   <div class="row f_asearch_tdv">
     <div class="f_list_filter_dv">
-      <app-left-side
+      <app-lot-left-side
         [applied_filter_source]="applied_filter_source"
         [applied_sold]="applied_sold"
         [applied_filter_features]="applied_filter_features"
         [applied_filter_makes]="applied_filter_makes"
         [applied_filter_models]="applied_filter_models"
         [applied_filter_years]="applied_filter_years"
-        [applied_filter_odometers]="applied_filter_odometers"
-        [applied_filter_locations]="applied_filter_locations"
-        [applied_filter_sale_dates]="applied_filter_sale_dates"
         [applied_filter_engine_types]="applied_filter_engine_types"
         [applied_filter_transmissions]="applied_filter_transmissions"
         [applied_filter_drive_trains]="applied_filter_drive_trains"
-        [applied_filter_cylinders]="applied_filter_cylinders"
         [applied_filter_fuels]="applied_filter_fuels"
         [applied_filter_body_styles]="applied_filter_body_styles"
-        [applied_filter_vehicle_types]="applied_filter_vehicle_types"
-        [applied_filter_damages]="applied_filter_damages"
-        [applied_filter_doctypes]="applied_filter_doctypes"
         [updated]="updateFilters"
         (changeFilters) = "onChangeFilters($event)"
-      ></app-left-side>
+      ></app-lot-left-side>
     </div>
     <div class="f_list_search_result_cnt_dv">
-      <app-search-list
+      <app-lot-search-list
         [applied_filter_source]="applied_filter_source"
         [applied_sold]="applied_sold"
         [applied_filter_features]="applied_filter_features"
         [applied_filter_makes]="applied_filter_makes"
         [applied_filter_models]="applied_filter_models"
         [applied_filter_years]="applied_filter_years"
-        [applied_filter_odometers]="applied_filter_odometers"
-        [applied_filter_locations]="applied_filter_locations"
-        [applied_filter_sale_dates]="applied_filter_sale_dates"
         [applied_filter_engine_types]="applied_filter_engine_types"
         [applied_filter_transmissions]="applied_filter_transmissions"
         [applied_filter_drive_trains]="applied_filter_drive_trains"
-        [applied_filter_cylinders]="applied_filter_cylinders"
         [applied_filter_fuels]="applied_filter_fuels"
         [applied_filter_body_styles]="applied_filter_body_styles"
-        [applied_filter_vehicle_types]="applied_filter_vehicle_types"
-        [applied_filter_damages]="applied_filter_damages"
-        [applied_filter_doctypes]="applied_filter_doctypes"
         [updated]="updateFilters"
         (changeFilters) = "onChangeFilters($event)"
-      ></app-search-list>
+      ></app-lot-search-list>
     </div>
   </div>
 </div>

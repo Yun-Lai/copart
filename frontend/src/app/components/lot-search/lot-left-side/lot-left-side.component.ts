@@ -98,7 +98,6 @@ export class LotLeftSideComponent implements OnInit {
         }
         if (this.params['status']) {
           this.status = JSON.parse(this.params['status']);
-          console.log("=-=-=-=-=", this.status);
           delete this.params['status'];
         }
         if (this.applied_sold === "yes") {
@@ -106,8 +105,7 @@ export class LotLeftSideComponent implements OnInit {
         } else {
           this.apply_sold = false;
         }
-          this.getListData();
-
+        this.getListData();
       });
   }
 
@@ -123,6 +121,31 @@ export class LotLeftSideComponent implements OnInit {
   }
 
   getListData() {
+    if (this.params['params']) {
+      let filter_params = JSON.parse(this.params['params']);
+      if (filter_params['odometers']) {
+        delete filter_params['odometers']
+      }
+      if (filter_params['locations']) {
+        delete filter_params['locations']
+      }
+      if (filter_params['sale_dates']) {
+        delete filter_params['sale_dates']
+      }
+      if (filter_params['cylinderss']) {
+        delete filter_params['cylinderss']
+      }
+      if (filter_params['vehicle_types']) {
+        delete filter_params['vehicle_types']
+      }
+      if (filter_params['damages']) {
+        delete filter_params['damages']
+      }
+      if (filter_params['doctypes']) {
+        delete filter_params['doctypes']
+      }
+      this.params['params'] = JSON.stringify(filter_params)
+    }
 
     this.api.getSearchListCount(this.params).then( result => {
       this.config = result.config;

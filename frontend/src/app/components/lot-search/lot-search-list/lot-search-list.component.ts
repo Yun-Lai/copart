@@ -120,10 +120,9 @@ export class LotSearchListComponent implements OnInit {
       }
       if (this.params['status']) {
         this.status = this.params['status'];
-        console.log("----===========----------", this.status);
         delete this.params['status']
       }
-      console.log("==================", this.status);
+
       if (status.length === 0 || status === this.status)
       {
         this.getData();
@@ -247,6 +246,31 @@ export class LotSearchListComponent implements OnInit {
     if (typeof (this.params.page) === 'string' && parseInt(this.params.page) < 1) {
       this.params.page = 1;
     }
+      if (this.params['params']) {
+          let filter_params = JSON.parse(this.params['params']);
+          if (filter_params['odometers']) {
+            delete filter_params['odometers']
+          }
+          if (filter_params['locations']) {
+            delete filter_params['locations']
+          }
+          if (filter_params['sale_dates']) {
+            delete filter_params['sale_dates']
+          }
+          if (filter_params['cylinderss']) {
+            delete filter_params['cylinderss']
+          }
+          if (filter_params['vehicle_types']) {
+            delete filter_params['vehicle_types']
+          }
+          if (filter_params['damages']) {
+            delete filter_params['damages']
+          }
+          if (filter_params['doctypes']) {
+            delete filter_params['doctypes']
+          }
+          this.params['params'] = JSON.stringify(filter_params)
+        }
     this.getSearchKey();
     this.api.getPagnagedData(this.params).then( rep => {
       this.lots = rep.lots;
